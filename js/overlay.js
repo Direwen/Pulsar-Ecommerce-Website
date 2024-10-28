@@ -14,9 +14,7 @@ const closeOverlay = (event) => {
 };
 
 function forceOverlayToClose() {
-    console.log("Clicked");
     overlay.style.display = 'none';
-    console.log("Clicked2");
 }
 
 // Event listener to close the overlay when clicking outside

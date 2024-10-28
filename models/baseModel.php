@@ -24,7 +24,16 @@ abstract class BaseModel
 
     public function get($conditions): ?array
     {
-        $whereClauses = $this->generateWhereClause($conditions);
+        $where_conditions_to_get = [];
+
+        foreach($conditions as $attr => $attr_value) {
+            $where_conditions_to_get[] = [
+                "attribute" => $attr,
+                "operator" => "=",
+                "value" => $attr_value,
+            ];
+        }
+        $whereClauses = $this->generateWhereClause($where_conditions_to_get);
 
         $result = $this->db->fetch(
             "SELECT * FROM " . static::getTableName() . " WHERE " . $whereClauses['clauses'],
@@ -36,7 +45,17 @@ abstract class BaseModel
 
     public function delete($conditions): bool
     {
-        $whereClauses = $this->generateWhereClause($conditions);
+        $where_conditions_to_delete = [];
+
+        foreach($conditions as $attr => $attr_value) {
+            $where_conditions_to_delete[] = [
+                "attribute" => $attr,
+                "operator" => "=",
+                "value" => $attr_value,
+            ];
+        }
+
+        $whereClauses = $this->generateWhereClause($where_conditions_to_delete);
 
         return $this->db->execute(
             "DELETE FROM " . static::getTableName() . " WHERE " . $whereClauses['clauses'],
@@ -48,7 +67,18 @@ abstract class BaseModel
     {
 
         $setData = $this->generateSetClause($this->ensureStorageCompatibility($attributesWithValues));
-        $whereData = $this->generateWhereClause($this->ensureStorageCompatibility($conditions));
+
+        $where_conditions_to_update = [];
+
+        foreach($conditions as $attr => $attr_value) {
+            $where_conditions_to_update[] = [
+                "attribute" => $attr,
+                "operator" => "=",
+                "value" => $attr_value,
+            ];
+        }
+
+        $whereData = $this->generateWhereClause($where_conditions_to_update);
 
         return $this->db->execute(
             "UPDATE " . static::getTableName() . " SET " . $setData['clauses'] . " WHERE " . $whereData['clauses'],

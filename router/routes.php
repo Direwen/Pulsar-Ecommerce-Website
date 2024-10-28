@@ -37,4 +37,8 @@ return [
         'controller' => 'controllers/404.php',
         'middleware' => [],
     ],
+    'test' => [
+        'controller' => 'controllers/test.php',
+        'middleware' => []
+    ]
 ];
