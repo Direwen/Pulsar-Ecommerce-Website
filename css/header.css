@@ -1,0 +1,9 @@
+.header_links {
+    border-bottom: 3px solid transparent; /* border-b border-transparent */
+    font-weight: bold; /* font-bold */
+    padding: 1.25rem 0;
+}
+
+.header_links:hover {
+    border-bottom: 3px solid var(--accent-color); /* hover:border-black */
+}

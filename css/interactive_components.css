@@ -1,0 +1,28 @@
+.interactive {
+    transition: all 0.1s ease-in-out;
+}
+
+.interactive:hover {
+    opacity: 0.8;
+}
+
+.interactive:active {
+    transform: scale(0.9);
+}
+
+.floatable {
+    transition: all 0.3s ease-in-out; /* Smoother transition */
+}
+
+.floatable:hover {
+    transform: translateY(-10px); /* Floating effect */
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.3); /* Adding shadow with RGBA color */
+}
+
+.material-symbols-outlined {
+    cursor: pointer;
+    vertical-align: middle;
+    user-select: none;
+    font-size: 1.875rem; /* 30px */
+    line-height: 2.25rem; /* 36px */
+}

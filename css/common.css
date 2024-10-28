@@ -1,0 +1,25 @@
+:root {
+    --primary-color: #ffffff; /* Updated from Tailwind */
+    --secondary-color: #f5f4f6; /* Added from Tailwind */
+    --accent-color: #0682fc; /* Added from Tailwind */
+    --dark-color: #24292c; /* Added from Tailwind */
+    --light-dark-color: #898888;
+}
+
+/* Hide scrollbar, but still allow scrolling */
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar.active {
+    cursor: grabbing;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}

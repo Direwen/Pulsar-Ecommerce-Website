@@ -1,0 +1,54 @@
+<?php
+
+require 'middlewares.php';
+// Load routes configuration
+$routes = require 'routes.php';
+
+// Process route
+routeToController(getCurrentUri(), $routes);
+
+/**
+ * Get the current request URI, stripping out the root directory.
+ *
+ * @return string The cleaned URI path
+ */
+function getCurrentUri()
+{
+    global $root_directory;
+    $uri = $_SERVER["REQUEST_URI"];
+    $cleaned_uri = str_replace($root_directory, "", $uri);
+    $cleaned_uri = parse_url($cleaned_uri, PHP_URL_PATH);
+    
+    return trim($cleaned_uri, '/');
+}
+
+/**
+ * Route the current URI to the appropriate controller.
+ *
+ * @param string $uri The cleaned URI
+ * @param array $routes Array of routes mapped to controllers
+ */
+function routeToController($uri, $routes)
+{
+    global $root_directory;
+
+    if (array_key_exists($uri, $routes)) {
+        // Call the middleware function
+        foreach ($routes[$uri]['middleware'] as $middleware) call_user_func($middleware . 'Middleware');
+        // Render the script or page from controller
+        require $routes[$uri]['controller'];
+    } else {
+        abort(404);
+    }
+}
+
+/**
+ * Handle errors by setting the HTTP response code and routing to the 404 controller.
+ *
+ * @param int $code HTTP response code (default is 404)
+ */
+function abort($code = 404)
+{
+    http_response_code($code);
+    require 'controllers/404.php';
+}
