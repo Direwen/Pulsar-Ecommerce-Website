@@ -9,13 +9,14 @@ class VariantModel extends BaseModel
 
     public const COLUMN_ID = 'id';
     public const COLUMN_PRODUCT_ID = 'product_id';
+    public const COLUMN_TYPE = 'type';
     public const COLUMN_NAME = 'name';
     public const COLUMN_UNIT_PRICE = 'unit_price';
-    public const COLUMN_SKU = 'sku';
-    public const COLUMN_IMAGE_PATH = 'image_path';
+    public const COLUMN_IMG = 'img';
     public const COLUMN_CREATED_AT = 'created_at';
     public const COLUMN_UPDATED_AT = 'updated_at';
 
+    // Static getter methods for table and column names
     public static function getTableName(): string {
         return self::TABLE_NAME;
     }
@@ -28,6 +29,10 @@ class VariantModel extends BaseModel
         return self::COLUMN_PRODUCT_ID;
     }
 
+    public static function getColumnType(): string {
+        return self::COLUMN_TYPE;
+    }
+
     public static function getColumnName(): string {
         return self::COLUMN_NAME;
     }
@@ -36,12 +41,8 @@ class VariantModel extends BaseModel
         return self::COLUMN_UNIT_PRICE;
     }
 
-    public static function getColumnSku(): string {
-        return self::COLUMN_SKU;
-    }
-
-    public static function getColumnImagePath(): string {
-        return self::COLUMN_IMAGE_PATH;
+    public static function getColumnImg(): string {
+        return self::COLUMN_IMG;
     }
 
     public static function getColumnCreatedAt(): string {
@@ -52,7 +53,6 @@ class VariantModel extends BaseModel
         return self::COLUMN_UPDATED_AT;
     }
 
-    
     /**
      * Creates the 'variants' table if it doesn't already exist.
      * @return bool
@@ -63,10 +63,10 @@ class VariantModel extends BaseModel
             CREATE TABLE IF NOT EXISTS " . self::getTableName() . " (
                 " . self::getColumnId() . " INT AUTO_INCREMENT PRIMARY KEY,
                 " . self::getColumnProductId() . " INT NOT NULL,
+                " . self::getColumnType() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnName() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnUnitPrice() . " DECIMAL(10, 2) NOT NULL,
-                " . self::getColumnSku() . " VARCHAR(255) NOT NULL UNIQUE,
-                " . self::getColumnImagePath() . " VARCHAR(255),
+                " . self::getColumnImg() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnCreatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (" . self::getColumnProductId() . ") REFERENCES " . ProductModel::getTableName() . "(" . ProductModel::getColumnId() . ") ON DELETE CASCADE
@@ -74,16 +74,23 @@ class VariantModel extends BaseModel
         ");
     }
 
+    /**
+     * Inserts a new record into the 'variants' table.
+     * @param array $data
+     * @return bool
+     */
     protected function createRaw($data): bool
     {
         return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " (" . self::getColumnName() . ", " . self::getColumnProductId() . ", " . self::getColumnUnitPrice() . ", " . self::getColumnSku() . ", " . self::getColumnImagePath() . ") VALUES (:name, :product_id, :unit_price, :sku, :image_path)",
+            "INSERT INTO " . self::getTableName() . " 
+            (" . self::getColumnProductId() . ", " . self::getColumnType() . ", " . self::getColumnName() . ", " . self::getColumnUnitPrice() . ", " . self::getColumnImg() . ")
+            VALUES (:product_id, :type, :name, :unit_price, :img)",
             [
-                ':name' => strtolower(trim($data['name'])),
                 ':product_id' => $data['product_id'],
+                ':type' => strtolower(trim($data['type'])), // Standardize variant type
+                ':name' => strtolower(trim($data['name'])), // Standardize name
                 ':unit_price' => $data['unit_price'],
-                ':sku' => $data['sku'],
-                ':image_path' => $data['image_path'] ?? null, // Optional field
+                ':img' => $data['img']
             ]
         );
     }

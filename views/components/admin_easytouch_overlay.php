@@ -1,6 +1,6 @@
 <div 
     id="overlay" 
-    class="w-screen h-screen bg-light-gray/40 fixed top-0 left-0 z-50 hidden justify-center items-center"
+    class="w-screen h-screen bg-light-gray/95 fixed top-0 left-0 z-50 hidden justify-center items-center"
     onclick="closeOverlay(event)"
 >
 

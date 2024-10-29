@@ -18,3 +18,9 @@ function updateInputField() {
         `;
     }
 }
+
+function toggleImageInput() {
+    const checkbox = document.getElementById('changeImageCheckbox');
+    const imageInput = document.getElementById('newImageInput');
+    imageInput.classList.toggle('hidden', !checkbox.checked); // Show input if checkbox is checked
+}

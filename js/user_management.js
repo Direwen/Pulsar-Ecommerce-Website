@@ -17,7 +17,7 @@ function editUser(recordId, submissionPath) {
             </section>
 
             <section class="flex justify-end items-center gap-2">
-                <button type="" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
+                <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
                 <button type="submit" class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Save</button>
             </section>
         </form>`;

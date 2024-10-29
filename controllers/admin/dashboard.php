@@ -66,6 +66,13 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             // Fetch data for the current page from the model
             $db_data = ErrorHandler::handle(fn() => $user_model->getAll(
                 page: $page,
+                select: [
+                    ["column" => $user_model->getColumnId()],
+                    ["column" => $user_model->getColumnEmail()],
+                    ["column" => $user_model->getColumnLastLoggedInAt()],
+                    ["column" => $user_model->getColumnIsActive()],
+                    ["column" => $user_model->getColumnRole()],
+                ],
                 conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
             ));
 
@@ -97,42 +104,55 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
             global $DB_METADATA;
 
+            // $db_data = Errorhandler::handle(fn() => $variant_model->getAll(
+            //     page: $page,
+            //     select: [
+            //         ["column" => "variants.id"],
+            //         ["column" => "variants.name"],
+            //         ["column" => "variants.unit_price"],
+            //         ["column" => "products.name", "alias" => "product"],
+            //         ["column" => "categories.name", "alias" => "category"],
+            //         ["column" => "inventories.inventory_id", "alias" => "inventory"],
+            //     ],
+            //     joins: [
+            //         [
+            //             'type' => 'INNER JOIN',
+            //             'table' => ProductModel::getTableName(),
+            //             'on' => "variants.product_id = products.id",
+            //         ],
+            //         [
+            //             'type' => 'INNER JOIN',
+            //             'table' => CategoryModel::getTableName(),
+            //             'on' => "products.category_id = categories.id",
+            //         ],
+            //         [
+            //             'type' => 'INNER JOIN',
+            //             'table' => InventoryModel::getTableName(),
+            //             'on' => "inventories.variant_id = variants.id",
+            //         ]
+            //     ],
+            //     conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date),
+            // ));
 
-            $db_data = Errorhandler::handle(fn() => $variant_model->getAll(
-                page: $page,
-                select: [
-                    ["column" => "variants.*"],
-                    ["column" => "products.name", "alias" => "product"],
-                    ["column" => "categories.name", "alias" => "category"],
-                    ["column" => "inventories.inventory_id", "alias" => "inventory"],
-                ],
-                joins: [
-                    [
-                        'type' => 'INNER JOIN',
-                        'table' => ProductModel::getTableName(),
-                        'on' => "variants.product_id = products.id",
-                    ],
-                    [
-                        'type' => 'INNER JOIN',
-                        'table' => CategoryModel::getTableName(),
-                        'on' => "products.category_id = categories.id",
-                    ],
-                    [
-                        'type' => 'INNER JOIN',
-                        'table' => InventoryModel::getTableName(),
-                        'on' => "inventories.variant_id = variants.id",
-                    ]
-                ],
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date),
+            $db_data = ErrorHandler::handle(fn () => $category_model->getAll(
+                page: $page
             ));
+
+            // Render the create button
+            renderDashboardHeader(
+                title_name: "Category Management",
+                create_btn_desc: "a new category",
+                create_user_btn_class: "create-category-button",
+                submission_path: "admin/categories/create"
+            );
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
                 fetched_data: $db_data,
-                update_submission_file_path: "admin/users/update",
-                edit_btn_class: "edit-user-button",
-                delete_submission_file_path: "admin/users/delete",
-                delete_btn_class: "delete-user-button",
+                update_submission_file_path: "admin/categories/update",
+                edit_btn_class: "edit-category-button",
+                delete_submission_file_path: "admin/categories/delete",
+                delete_btn_class: "delete-category-button",
                 attribute_to_confirm_deletion: "name"
             );
 

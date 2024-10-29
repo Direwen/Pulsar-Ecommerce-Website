@@ -3,13 +3,16 @@
 session_start();
 
 
-require_once './utils/database.php';
 require_once './services/mailService.php';
 require_once './services/authService.php';
 require_once './services/tokenService.php';
 require_once './services/sessionService.php';
 require_once './services/otpService.php';
+
+require_once './utils/database.php';
 require_once './utils/errorHandler.php';
+require_once './utils/imageHandler.php';
+
 require_once './models/userModel.php';
 require_once './models/sessionModel.php';
 require_once './models/categoryModel.php';
@@ -46,38 +49,7 @@ $DB_METADATA = ErrorHandler::handle(fn() => [
 
 // echo "<pre>";
 
-// var_dump(ErrorHandler::handle(fn () => $variant_model->getAll(
-//     select: [
-//         ["column" => "variants.*"],
-//         ["column" => "products.name", "alias" => "product"],
-//         ["column" => "categories.name", "alias" => "category"],
-//         ["column" => "inventories.inventory_id", "alias" => "inventory"],
-//     ],
-//     joins: [
-//         [
-//             'type' => 'INNER JOIN',
-//             'table' => ProductModel::getTableName(),
-//             'on' => "variants.product_id = products.id",
-//         ],
-//         [
-//             'type' => 'INNER JOIN',
-//             'table' => CategoryModel::getTableName(),
-//             'on' => "products.category_id = categories.id",
-//         ],
-//         [
-//             'type' => 'INNER JOIN',
-//             'table' => InventoryModel::getTableName(),
-//             'on' => "inventories.variant_id = variants.id",
-//         ]
-//     ],
-//     conditions: [
-//         [
-//             'attribute' => 'products.name',
-//             'value' => 'phone',
-//             'operator' => 'LIKE'
-//         ]
-//     ]
-// )));
+// echo "diddy";
 
 // echo "</pre>";
 

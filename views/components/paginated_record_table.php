@@ -1,5 +1,5 @@
 <?php
-
+global $root_directory;
 // Extracting records, current page, and pagination data from fetched data
 $records = $fetched_data["records"];
 unset($fetched_data["records"]);
@@ -95,6 +95,12 @@ $metadata = $fetched_data["metadata"];
                             <td class="p-3 flex justify-start items-center gap-2">
                                 <?php if ($update_submission_file_path && $edit_btn_class): ?>
                                     <span
+                                        <?php
+                                        foreach($record as $k => $v) {
+                                            if ($k != 'id') echo "{$k}={$v} ";
+                                        }
+                                        ?>
+                                        root-directory="<?= $root_directory; ?>"
                                         submission-path="<?= $root_directory . $update_submission_file_path; ?>"
                                         data-id="<?= $record['id'] ?>"
                                         class="material-symbols-outlined interactive <?= $edit_btn_class; ?> px-2 py-1 rounded-full text-accent hover:bg-accent hover:text-primary cursor-pointer">

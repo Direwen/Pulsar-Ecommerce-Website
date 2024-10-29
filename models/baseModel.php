@@ -26,7 +26,7 @@ abstract class BaseModel
     {
         $where_conditions_to_get = [];
 
-        foreach($conditions as $attr => $attr_value) {
+        foreach ($conditions as $attr => $attr_value) {
             $where_conditions_to_get[] = [
                 "attribute" => $attr,
                 "operator" => "=",
@@ -47,7 +47,7 @@ abstract class BaseModel
     {
         $where_conditions_to_delete = [];
 
-        foreach($conditions as $attr => $attr_value) {
+        foreach ($conditions as $attr => $attr_value) {
             $where_conditions_to_delete[] = [
                 "attribute" => $attr,
                 "operator" => "=",
@@ -70,7 +70,7 @@ abstract class BaseModel
 
         $where_conditions_to_update = [];
 
-        foreach($conditions as $attr => $attr_value) {
+        foreach ($conditions as $attr => $attr_value) {
             $where_conditions_to_update[] = [
                 "attribute" => $attr,
                 "operator" => "=",
@@ -319,67 +319,85 @@ abstract class BaseModel
     {
         $metadata = [];
         $columns_seen = []; // Track columns added to metadata to prevent duplicates
-        $selected_tables = [$this->getTableName()];
-
-        foreach ($joins as $join) {
-            $selected_tables[] = $join["table"];
-        }
-
+        $selected_tables = array_merge([$this->getTableName()], array_column($joins, 'table'));
+    
         // Split selectClause by commas and trim each clause
         $selectFields = array_map('trim', explode(',', $selectClause));
-
+    
+        // Process each field in the select clause
         foreach ($selectFields as $field) {
+            if ($field === "*") {
+                $this->addAllColumnsFromTables($selected_tables, $metadata, $columns_seen);
+                continue;
+            }
+    
             if (strpos($field, '.') !== false) {
-                list($table, $attribute) = explode('.', $field);
-
-                if ($attribute == "*") {
-                    // Add all columns from this table
-                    foreach ($GLOBALS["DB_METADATA"][$table] as $col => $info) {
-                        if (!isset($columns_seen[$col])) {
-                            $metadata[$col] = [
-                                "type" => $info["Type"],
-                                "sql_name" => "{$table}.{$col}"
-                            ];
-                            $columns_seen[$col] = true;
-                        }
-                    }
-                    continue;
-                }
-
-                if (strpos($attribute, "AS") !== false) {
-                    list($attribute, $alias) = array_map('trim', explode('AS', $attribute));
-                    if (!isset($columns_seen[$alias])) {
-                        $metadata[$alias] = [
-                            "type" => $GLOBALS["DB_METADATA"][$table][$attribute]["Type"],
-                            "sql_name" => "{$table}.{$attribute}"
-                        ];
-                        $columns_seen[$alias] = true;
-                    }
-                } else {
-                    if (!isset($columns_seen[$attribute])) {
-                        $metadata[$attribute] = [
-                            "type" => $GLOBALS["DB_METADATA"][$table][$attribute]["Type"],
-                            "sql_name" => "{$table}.{$attribute}"
-                        ];
-                        $columns_seen[$attribute] = true;
-                    }
-                }
-            } elseif ($field == "*") {
-                // Add all columns from all selected tables
-                foreach ($selected_tables as $table) {
-                    foreach ($GLOBALS["DB_METADATA"][$table] as $col => $info) {
-                        if (!isset($columns_seen[$col])) {
-                            $metadata[$col] = [
-                                "type" => $info["Type"],
-                                "sql_name" => "{$table}.{$col}"
-                            ];
-                            $columns_seen[$col] = true;
-                        }
-                    }
+                $this->processTableField($field, $metadata, $columns_seen);
+            } else {
+                $this->processSimpleField($field, $metadata, $columns_seen);
+            }
+        }
+    
+        return $metadata;
+    }
+    
+    // Adds all columns from specified tables if not already in $columns_seen
+    private function addAllColumnsFromTables(array $tables, array &$metadata, array &$columns_seen)
+    {
+        foreach ($tables as $table) {
+            foreach ($GLOBALS["DB_METADATA"][$table] as $col => $info) {
+                if (!isset($columns_seen[$col])) {
+                    $metadata[$col] = [
+                        "type" => $info["Type"],
+                        "sql_name" => "{$table}.{$col}"
+                    ];
+                    $columns_seen[$col] = true;
                 }
             }
         }
-
-        return $metadata;
     }
+    
+    // Processes fields with table.column or table.column AS alias format
+    private function processTableField(string $field, array &$metadata, array &$columns_seen)
+    {
+        list($table, $attribute) = explode('.', $field);
+    
+        if ($attribute === "*") {
+            $this->addAllColumnsFromTables([$table], $metadata, $columns_seen);
+            return;
+        }
+    
+        if (strpos($attribute, "AS") !== false) {
+            list($attribute, $alias) = array_map('trim', explode('AS', $attribute));
+            $this->addMetadataEntry($table, $attribute, $alias, $metadata, $columns_seen);
+        } else {
+            $this->addMetadataEntry($table, $attribute, $attribute, $metadata, $columns_seen);
+        }
+    }
+    
+    // Processes fields with attribute or attribute AS alias format
+    private function processSimpleField(string $field, array &$metadata, array &$columns_seen)
+    {
+        $table = $this->getTableName();
+    
+        if (strpos($field, "AS") !== false) {
+            list($attribute, $alias) = array_map('trim', explode('AS', $field));
+            $this->addMetadataEntry($table, $attribute, $alias, $metadata, $columns_seen);
+        } else {
+            $this->addMetadataEntry($table, $field, $field, $metadata, $columns_seen);
+        }
+    }
+    
+    // Adds a single column to metadata if it hasn't been added yet
+    private function addMetadataEntry(string $table, string $attribute, string $alias, array &$metadata, array &$columns_seen)
+    {
+        if (!isset($columns_seen[$alias])) {
+            $metadata[$alias] = [
+                "type" => $GLOBALS["DB_METADATA"][$table][$attribute]["Type"],
+                "sql_name" => "{$table}.{$attribute}"
+            ];
+            $columns_seen[$alias] = true;
+        }
+    }
+    
 }

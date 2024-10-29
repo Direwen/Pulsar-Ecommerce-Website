@@ -21,6 +21,10 @@ return [
         'controller' => 'controllers/admin/dashboard.php',
         'middleware' => []
     ],
+    'admin/users/create' => [
+        'controller' => 'controllers/admin/user_management/create.php',
+        'middleware' => []
+    ],
     'admin/users/update' => [
         'controller' => 'controllers/admin/user_management/update.php',
         'middleware' => []
@@ -29,8 +33,16 @@ return [
         'controller' => 'controllers/admin/user_management/delete.php',
         'middleware' => []
     ],
-    'admin/users/create' => [
-        'controller' => 'controllers/admin/user_management/create.php',
+    'admin/categories/create' => [
+        'controller' => 'controllers/admin/category_management/create.php',
+        'middleware' => []
+    ],
+    'admin/categories/update' => [
+        'controller' => 'controllers/admin/category_management/update.php',
+        'middleware' => []
+    ],
+    'admin/categories/delete' => [
+        'controller' => 'controllers/admin/category_management/delete.php',
         'middleware' => []
     ],
     '404' => [

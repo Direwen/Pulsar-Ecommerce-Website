@@ -1,6 +1,6 @@
 <?php
 
-require("./views/components/header.php");
+// require("./views/components/header.php");
 require("./views/components/navbar.php");
 require("./views/components/admin_easytouch_overlay.php");
 
