@@ -32,7 +32,7 @@ function editCategory(recordId, submissionPath, current_values) {
             <!-- Existing Image Preview Section -->
             <section class="flex flex-col justify-start items-start gap-2">
                 <label class="block text-sm font-medium text-dark">Current Image</label>
-                <img src="${current_values.rootDirectory + 'assets/' + 'mouse_skate.jpg'}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
+                <img src="${current_values.rootDirectory + 'assets/categories/' + current_values.img}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
 
                 <!-- Option to change image -->
                 <label class="flex items-center gap-2 mt-2">
@@ -121,9 +121,9 @@ document.querySelectorAll('.edit-category-button').forEach(button => {
         // Collect all attributes in an object to pass to editCategory
         const categoryDetails = {
             categoryName: this.getAttribute('name'),
-            software: this.getAttribute('software'),
-            firmware: this.getAttribute('firmware'),
-            manual: this.getAttribute('manual'),
+            software: this.getAttribute('software') ?? "",
+            firmware: this.getAttribute('firmware') ?? "",
+            manual: this.getAttribute('manual') ?? "",
             img: this.getAttribute('img'),
             rootDirectory: this.getAttribute('root-directory')
         };

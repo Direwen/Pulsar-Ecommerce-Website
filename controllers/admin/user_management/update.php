@@ -19,12 +19,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $user_model->getColumnId() => $user_id
             ]
         );
-        // Check if $update_result is an array before accessing its elements
-        if ($update_result == true) $_SESSION["message"] = "Successfully Updated";
-    } else {
-        $_SESSION["message"] = "No need to Update";
-    }
 
-    // Set session message before redirecting
+        // Check if $update_result indicates success
+        if ($update_result) {
+            setMessage("Successfully Updated", "success"); // Use setMessage for success
+        } else {
+            setMessage("Failed to Update", "error"); // Use setMessage for failure
+        }
+    } else {
+        setMessage("No need to Update", "info"); // Use setMessage for no change
+    }
 }
+
+// Redirect to the previous page
 header("Location: " . $_SERVER['HTTP_REFERER']);
+exit(); // Good practice to exit after a header redirect

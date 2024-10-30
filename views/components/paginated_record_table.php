@@ -96,8 +96,8 @@ $metadata = $fetched_data["metadata"];
                                 <?php if ($update_submission_file_path && $edit_btn_class): ?>
                                     <span
                                         <?php
-                                        foreach($record as $k => $v) {
-                                            if ($k != 'id') echo "{$k}={$v} ";
+                                        foreach ($record as $k => $v) {
+                                            if ($k != 'id' && !empty($v)) echo " {$k}={$v} ";
                                         }
                                         ?>
                                         root-directory="<?= $root_directory; ?>"

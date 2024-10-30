@@ -1,7 +1,6 @@
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST')
-{
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     global $user_model;
     $user_id = $_POST["id"];
 
@@ -9,8 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
         $user_model->getColumnId() => $user_id
     ]));
 
-    if ($result) $_SESSION["message"] = "Record Deleted";
-    else $_SESSION["message"] = "Failed to Delete the Record";
+    // Set messages using the setMessage function
+    if ($result) {
+        setMessage("Record Deleted", "success"); // Use setMessage function for success
+    } else {
+        setMessage("Failed to Delete the Record", "error"); // Use setMessage function for error
+    }
 }
 
 header("Location: " . $_SERVER['HTTP_REFERER']);
+exit(); // Always good practice to exit after a header redirect
