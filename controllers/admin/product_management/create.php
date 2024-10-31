@@ -7,6 +7,12 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+echo "<pre>";
+var_dump($_POST);
+var_dump($_FILES);
+echo "</pre>";
+exit();
+
 // prepare form data for first stage of validation
 $product_data_without_img = [
     "name" => $_POST["product-name"],

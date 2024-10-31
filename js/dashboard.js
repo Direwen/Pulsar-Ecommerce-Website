@@ -61,3 +61,52 @@ function addSpecialFeatureCategory() {
     // Add the feature section to the main container
     container.appendChild(featureSection);
 }
+
+
+let variantCount = 1;
+
+function addVariant() {
+    const variantContainer = document.getElementById('variantsContainer');
+    
+    // Update `variantCount` based on the number of variant items
+    variantCount = variantContainer.querySelectorAll('.variant-item').length + 1;
+
+    const variantHTML = `<div class="variant-item relative flex flex-col gap-4 border shadow px-4 py-6" data-variant-id="${variantCount}">
+
+    <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+        <label for="variantType_${variantCount}" class="text-gray-700">Type</label>
+        <input type="text" id="variantType_${variantCount}" name="variants[${variantCount - 1}][type]" class="block w-full border shadow rounded outline-accent p-2" required>
+    </section>
+
+    <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+        <label for="variantName_${variantCount}" class="text-gray-700">Name</label>
+        <input type="text" id="variantName_${variantCount}" name="variants[${variantCount - 1}][name]" class="block w-full border shadow rounded outline-accent p-2" required>
+    </section>
+
+    <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+        <label for="variantUnitPrice_${variantCount}" class="text-gray-700">Unit Price</label>
+        <input type="number" step="0.01" id="variantUnitPrice_${variantCount}" name="variants[${variantCount - 1}][unit_price]" class="block w-full border shadow rounded outline-accent p-2" required>
+    </section>
+
+    <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+        <label for="variantImg_${variantCount}" class="text-gray-700">Image for the variant</label>
+        <input type="file" accept="image/*" id="variantImg_${variantCount}" name="variants[${variantCount - 1}]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
+    </section>
+
+    <button type="button" class="absolute -top-3 -right-2 w-fit interactive bg-secondary text-light-dark font-semibold rounded-full px-1 border shadow hover:bg-red-500 hover:text-primary" onclick="removeVariant(this)">
+        <span class="material-symbols-outlined">remove</span>
+    </button>
+</div>
+`;
+    variantContainer.insertAdjacentHTML('beforeend', variantHTML);
+}
+
+function removeVariant(button) {
+    button.closest('.variant-item').remove();
+
+    // Ensure at least one variant remains visible
+    const remainingVariants = document.querySelectorAll('.variant-item').length;
+    if (remainingVariants === 0) {
+        addVariant();
+    }
+}
