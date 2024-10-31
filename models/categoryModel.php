@@ -88,7 +88,7 @@ class CategoryModel extends BaseModel
         }
 
         if ($check_img) {
-            if (empty($files_data["name"])) {
+            if (empty($files_data["img"]["name"])) {
                 $errors[] = "Image is required.";
             }
         }

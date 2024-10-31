@@ -2,15 +2,13 @@
 
 global $category_model, $root_directory;
 
-global $category_model, $root_directory;
-
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit;
 }
 
 // Validate form data
-if (!$category_model->validateFormData($_POST, $_FILES["img"] ?? [])) {
+if (!$category_model->validateFormData($_POST, $_FILES ?? [])) {
     setMessage("Invalid form data.", "error"); // Set error message
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit;
@@ -28,16 +26,13 @@ if (!$result) {
     exit;
 }
 
-// Extract prepared image details
-[$unique_file_name, $path_to_submit] = $result;
-
 // Create category
 $isCreated = ErrorHandler::handle(fn() => $category_model->create([
     $category_model::getColumnName() => $_POST["name"],
     $category_model::getColumnSoftware() => $_POST["software"] ?? null,
     $category_model::getColumnFirmware() => $_POST["firmware"] ?? null,
     $category_model::getColumnManual() => $_POST["manual"] ?? null,
-    $category_model::getColumnImg() => $unique_file_name,
+    $category_model::getColumnImg() => $result["name"],
 ]));
 
 if (!$isCreated) {
@@ -47,7 +42,7 @@ if (!$isCreated) {
 }
 
 // Move uploaded file
-$message = move_uploaded_file($_FILES["img"]["tmp_name"], $path_to_submit) ?
+$message = move_uploaded_file($result["temp_name"], $result["destination"]) ?
     "Created a new category" :
     "Failed to save a new category image";
 

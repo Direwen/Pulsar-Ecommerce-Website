@@ -104,6 +104,8 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
             global $DB_METADATA;
 
+            global $root_directory;
+
             // $db_data = Errorhandler::handle(fn() => $variant_model->getAll(
             //     page: $page,
             //     select: [
@@ -155,6 +157,17 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 delete_btn_class: "delete-category-button",
                 attribute_to_confirm_deletion: "name"
             );
+
+            renderDashboardHeader(
+                title_name: "Product Management",
+                create_btn_desc: "a new product",
+                create_user_btn_class: "create-product-button",
+                submission_path: "admin/products/create",
+                extra_info: [
+                    "path-for-api" => $root_directory . 'api/categories'
+                ]
+            );
+
 
             break;
 

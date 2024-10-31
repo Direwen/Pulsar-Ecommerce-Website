@@ -21,7 +21,7 @@ require_once './models/productModel.php';
 require_once './models/variantModel.php';
 require_once './models/inventoryModel.php';
 
-
+$root_directory = "/E-Commerce%20Assignment%20Project/";
 $pdo = ErrorHandler::handle(fn() => Database::getInstance());
 
 //Initializing Database Tables' Models
@@ -56,11 +56,19 @@ $DB_METADATA = ErrorHandler::handle(fn() => [
 
 // ErrorHandler::handle(fn () => $otp_service->clearOtpSession());
 
+// Function to check if the request is for an API route
+function isApiRequest() {
+    return strpos($_SERVER['REQUEST_URI'], '/api/') !== false;
+}
 
+// If it's an API request, only load the router and exit
+if (isApiRequest()) {
+    require("./router/router.php");
+    exit;
+}
 
 ErrorHandler::handle(fn() => $auth_service->maintainUserSession());
 $website_title = "Pulsar";
-$root_directory = "/E-Commerce%20Assignment%20Project/";
 $categories = [
     ['name' => 'Mice', 'link' => null, 'image' => $root_directory . "assets/mouse_pad.webp"],
     ['name' => 'Mouse Accessories', 'link' => null, 'image' => null],

@@ -33,8 +33,15 @@ function routeToController($uri, $routes)
     global $root_directory;
 
     if (array_key_exists($uri, $routes)) {
+        // Check if this is an API route
+        if (!empty($routes[$uri]['isApi'])) {
+            // Set header for JSON response
+            header('Content-Type: application/json');
+        }
+
         // Call the middleware function
         foreach ($routes[$uri]['middleware'] as $middleware) call_user_func($middleware . 'Middleware');
+        
         // Render the script or page from controller
         require $routes[$uri]['controller'];
     } else {

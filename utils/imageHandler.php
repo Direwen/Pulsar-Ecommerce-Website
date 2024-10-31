@@ -26,7 +26,11 @@ class ImageHandler
         // Define the path to save the image
         $destination = rtrim($dir_to_save, '/') . '/' . $uniqueFileName;
 
-        return [$uniqueFileName, $destination];
+        return [
+            'name' => $uniqueFileName, 
+            'destination' => $destination, 
+            'temp_name' => $temp_name
+        ];
     }
 
     private static function generateUniqueFileName(string $file_name): string
