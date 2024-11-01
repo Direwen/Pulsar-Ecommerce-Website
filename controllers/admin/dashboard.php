@@ -125,7 +125,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             //     conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date),
             // ));
 
-            $db_data = ErrorHandler::handle(fn () => $category_model->getAll(
+            $db_data = ErrorHandler::handle(fn() => $category_model->getAll(
                 page: $page
             ));
 
@@ -147,6 +147,25 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 attribute_to_confirm_deletion: "name"
             );
 
+            $db_data = ErrorHandler::handle(fn() => $variant_model->getAll(
+                page: $page,
+                select: [
+                    ["column" => $variant_model->getColumnId()],
+                    ["column" => $product_model->getColumnName(), "alias" => "Product", "table" => $product_model->getTableName()],
+                    ["column" => $variant_model->getColumnType()],
+                    ["column" => $variant_model->getColumnName()],
+                    ["column" => $variant_model->getColumnUnitPrice()],
+                    ["column" => $variant_model->getColumnImg()],
+                ],
+                joins: [
+                    [
+                        'type' => 'INNER JOIN',
+                        'table' => $product_model->getTableName(),
+                        'on' => "variants.product_id = products.id",
+                    ]
+                ]
+            ));
+
             renderDashboardHeader(
                 title_name: "Product Management",
                 create_btn_desc: "a new product",
@@ -157,6 +176,15 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 ]
             );
 
+            renderPaginatedTable(
+                attributes_data: $DB_METADATA,
+                fetched_data: $db_data,
+                update_submission_file_path: "admin/categories/update",
+                edit_btn_class: "edit-category-button",
+                delete_submission_file_path: "admin/categories/delete",
+                delete_btn_class: "delete-category-button",
+                attribute_to_confirm_deletion: "name"
+            );
 
             break;
 

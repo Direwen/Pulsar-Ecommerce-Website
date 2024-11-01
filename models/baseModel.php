@@ -128,7 +128,7 @@ abstract class BaseModel
         $recordsPerPage = $this->validateRecordsPerPage($recordsPerPage);
         $whereClauseData = $this->generateWhereClause($conditions);
         $joinClause = $this->generateJoinClause($joins);
-        $selectClause = $this->generateSelectClause($select);
+        $selectClause = $this->generateSelectClause($select, static::getTableName());
         $sortDirection = $this->validateSortDirection($sortDirection);
         $offset = ($page - 1) * $recordsPerPage;
         $params  = $whereClauseData['params'];
@@ -142,6 +142,8 @@ abstract class BaseModel
         // Conditionally add ORDER BY clause if $sortField is defined
         if ($sortField) $query .= " ORDER BY {$sortField} {$sortDirection}";
 
+        var_dump($query);
+        var_dump($params);
         // Fetch records
         $result = $this->db->fetchAll($query, $params, $recordsPerPage, $offset);
 
@@ -293,20 +295,25 @@ abstract class BaseModel
     }
 
     // Helper function to generate SELECT clause
-    private function generateSelectClause(array $select)
+    private function generateSelectClause(array $select, string $mainTable)
     {
         if (empty($select)) {
-            return '*'; // Default to all columns if none specified
+            return '*'; // Default to all columns if none are specified
         }
 
         $selectClauses = [];
         foreach ($select as $item) {
+            // Use the main table as the prefix if 'table' is not provided
+            $tablePrefix = isset($item['table']) ? "{$item['table']}." : "{$mainTable}.";
+
+            // Check if an alias is specified for the column
             $selectClauses[] = isset($item['alias'])
-                ? "{$item['column']} AS {$item['alias']}"
-                : "{$item['column']}";
+                ? "{$tablePrefix}{$item['column']} AS {$item['alias']}"
+                : "{$tablePrefix}{$item['column']}";
         }
         return implode(', ', $selectClauses);
     }
+
 
     // Helper function to validate sort direction
     private function validateSortDirection($sortDirection)
@@ -320,27 +327,27 @@ abstract class BaseModel
         $metadata = [];
         $columns_seen = []; // Track columns added to metadata to prevent duplicates
         $selected_tables = array_merge([$this->getTableName()], array_column($joins, 'table'));
-    
+
         // Split selectClause by commas and trim each clause
         $selectFields = array_map('trim', explode(',', $selectClause));
-    
+
         // Process each field in the select clause
         foreach ($selectFields as $field) {
             if ($field === "*") {
                 $this->addAllColumnsFromTables($selected_tables, $metadata, $columns_seen);
                 continue;
             }
-    
+
             if (strpos($field, '.') !== false) {
                 $this->processTableField($field, $metadata, $columns_seen);
             } else {
                 $this->processSimpleField($field, $metadata, $columns_seen);
             }
         }
-    
+
         return $metadata;
     }
-    
+
     // Adds all columns from specified tables if not already in $columns_seen
     private function addAllColumnsFromTables(array $tables, array &$metadata, array &$columns_seen)
     {
@@ -356,17 +363,17 @@ abstract class BaseModel
             }
         }
     }
-    
+
     // Processes fields with table.column or table.column AS alias format
     private function processTableField(string $field, array &$metadata, array &$columns_seen)
     {
         list($table, $attribute) = explode('.', $field);
-    
+
         if ($attribute === "*") {
             $this->addAllColumnsFromTables([$table], $metadata, $columns_seen);
             return;
         }
-    
+
         if (strpos($attribute, "AS") !== false) {
             list($attribute, $alias) = array_map('trim', explode('AS', $attribute));
             $this->addMetadataEntry($table, $attribute, $alias, $metadata, $columns_seen);
@@ -374,12 +381,12 @@ abstract class BaseModel
             $this->addMetadataEntry($table, $attribute, $attribute, $metadata, $columns_seen);
         }
     }
-    
+
     // Processes fields with attribute or attribute AS alias format
     private function processSimpleField(string $field, array &$metadata, array &$columns_seen)
     {
         $table = $this->getTableName();
-    
+
         if (strpos($field, "AS") !== false) {
             list($attribute, $alias) = array_map('trim', explode('AS', $field));
             $this->addMetadataEntry($table, $attribute, $alias, $metadata, $columns_seen);
@@ -387,7 +394,7 @@ abstract class BaseModel
             $this->addMetadataEntry($table, $field, $field, $metadata, $columns_seen);
         }
     }
-    
+
     // Adds a single column to metadata if it hasn't been added yet
     private function addMetadataEntry(string $table, string $attribute, string $alias, array &$metadata, array &$columns_seen)
     {
@@ -399,5 +406,4 @@ abstract class BaseModel
             $columns_seen[$alias] = true;
         }
     }
-    
 }
