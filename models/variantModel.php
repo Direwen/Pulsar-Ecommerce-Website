@@ -75,6 +75,56 @@ class VariantModel extends BaseModel
     }
 
     /**
+     * Validates the form data for creating or updating variants.
+     * @param array $post_data The submitted form data.
+     * @param array $files_data The uploaded file data (if any).
+     * @return bool|null Returns true if validation passes, false if it fails, or null if errors occur.
+     */
+    public function validateFormData(array $post_data, array $files_data = []): ?bool
+    {
+        $errors = [];
+
+        // Validate 'product_id' - required and must be an integer
+        if (empty($post_data[$this->getColumnProductId()]) || !is_numeric($post_data[$this->getColumnProductId()])) {
+            $errors[] = "Product ID is required and must be a valid integer.";
+        }
+
+        // Validate 'type' - required, max length of 255 characters
+        if (empty($post_data[$this->getColumnType()])) {
+            $errors[] = "Variant type is required.";
+        } elseif (strlen($post_data[$this->getColumnType()]) > 255) {
+            $errors[] = "Variant type cannot exceed 255 characters.";
+        }
+
+        // Validate 'name' - required, max length of 255 characters
+        if (empty($post_data[$this->getColumnName()])) {
+            $errors[] = "Variant name is required.";
+        } elseif (strlen($post_data[$this->getColumnName()]) > 255) {
+            $errors[] = "Variant name cannot exceed 255 characters.";
+        }
+
+        // Validate 'unit_price' - required, must be a decimal number
+        if (empty($post_data[$this->getColumnUnitPrice()]) || !is_numeric($post_data[$this->getColumnUnitPrice()])) {
+            $errors[] = "Unit price is required and must be a valid number.";
+        }
+
+        // Validate 'img' - required, must be a valid image path
+        if (empty($files_data[$this->getColumnImg()]["name"])) {
+            $errors[] = "Variant image is required.";
+        }
+
+        // If there are any validation errors, return false and handle the errors
+        if (!empty($errors)) {
+            var_dump($errors);
+            setMessage(implode(", ", $errors), 'error');
+            return false;
+        }
+
+        // Return true if validation passed with no errors
+        return true;
+    }
+
+    /**
      * Inserts a new record into the 'variants' table.
      * @param array $data
      * @return bool
