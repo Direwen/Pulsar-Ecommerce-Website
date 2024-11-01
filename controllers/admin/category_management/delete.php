@@ -1,6 +1,5 @@
 <?php
 
-global $category_model;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = $_POST["id"];

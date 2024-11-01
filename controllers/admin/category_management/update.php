@@ -1,84 +1,99 @@
 <?php
 
-global $category_model;
-
 echo "<pre>";
 var_dump($_POST);
 var_dump($_FILES);
 echo "</pre>";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST["id"] ?? null; // Ensure $id is set to null if not present
+    $id = $_POST["id"] ?? null;
 
-    // Validate form data, ensuring empty values are set to null
+    // Validate form data
     if (!$category_model->validateFormData($_POST, $_FILES["img"] ?? [], false)) {
-        setMessage("Invalid form data.", "error"); // Use setMessage function
+        setMessage("Invalid form data.", "error");
         header("Location: " . $_SERVER['HTTP_REFERER']);
         exit();
     }
 
-    // Retrieve the category record and handle errors
+    // Retrieve the category record
     $category = ErrorHandler::handle(fn() => $category_model->get([$category_model->getColumnId() => $id]));
-
-    // Check if the record was found, if not, exit early
     if (!$category) {
-        setMessage("Record not found to update", "error"); // Use setMessage function
+        setMessage("Record not found to update", "error");
         header("Location: " . $_SERVER['HTTP_REFERER']);
         exit();
     }
 
     $newImageName = $_FILES["img"]["name"] ?? null;
-    $oldImageName = $category["img"] ?? null; // Set to null if not present
-
-    // Check if new image name is provided
+    $oldImageName = $category["img"] ?? null;
     $imgChanged = ($newImageName && $newImageName !== $oldImageName);
 
-    // Prepare image for storage if it has changed
-    if ($imgChanged) {
-        $result = ErrorHandler::handle(fn() => ImageHandler::prepareImageForStorage(
-            $_FILES["img"]["tmp_name"],
-            $newImageName,
-            "./assets/categories"
-        ));
+    // Extract values from $_POST to avoid using superglobals directly in the closure
+    $name = $_POST["name"] ?? null;
+    $software = $_POST["software"] ?? null;
+    $firmware = $_POST["firmware"] ?? null;
+    $manual = $_POST["manual"] ?? null;
 
-        if (!$result) {
-            setMessage("Image preparation failed.", "error"); // Use setMessage function
-            header("Location: " . $_SERVER['HTTP_REFERER']);
-            exit();
-        }
-    }
-
-    // Assign unique file name or retain old image name if no new image is uploaded
-    [$uniqueFileName, $pathToSubmit] = $result ?? [$oldImageName, null];
-
-    // Prepare data for update, ensuring empty attributes are set to null
-    $updateData = [
-        $category_model::getColumnName() => $_POST["name"] ?: null,
-        $category_model::getColumnSoftware() => $_POST["software"] ?: null,
-        $category_model::getColumnFirmware() => $_POST["firmware"] ?: null,
-        $category_model::getColumnManual() => $_POST["manual"] ?: null,
-        $category_model::getColumnImg() => $imgChanged ? $uniqueFileName : $oldImageName,
-    ];
-
-    // Update category record
-    $updateResult = ErrorHandler::handle(fn() => $category_model->update(
-        $updateData,
-        [$category_model->getColumnId() => $id]
-    ));
-
-    // Handle update result
-    if ($updateResult) {
+    // Handle transaction for update process
+    $updateResult = $error_handler->handleDbOperation(function () use (
+        $category_model,
+        $id,
+        $imgChanged,
+        $newImageName,
+        $oldImageName,
+        $name,
+        $software,
+        $firmware,
+        $manual
+    ) {
+        // Prepare new image if it has changed
         if ($imgChanged) {
-            // Delete old image if it exists
+            $result = ImageHandler::prepareImageForStorage(
+                $_FILES["img"]["tmp_name"],
+                $newImageName,
+                "./assets/categories"
+            );
+
+            if (!$result) {
+                throw new Exception("Image preparation failed.");
+            }
+            [$uniqueFileName, $pathToSubmit] = $result;
+        } else {
+            $uniqueFileName = $oldImageName;
+        }
+
+        // Prepare data for update
+        $updateData = [
+            $category_model::getColumnName() => $name,
+            $category_model::getColumnSoftware() => $software,
+            $category_model::getColumnFirmware() => $firmware,
+            $category_model::getColumnManual() => $manual,
+            $category_model::getColumnImg() => $uniqueFileName,
+        ];
+
+        // Perform the update
+        if (!$category_model->update($updateData, [$category_model->getColumnId() => $id])) {
+            throw new Exception("Failed to update the category.");
+        }
+
+        // Move new image file if changed
+        if ($imgChanged) {
             $oldFilePath = "./assets/categories/" . $oldImageName;
             if (file_exists($oldFilePath)) {
                 unlink($oldFilePath);
             }
-            move_uploaded_file($_FILES["img"]["tmp_name"], $pathToSubmit);
+            if (!move_uploaded_file($_FILES["img"]["tmp_name"], $pathToSubmit)) {
+                throw new Exception("Failed to save the new category image.");
+            }
         }
-        setMessage("Category updated successfully.", "success"); // Use setMessage function
+
+        return true;
+    });
+
+    // Set appropriate success or error message
+    if ($updateResult) {
+        setMessage("Category updated successfully.", "success");
     } else {
-        setMessage("Failed to update the category.", "error"); // Use setMessage function
+        setMessage("Failed to update the category.", "error");
     }
 }
 

@@ -2,8 +2,6 @@
 
 header('Content-Type: application/json');
 
-global $category_model;
-
 $categories = [];
 $page = 1;
 

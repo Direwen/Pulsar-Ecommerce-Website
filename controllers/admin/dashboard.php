@@ -61,8 +61,6 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
     // This will be responsible for choosing what management dashboard to render
     switch ($_SESSION['selected_dashboard']) {
         case 'user-management':
-            global $user_model;
-            global $DB_METADATA;
             // Fetch data for the current page from the model
             $db_data = ErrorHandler::handle(fn() => $user_model->getAll(
                 page: $page,
@@ -96,15 +94,6 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             break;
 
         case 'product-management':
-            global $category_model;
-
-            global $product_model;
-
-            global $variant_model;
-
-            global $DB_METADATA;
-
-            global $root_directory;
 
             // $db_data = Errorhandler::handle(fn() => $variant_model->getAll(
             //     page: $page,

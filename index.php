@@ -21,16 +21,39 @@ require_once './models/productModel.php';
 require_once './models/variantModel.php';
 require_once './models/inventoryModel.php';
 
+$error_handler = null; 
+$user_model = null; 
+$session_model = null;
+$category_model = null;
+$product_model = null; 
+$variant_model = null;
+$inventory_model = null; 
+$DB_METADATA = null;
+
 $root_directory = "/E-Commerce%20Assignment%20Project/";
 $pdo = ErrorHandler::handle(fn() => Database::getInstance());
+$error_handler = ErrorHandler::getInstance($pdo);
 
-//Initializing Database Tables' Models
-$user_model = ErrorHandler::handle(fn() => new UserModel($pdo));
-$session_model = ErrorHandler::handle(fn() => new SessionModel($pdo));
-$category_model = ErrorHandler::handle(fn() => new CategoryModel($pdo));
-$product_model = ErrorHandler::handle(fn() => new ProductModel($pdo));
-$variant_model = ErrorHandler::handle(fn() => new VariantModel($pdo));
-$inventory_model = ErrorHandler::handle(fn() => new InventoryModel($pdo));
+$result = $error_handler->handleDbOperation(function () use ($pdo) {
+
+    global $user_model, $session_model, $category_model, $product_model, $variant_model, $inventory_model, $DB_METADATA;
+    $user_model = new UserModel($pdo);
+    $session_model = new SessionModel($pdo);
+    $category_model = new CategoryModel($pdo);
+    $product_model = new ProductModel($pdo);
+    $variant_model = new VariantModel($pdo);
+    $inventory_model = new InventoryModel($pdo);
+    $DB_METADATA = [
+        UserModel::getTableName() => $user_model->getColumnMetadata(),
+        SessionModel::getTableName() => $session_model->getColumnMetadata(),
+        CategoryModel::getTableName() => $category_model->getColumnMetadata(),
+        ProductModel::getTableName() => $product_model->getColumnMetadata(),
+        VariantModel::getTableName() => $variant_model->getColumnMetadata(),
+        InventoryModel::getTableName() => $inventory_model->getColumnMetadata(),
+    ];
+
+    return true;
+});
 
 //INITIALIZING SERVICES
 $mail_service = MailService::getInstance();
@@ -38,22 +61,10 @@ $otp_service = new OtpService();
 $token_service = new TokenService($session_model);
 $session_service = new SessionService($token_service);
 $auth_service = new AuthService($mail_service, $otp_service, $session_service, $token_service, $user_model);
-$DB_METADATA = ErrorHandler::handle(fn() => [
-    UserModel::getTableName() => $user_model->getColumnMetadata(),
-    SessionModel::getTableName() => $session_model->getColumnMetadata(),
-    CategoryModel::getTableName() => $category_model->getColumnMetadata(),
-    ProductModel::getTableName() => $product_model->getColumnMetadata(),
-    VariantModel::getTableName() => $variant_model->getColumnMetadata(),
-    InventoryModel::getTableName() => $inventory_model->getColumnMetadata(),
-]);
-
 
 // echo "<pre>";
-
 // echo "diddy";
-
 // echo "</pre>";
-
 // ErrorHandler::handle(fn () => $otp_service->clearOtpSession());
 
 // Function to check if the request is for an API route

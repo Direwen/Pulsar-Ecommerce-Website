@@ -24,6 +24,27 @@ class Database
         return self::$instance;
     }
 
+    public function beginTransaction()
+    {
+        if (!$this->pdo->inTransaction()) {
+            $this->pdo->beginTransaction();
+        }
+    }
+
+    public function commit()
+    {
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->commit();
+        }
+    }
+
+    public function rollBack()
+    {
+        if ($this->pdo->inTransaction()) {
+            $this->pdo->rollBack();
+        }
+    }
+
     // Use for INSERT, UPDATE, DELETE queries
     public function execute($sql, $params = [])
     {
@@ -43,15 +64,6 @@ class Database
     public function fetchAll($sql, $params = [], $limit = null, $offset = null)
     {
 
-        // echo "IN DATABASE FETCH ALL";
-        // echo "<br>";
-        
-        // echo($sql);
-        
-        // echo "<br>";
-        // var_dump($params);
-        // echo "<br>";
-        
         // If limit and offset are provided, append them to the SQL query
         if ($limit !== null && $offset !== null) {
             $sql .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
