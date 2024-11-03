@@ -42,6 +42,8 @@ if (!$product_model->validateFormData($product_data_without_img, $_FILES, false)
 
 $finalized_data = $product_data_without_img;
 
+$details_for_main_img = null;
+
 if (in_array($product_model->getColumnImg(), $imgUploaded)) {
     echo "Update " . $product_model->getColumnImg();
     $details_for_main_img = ImageHandler::prepareImageForStorage(
@@ -56,6 +58,8 @@ if (in_array($product_model->getColumnImg(), $imgUploaded)) {
         $product_model->getColumnImg() => $details_for_main_img["name"],
     ]);
 }
+
+$details_for_ads_img = [];
 
 if (in_array($product_model->getColumnImgForAds(), $imgUploaded)) {
     echo "Update " . $product_model->getColumnImgForAds();
@@ -91,6 +95,8 @@ foreach ($_POST["variants"] as $each) {
     }
 }
 
+$details_for_variant_img = [];
+
 if (in_array("variants", $imgUploaded)) {
     $details_for_variant_img = [];
     for ($i = 0; $i < count($_FILES["variants"]["name"]); $i++) {
@@ -105,7 +111,7 @@ if (in_array("variants", $imgUploaded)) {
 }
 
 for ($i = 0; $i < count($_POST["variants"]); $i++) {
-    
+
 
     $finalized_data = [
         $variant_model->getColumnType() => $_POST["variants"][$i]["type"],
@@ -116,7 +122,7 @@ for ($i = 0; $i < count($_POST["variants"]); $i++) {
     if (!empty($details_for_variant_img)) {
         $finalized_data[$variant_model->getColumnImg()] = $details_for_variant_img[$i]["name"];
     }
-    
+
 
     $result = $variant_model->update(
         $finalized_data,
@@ -140,12 +146,36 @@ $product = $product_model->get(
         $product_model->getColumnId() => $product_id
     ]
 );
+
+// Remove the variant image from the filesystem if it exists
+$variant_img_path = './assets/products/' . $variant["img"];
+if (file_exists($variant_img_path)) {
+    unlink($variant_img_path);
+}
+
+// Prepare the list of images to delete (main and additional images)
+$product_img_list = ['./assets/products/' . $product["img"]];
+foreach (json_decode($product[$product_model->getColumnImgForAds()]) as $img) {
+    $product_img_list[] = './assets/products/' . $img;
+}
+
+// Delete each product image from the filesystem
+foreach ($product_img_list as $img) {
+    if (file_exists($img)) {
+        unlink($img);
+    }
+}
+
+if (in_array($product_model->getColumnImg(), $imgUploaded) && !move_uploaded_file($details_for_main_img["temp_name"], $details_for_main_img["destination"])) {
+    throw new Exception("Failed to move images to final destination");
+}
+
 // Move images to final destinations
-// foreach ([$details_for_main_img, ...$details_for_ads_img, ...$details_for_variant_img] as $each) {
-//     if (!move_uploaded_file($each["temp_name"], $each["destination"])) {
-//         throw new Exception("Failed to move images to final destination");
-//     }
-// }
+foreach ([...$details_for_ads_img, ...$details_for_variant_img] as $each) {
+    if (!move_uploaded_file($each["temp_name"], $each["destination"])) {
+        throw new Exception("Failed to move images to final destination");
+    }
+}
 
 
 echo "<pre>";
