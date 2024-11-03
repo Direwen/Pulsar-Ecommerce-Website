@@ -66,6 +66,11 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/products' => [
+        'controller' => 'controllers/api/get_products.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'test' => [
         'controller' => 'controllers/test.php',
         'middleware' => []

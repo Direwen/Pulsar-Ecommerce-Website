@@ -20,7 +20,7 @@ function renderLinkButton($link_button_name, $url){
     include("./views/components/link_button.php");
 }
 
-function renderPaginatedTable($attributes_data, $fetched_data, $update_submission_file_path = null, $edit_btn_class = null, $delete_submission_file_path = null, $delete_btn_class = null, $attribute_to_confirm_deletion=null)
+function renderPaginatedTable($attributes_data, $fetched_data, $update_submission_file_path = null, $edit_btn_class = null, $delete_submission_file_path = null, $delete_btn_class = null, $attribute_to_confirm_deletion=null, $extra_info = [])
 {
     global $root_directory;
     include("./views/components/paginated_record_table.php");

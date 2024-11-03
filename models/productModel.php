@@ -159,12 +159,11 @@ class ProductModel extends BaseModel
             if (empty($files_data[$this->getColumnImgForAds()]["name"])) {
                 $errors[] = "Image for ads must be provided.";
             }
-    
+
             // Validate 'img' - check if required or optional based on $check_img flag
             if (empty($files_data[$this->getColumnImg()]["name"])) {
                 $errors[] = "Main product image is required.";
             }
-
         }
 
         // If there are any validation errors, return false and handle the errors
@@ -181,22 +180,41 @@ class ProductModel extends BaseModel
 
     protected function createRaw($data): bool
     {
-        return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " 
-            (" . self::getColumnName() . ", " . self::getColumnCategoryId() . ", " . self::getColumnDescription() . ", " . self::getColumnDimension() . ", " . self::getColumnFeature() . ", " . self::getColumnImportantFeature() . ", " . self::getColumnRequirement() . ", " . self::getColumnPackageContent() . ", " . self::getColumnImgForAds() . ", " . self::getColumnImg() . ")
-            VALUES (:name, :category_id, :details_description, :dimension, :feature, :important_feature, :requirement, :package_content, :img_for_ads, :img)",
-            [
-                ':name' => strtolower(trim($data['name'])),
-                ':category_id' => $data['category_id'],
-                ':details_description' => $data['description'] ?? null,
-                ':dimension' => $data['dimension'] ?? null,
-                ':feature' => json_encode($data['feature'] ?? []),
-                ':important_feature' => json_encode($data['important_feature'] ?? []),
-                ':requirement' => json_encode($data['requirement'] ?? []),
-                ':package_content' => json_encode($data['package_content'] ?? []),
-                ':img_for_ads' => json_encode($data['img_for_ads'] ?? []),
-                ':img' => $data['img'] ?? null
-            ]
+        // Use formatData to prepare only the necessary data
+        $formattedData = $this->formatData($data);
+
+        // Dynamically generate column names and placeholders based on formatted data
+        $columns = array_keys($formattedData);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
+
+        // Construct the SQL query
+        $query = sprintf(
+            "INSERT INTO %s (%s) VALUES (%s)",
+            self::getTableName(),
+            implode(', ', $columns),
+            implode(', ', $placeholders)
         );
+
+        // Execute the query with formatted data as the values
+        return $this->db->execute($query, array_combine($placeholders, array_values($formattedData)));
+    }
+
+    protected function formatData($data, $null_filter=false): array
+    {
+        $formattedData = [
+            'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
+            'category_id' => $data['category_id'] ?? null,
+            'description' => $data['description'] ?? null,
+            'dimension' => $data['dimension'] ?? null,
+            'feature' => isset($data['feature']) ? json_encode($data['feature']) : null,
+            'important_feature' => isset($data['important_feature']) ? json_encode($data['important_feature']) : null,
+            'requirement' => isset($data['requirement']) ? json_encode($data['requirement']) : null,
+            'package_content' => isset($data['package_content']) ? json_encode($data['package_content']) : null,
+            'img_for_ads' => isset($data['img_for_ads']) ? json_encode($data['img_for_ads']) : null,
+            'img' => $data['img'] ?? null
+        ];
+
+        // Filter out null values to keep only the provided attributes
+        return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
 }

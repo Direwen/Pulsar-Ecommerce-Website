@@ -80,4 +80,9 @@ class SessionModel extends BaseModel
 
         return $session ?? null;
     }
+
+    protected function formatData($data, $null_filter=false): array
+    {
+        return $data;
+    }
 }

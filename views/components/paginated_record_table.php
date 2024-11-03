@@ -99,6 +99,9 @@ $metadata = $fetched_data["metadata"];
                                         foreach ($record as $k => $v) {
                                             if ($k != 'id' && !empty($v)) echo " {$k}={$v} ";
                                         }
+                                        foreach ($extra_info as $k => $v) {
+                                            echo " {$k}={$v} ";
+                                        }
                                         ?>
                                         root-directory="<?= $root_directory; ?>"
                                         submission-path="<?= $root_directory . $update_submission_file_path; ?>"
@@ -110,6 +113,14 @@ $metadata = $fetched_data["metadata"];
 
                                 <?php if ($delete_submission_file_path && $delete_btn_class): ?>
                                     <span
+                                        <?php
+                                        foreach ($record as $k => $v) {
+                                            if ($k != 'id' && !empty($v)) echo " {$k}={$v} ";
+                                        }
+                                        foreach ($extra_info as $k => $v) {
+                                            echo " {$k}={$v} ";
+                                        }
+                                        ?>
                                         submission-path="<?= $root_directory . $delete_submission_file_path; ?>"
                                         <?php if ($attribute_to_confirm_deletion): ?>
                                         <?= $attribute_to_confirm_deletion . "=" . $record[$attribute_to_confirm_deletion]; ?>

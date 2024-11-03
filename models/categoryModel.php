@@ -118,4 +118,9 @@ class CategoryModel extends BaseModel
             ]
         );
     }
+
+    protected function formatData($data, $null_filter=false): array
+    {
+        return $data;
+    }
 }

@@ -19,47 +19,75 @@ function updateInputField() {
     }
 }
 
-function toggleImageInput() {
-    const checkbox = document.getElementById('changeImageCheckbox');
-    const imageInput = document.getElementById('newImageInput');
-    imageInput.classList.toggle('hidden', !checkbox.checked); // Show input if checkbox is checked
+// function toggleImageInput() {
+//     const checkbox = document.getElementById('changeImageCheckbox');
+//     const imageInput = document.getElementById('newImageInput');
+//     imageInput.classList.toggle('hidden', !checkbox.checked); // Show input if checkbox is checked
+// }
+
+function toggleImageInput(checkbox) {
+    // Find the corresponding file input using the data-toggle attribute
+    const toggleId = checkbox.getAttribute('data-toggle');
+    const fileInput = document.querySelector(`input[type="file"][data-toggle="${toggleId}"]`);
+
+    // Show or hide the file input based on the checkbox state
+    if (fileInput) {
+        fileInput.classList.toggle('hidden', !checkbox.checked);
+    }
 }
 
 // Function to handle adding new special feature containers dynamically
 function addSpecialFeatureCategory() {
     const container = document.getElementById('special-feature-container');
 
-    // Create a new feature section
-    const featureSection = document.createElement('div');
-    featureSection.classList.add('special-feature-item', 'flex', 'flex-col', 'gap-2', 'border', 'p-4', 'rounded', 'shadow', 'relative');
-    
-    // Create input for the category name
-    const categoryNameInput = document.createElement('input');
-    categoryNameInput.type = 'text';
-    categoryNameInput.placeholder = 'Category (e.g., Sensor)';
-    categoryNameInput.name = 'special-feature-title[]';
-    categoryNameInput.classList.add('block', 'w-full', 'border', 'rounded', 'p-2', 'outline-accent');
-    
-    // Create textarea for the category description
-    const categoryDescription = document.createElement('textarea');
-    categoryDescription.placeholder = 'Feature Details';
-    categoryDescription.name = 'special-feature-details[]';
-    categoryDescription.classList.add('block', 'w-full', 'border', 'rounded', 'p-2', 'outline-accent');
-    
-    // Create delete button
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.textContent = 'Delete Feature';
-    deleteButton.classList.add('absolute', 'top-2', 'right-2', 'text-red-500', 'font-semibold', 'py-1', 'px-2', 'rounded');
-    deleteButton.onclick = () => container.removeChild(featureSection); // Remove feature section on click
+    // Get the count of existing feature items
+    const featureCount = container.querySelectorAll('.special-feature-item').length + 1;
 
-    // Append inputs and delete button to the feature section
-    featureSection.appendChild(categoryNameInput);
-    featureSection.appendChild(categoryDescription);
-    featureSection.appendChild(deleteButton);
+    // Define the HTML structure for a new feature section
+    const featureHTML = `
+        <div class="special-feature-item relative flex flex-col gap-4 border shadow px-4 py-6" data-feature-id="${featureCount}">
+        
+            <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+                <label for="featureCategory_${featureCount}" class="text-gray-700">Title</label>
+                <input type="text" id="featureCategory_${featureCount}" name="special-feature-title[]" placeholder="Category (e.g., Sensor)" class="block w-full border shadow rounded outline-accent p-2" required>
+            </section>
 
-    // Add the feature section to the main container
-    container.appendChild(featureSection);
+            <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+                <label for="featureDescription_${featureCount}" class="text-gray-700">Details</label>
+                <textarea id="featureDescription_${featureCount}" name="special-feature-details[]" placeholder="Feature Details" class="block w-full border shadow rounded outline-accent p-2" required></textarea>
+            </section>
+
+            <button type="button" class="absolute -top-3 -right-2 w-fit interactive bg-secondary text-light-dark font-semibold rounded-full px-1 border shadow hover:bg-red-500 hover:text-primary" onclick="removeFeature(this)">
+                <span class="material-symbols-outlined">remove</span>
+            </button>
+        </div>
+    `;
+
+    // Insert the new feature section HTML into the container
+    container.insertAdjacentHTML('beforeend', featureHTML);
+}
+
+// Function to remove a feature item
+function removeFeature(button) {
+    const featureItem = button.closest('.special-feature-item');
+    featureItem.remove();
+}
+
+function toggleProductForm() {
+    const productOption = document.getElementById('productOption').value;
+    const existingProductForm = document.getElementById('existingProductForm');
+    const createProductForm = document.getElementById('createProductForm');
+    const actionType = document.getElementById('actionType');
+
+    if (productOption === 'create') {
+        existingProductForm.classList.add('hidden');
+        createProductForm.classList.remove('hidden');
+        actionType.value = 'create'; // Update hidden input for creating a new product
+    } else {
+        existingProductForm.classList.remove('hidden');
+        createProductForm.classList.add('hidden');
+        actionType.value = 'add-variant'; // Update hidden input for adding a variant
+    }
 }
 
 

@@ -109,7 +109,7 @@ class VariantModel extends BaseModel
         }
 
         // Validate 'img' - required, must be a valid image path
-        if (empty($files_data[$this->getColumnImg()]["name"])) {
+        if (empty($files_data["variants"])) {
             $errors[] = "Variant image is required.";
         }
 
@@ -143,5 +143,10 @@ class VariantModel extends BaseModel
                 ':img' => $data['img']
             ]
         );
+    }
+
+    protected function formatData($data, $null_filter=false): array
+    {
+        return $data;
     }
 }

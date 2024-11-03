@@ -15,6 +15,7 @@ abstract class BaseModel
     abstract public function createTable(): bool;
     abstract public static function getTableName(): string;
     abstract protected function createRaw($data): bool;
+    abstract protected function formatData($data, $null_filter = false): array;
 
     // Public methods
     public function create($data): bool
@@ -66,7 +67,7 @@ abstract class BaseModel
     public function update($attributesWithValues, $conditions)
     {
 
-        $setData = $this->generateSetClause($this->ensureStorageCompatibility($attributesWithValues));
+        $setData = $this->generateSetClause($this->formatData($this->ensureStorageCompatibility($attributesWithValues), true));
 
         $where_conditions_to_update = [];
 
@@ -142,8 +143,8 @@ abstract class BaseModel
         // Conditionally add ORDER BY clause if $sortField is defined
         if ($sortField) $query .= " ORDER BY {$sortField} {$sortDirection}";
 
-        var_dump($query);
-        var_dump($params);
+        // var_dump($query);
+        // var_dump($params);
         // Fetch records
         $result = $this->db->fetchAll($query, $params, $recordsPerPage, $offset);
 

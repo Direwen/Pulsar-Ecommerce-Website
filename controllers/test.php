@@ -40,7 +40,7 @@
             </section>
 
             <!-- Special Feature Input -->
-            <section id="special-feature-section" class="flex flex-col gap-4 text-sm font-medium text-dark">
+            <section id="special-feature-section" class="flex flex-col gap-2 text-sm font-medium text-dark">
                 <label>Special Features</label>
 
                 <!-- Container for dynamic special feature entries -->

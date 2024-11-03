@@ -95,36 +95,6 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
         case 'product-management':
 
-            // $db_data = Errorhandler::handle(fn() => $variant_model->getAll(
-            //     page: $page,
-            //     select: [
-            //         ["column" => "variants.id"],
-            //         ["column" => "variants.name"],
-            //         ["column" => "variants.unit_price"],
-            //         ["column" => "products.name", "alias" => "product"],
-            //         ["column" => "categories.name", "alias" => "category"],
-            //         ["column" => "inventories.inventory_id", "alias" => "inventory"],
-            //     ],
-            //     joins: [
-            //         [
-            //             'type' => 'INNER JOIN',
-            //             'table' => ProductModel::getTableName(),
-            //             'on' => "variants.product_id = products.id",
-            //         ],
-            //         [
-            //             'type' => 'INNER JOIN',
-            //             'table' => CategoryModel::getTableName(),
-            //             'on' => "products.category_id = categories.id",
-            //         ],
-            //         [
-            //             'type' => 'INNER JOIN',
-            //             'table' => InventoryModel::getTableName(),
-            //             'on' => "inventories.variant_id = variants.id",
-            //         ]
-            //     ],
-            //     conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date),
-            // ));
-
             $db_data = ErrorHandler::handle(fn() => $category_model->getAll(
                 page: $page
             ));
@@ -152,16 +122,34 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 select: [
                     ["column" => $variant_model->getColumnId()],
                     ["column" => $product_model->getColumnName(), "alias" => "Product", "table" => $product_model->getTableName()],
-                    ["column" => $variant_model->getColumnType()],
-                    ["column" => $variant_model->getColumnName()],
+                    ["column" => $variant_model->getColumnType(), "alias" => "Variant_Type"],
+                    ["column" => $variant_model->getColumnName(), "alias" => "variant_type_name"],
                     ["column" => $variant_model->getColumnUnitPrice()],
-                    ["column" => $variant_model->getColumnImg()],
+                    ["column" => $variant_model->getColumnImg(), "alias" => "Variant_Image"],
+                    ["column" => $variant_model->getColumnProductId()],
+                    
+                    ["column" => $category_model->getColumnName(), "alias" => "Category", "table" => $category_model->getTableName()],
+                    
+                    ["column" => $product_model->getColumnCategoryId(), "alias" => "Category_Id", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnDescription(), "alias" => "Description", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnDimension(), "alias" => "Dimension", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnFeature(), "alias" => "Feature", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnImportantFeature(), "alias" => "Specials", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnRequirement(), "alias" => "Requirement", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnPackageContent(), "alias" => "Package_Content", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnImg(), "alias" => "Product_Image", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnImgForAds(), "alias" => "Ads_Image", "table" => $product_model->getTableName()],
                 ],
                 joins: [
                     [
                         'type' => 'INNER JOIN',
                         'table' => $product_model->getTableName(),
                         'on' => "variants.product_id = products.id",
+                    ],
+                    [
+                        'type' => 'INNER JOIN',
+                        'table' => $category_model->getTableName(),
+                        'on' => "products.category_id = categories.id",
                     ]
                 ]
             ));
@@ -172,18 +160,26 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 create_user_btn_class: "create-product-button",
                 submission_path: "admin/products/create",
                 extra_info: [
-                    "path-for-api" => $root_directory . 'api/categories'
+                    "api-for-categories" => $root_directory . 'api/categories',
+                    "api-for-products" => $root_directory . 'api/products'
                 ]
             );
+            
+            // echo "<pre>";
+            // var_dump($db_data);
+            // echo "</pre>";
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
                 fetched_data: $db_data,
-                update_submission_file_path: "admin/categories/update",
-                edit_btn_class: "edit-category-button",
-                delete_submission_file_path: "admin/categories/delete",
-                delete_btn_class: "delete-category-button",
-                attribute_to_confirm_deletion: "name"
+                update_submission_file_path: "admin/products/update",
+                edit_btn_class: "edit-product-button",
+                delete_submission_file_path: "admin/products/delete",
+                delete_btn_class: "delete-product-button",
+                attribute_to_confirm_deletion: "variant_type_name",
+                extra_info: [
+                    "path-for-api" => $root_directory . 'api/categories'
+                ]
             );
 
             break;
