@@ -177,28 +177,6 @@ class ProductModel extends BaseModel
         return true;
     }
 
-
-    protected function createRaw($data): bool
-    {
-        // Use formatData to prepare only the necessary data
-        $formattedData = $this->formatData($data);
-
-        // Dynamically generate column names and placeholders based on formatted data
-        $columns = array_keys($formattedData);
-        $placeholders = array_map(fn($col) => ":$col", $columns);
-
-        // Construct the SQL query
-        $query = sprintf(
-            "INSERT INTO %s (%s) VALUES (%s)",
-            self::getTableName(),
-            implode(', ', $columns),
-            implode(', ', $placeholders)
-        );
-
-        // Execute the query with formatted data as the values
-        return $this->db->execute($query, array_combine($placeholders, array_values($formattedData)));
-    }
-
     protected function formatData($data, $null_filter=false): array
     {
         $formattedData = [

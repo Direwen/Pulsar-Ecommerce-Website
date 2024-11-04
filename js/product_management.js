@@ -212,7 +212,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                 <button type="button" onclick="addSpecialFeatureCategory()" class="w-fit bg-primary text-accent font-semibold py-2 px-4 rounded shadow">+ Add Special Feature</button>
             </section>
             <section class="flex flex-col gap-2">
-                <label for="requirement" class="text-sm font-medium text-dark">Requirement (separate by commas)</label>
+                <label for="requirement" class="text-sm font-medium text-dark">Requirement (separate by commas)${currentValues.requirement}</label>
                 <textarea name="requirement" class="w-full border shadow rounded outline-accent p-2">${currentValues.requirement ? Object.values(currentValues.requirement).join(", ") : ""}</textarea>
             </section>
             <section class="flex flex-col gap-2">
@@ -228,7 +228,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                     <input type="checkbox" name="changeImage" data-toggle="newAdsImageInput" class="accent-accent" onclick="toggleImageInput(this)">
                     <span>Change Image</span>
                 </label>
-                <input type="file" name="img_for_ads[]" accept="image/*" data-toggle="newAdsImageInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
+                <input multiple type="file" name="img_for_ads[]" accept="image/*" data-toggle="newAdsImageInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
 
             </section>
             <section class="flex flex-col justify-start items-start gap-2">

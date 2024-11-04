@@ -14,13 +14,25 @@ abstract class BaseModel
     // Abstract methods
     abstract public function createTable(): bool;
     abstract public static function getTableName(): string;
-    abstract protected function createRaw($data): bool;
     abstract protected function formatData($data, $null_filter = false): array;
 
     // Public methods
     public function create($data): bool
     {
-        return $this->createRaw($this->ensureStorageCompatibility($data));
+        // Use formatData to prepare only the necessary data
+        $formattedData = $this->ensureStorageCompatibility($this->formatData($data));
+        // Dynamically generate column names and placeholders based on formatted data
+        $columns = array_keys($formattedData);
+        $placeholders = array_map(fn($col) => ":$col", $columns);
+        // Construct the SQL query
+        $query = sprintf(
+            "INSERT INTO %s (%s) VALUES (%s)",
+            $this->getTableName(),
+            implode(', ', $columns),
+            implode(', ', $placeholders)
+        );
+        // Execute the query with formatted data as the values
+        return $this->db->execute($query, array_combine($placeholders, array_values($formattedData)));
     }
 
     public function get($conditions): ?array

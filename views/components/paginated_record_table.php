@@ -8,6 +8,19 @@ $totalPages = $fetched_data["totalPages"];
 $hasMore = $fetched_data["hasMore"];
 $metadata = $fetched_data["metadata"];
 
+$filtered_metadata = [];
+
+foreach ($metadata as $attr_title => $arr) {
+    // Get the sql_name
+    $sql_name = $arr['sql_name'];
+
+    // Check if the sql_name ends with "img" or "id" (case insensitive)
+    if (!(strpos(strtolower($sql_name), 'img') !== false || str_ends_with(strtolower($sql_name), 'id'))) {
+        // Add the attribute to the filtered array if it doesn't match
+        $filtered_metadata[] = $attr_title;
+    }
+}
+
 ?>
 
 
@@ -22,7 +35,7 @@ $metadata = $fetched_data["metadata"];
             <select name="search_attribute" id="search_attribute" class="p-3 border rounded focus:outline-none focus:border-accent mb-2 md:mb-0 w-full md:w-2/12" onchange="updateInputField()">
                 <?php foreach ($metadata as $attr_title => $arr): ?>
                     <!-- Skip 'id' field -->
-                    <?php if ($attr_title !== 'id'): ?>
+                    <?php if (in_array($attr_title, $filtered_metadata)): ?>
                         <option value="<?= htmlspecialchars($arr['sql_name']) ?>" data-type="<?= htmlspecialchars($arr['type']) ?>"
                             <?= isset($_GET['search_attribute']) && $_GET['search_attribute'] === $attr_title ? 'selected' : '' ?>>
                             <?= ucwords(str_replace('_', ' ', $attr_title)) ?>
@@ -65,7 +78,7 @@ $metadata = $fetched_data["metadata"];
                     <tr>
                         <?php foreach ($metadata as $attr_title => $arr): ?>
                             <!-- Skip 'id' field in headers -->
-                            <?php if ($attr_title !== 'id'): ?>
+                            <?php if (in_array($attr_title, $filtered_metadata)): ?>
                                 <th class="p-3 text-left font-semibold whitespace-nowrap">
                                     <?= htmlspecialchars(ucwords(str_replace('_', ' ', $attr_title))) ?>
                                 </th>
@@ -79,17 +92,55 @@ $metadata = $fetched_data["metadata"];
                     <?php foreach ($records as $record): ?>
                         <tr class="hover:bg-accent/20">
 
-                            <?php foreach ($record as $attr_name => $attr_value): ?>
-                                <?php if ($attr_name !== "id"): ?>
-                                    <td class="p-3 text-left whitespace-nowrap">
-                                        <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
-                                            <?= $attr_value ? "true" : "false" ?>
-                                        <?php else: ?>
-                                            <?= $attr_value !== null ? htmlspecialchars($attr_value) : 'N/A' ?>
-                                        <?php endif; ?>
-                                    </td>
-                                <?php endif; ?>
+                        <?php foreach ($record as $attr_name => $attr_value): ?>
+    <?php if ($attr_name !== "id"): ?>
+        <td class="p-3 text-left whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
+            <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
+                <?= $attr_value ? "true" : "false" ?>
+            <?php else: ?>
+                <?php if ($attr_value !== null): ?>
+                    <?php
+                    $decodedValue = json_decode($attr_value);
+                    $valueType = gettype($decodedValue);
+                    
+                    // Check if it's an array
+                    if ($valueType === 'array'):
+                    ?>
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <?php foreach ($decodedValue as $each): ?>
+                                <span class="bg-yellow-300 text-primary py-1 px-2 rounded"><?= htmlspecialchars($each); ?></span>
                             <?php endforeach; ?>
+                        </div>
+
+                    <?php elseif ($valueType === 'object'): ?>
+                        <div class="mb-2">
+                            <?php foreach ($decodedValue as $key => $value): ?>
+                                <section class="bg-gray-100 p-2 mb-2 rounded">
+                                    <strong class="text-gray-700"><?= htmlspecialchars($key); ?>:</strong>
+                                    <?php if (is_array($value)): ?>
+                                        <div class="flex flex-wrap gap-2">
+                                            <?php foreach ($value as $value2): ?>
+                                                <span class="bg-yellow-300 py-1 px-2 rounded"><?= htmlspecialchars($value2); ?></span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php else: ?>
+                                        <span class="bg-yellow-300 py-1 px-2 rounded"><?= htmlspecialchars($value); ?></span>
+                                    <?php endif; ?>
+                                </section>
+                            <?php endforeach; ?>
+                        </div>
+
+                    <?php else: ?>
+                        <span class="text-gray-800"><?= htmlspecialchars($attr_value); ?></span>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <span class="text-gray-500">N/A</span>
+                <?php endif; ?>
+            <?php endif; ?>
+        </td>
+    <?php endif; ?>
+<?php endforeach; ?>
+
 
                             <!-- Action buttons (edit and delete) -->
                             <td class="p-3 flex justify-start items-center gap-2">
@@ -97,19 +148,25 @@ $metadata = $fetched_data["metadata"];
                                     <span
                                         <?php
                                         foreach ($record as $k => $v) {
-                                            if ($k != 'id' && !empty($v)) echo " {$k}={$v} ";
+                                            if ($k != 'id' && !empty($v)) {
+                                                $value = is_array($v) || is_object($v) ? htmlspecialchars(json_encode($v)) : htmlspecialchars($v);
+                                                echo " {$k}=\"{$value}\" ";
+                                            }
                                         }
+
                                         foreach ($extra_info as $k => $v) {
-                                            echo " {$k}={$v} ";
+                                            $value = is_array($v) || is_object($v) ? htmlspecialchars(json_encode($v)) : htmlspecialchars($v);
+                                            echo " {$k}=\"{$value}\" ";
                                         }
                                         ?>
-                                        root-directory="<?= $root_directory; ?>"
-                                        submission-path="<?= $root_directory . $update_submission_file_path; ?>"
-                                        data-id="<?= $record['id'] ?>"
-                                        class="material-symbols-outlined interactive <?= $edit_btn_class; ?> px-2 py-1 rounded-full text-accent hover:bg-accent hover:text-primary cursor-pointer">
+                                        root-directory="<?= htmlspecialchars($root_directory); ?>"
+                                        submission-path="<?= htmlspecialchars($root_directory . $update_submission_file_path); ?>"
+                                        data-id="<?= htmlspecialchars($record['id']); ?>"
+                                        class="material-symbols-outlined interactive <?= htmlspecialchars($edit_btn_class); ?> px-2 py-1 rounded-full text-accent hover:bg-accent hover:text-primary cursor-pointer">
                                         border_color
                                     </span>
                                 <?php endif; ?>
+
 
                                 <?php if ($delete_submission_file_path && $delete_btn_class): ?>
                                     <span
