@@ -92,54 +92,54 @@ foreach ($metadata as $attr_title => $arr) {
                     <?php foreach ($records as $record): ?>
                         <tr class="hover:bg-accent/20">
 
-                        <?php foreach ($record as $attr_name => $attr_value): ?>
-    <?php if ($attr_name !== "id"): ?>
-        <td class="p-3 text-left whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
-            <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
-                <?= $attr_value ? "true" : "false" ?>
-            <?php else: ?>
-                <?php if ($attr_value !== null): ?>
-                    <?php
-                    $decodedValue = json_decode($attr_value);
-                    $valueType = gettype($decodedValue);
-                    
-                    // Check if it's an array
-                    if ($valueType === 'array'):
-                    ?>
-                        <div class="flex flex-wrap gap-2 mb-2">
-                            <?php foreach ($decodedValue as $each): ?>
-                                <span class="bg-yellow-300 text-primary py-1 px-2 rounded"><?= htmlspecialchars($each); ?></span>
-                            <?php endforeach; ?>
-                        </div>
+                            <?php foreach ($record as $attr_name => $attr_value): ?>
+                                <?php if ($attr_name !== "id"): ?>
+                                    <td class="p-3 text-left whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
+                                        <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
+                                            <?= $attr_value ? "true" : "false" ?>
+                                        <?php else: ?>
+                                            <?php if ($attr_value !== null): ?>
+                                                <?php
+                                                $decodedValue = json_decode($attr_value);
+                                                $valueType = gettype($decodedValue);
 
-                    <?php elseif ($valueType === 'object'): ?>
-                        <div class="mb-2">
-                            <?php foreach ($decodedValue as $key => $value): ?>
-                                <section class="bg-gray-100 p-2 mb-2 rounded">
-                                    <strong class="text-gray-700"><?= htmlspecialchars($key); ?>:</strong>
-                                    <?php if (is_array($value)): ?>
-                                        <div class="flex flex-wrap gap-2">
-                                            <?php foreach ($value as $value2): ?>
-                                                <span class="bg-yellow-300 py-1 px-2 rounded"><?= htmlspecialchars($value2); ?></span>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    <?php else: ?>
-                                        <span class="bg-yellow-300 py-1 px-2 rounded"><?= htmlspecialchars($value); ?></span>
-                                    <?php endif; ?>
-                                </section>
-                            <?php endforeach; ?>
-                        </div>
+                                                // Check if it's an array
+                                                if ($valueType === 'array'):
+                                                ?>
+                                                    <div class="flex flex-wrap gap-2">
+                                                        <?php foreach ($decodedValue as $each): ?>
+                                                            <span class="border shadow py-1 px-2 rounded"><?= htmlspecialchars($each); ?></span>
+                                                        <?php endforeach; ?>
+                                                    </div>
 
-                    <?php else: ?>
-                        <span class="text-gray-800"><?= htmlspecialchars($attr_value); ?></span>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <span class="text-gray-500">N/A</span>
-                <?php endif; ?>
-            <?php endif; ?>
-        </td>
-    <?php endif; ?>
-<?php endforeach; ?>
+                                                <?php elseif ($valueType === 'object'): ?>
+                                                    <div class="flex flex-col gap-2">
+                                                        <?php foreach ($decodedValue as $key => $value): ?>
+                                                            <section class="border shadow p-2">
+                                                                <strong class=""><?= htmlspecialchars($key); ?>:</strong>
+                                                                <?php if (is_array($value)): ?>
+                                                                    <div class="flex flex-wrap gap-2">
+                                                                        <?php foreach ($value as $value2): ?>
+                                                                            <span class="border shadow py-1 px-2 rounded"><?= htmlspecialchars($value2); ?></span>
+                                                                        <?php endforeach; ?>
+                                                                    </div>
+                                                                <?php else: ?>
+                                                                    <span class="border shadow py-1 px-2 rounded"><?= htmlspecialchars($value); ?></span>
+                                                                <?php endif; ?>
+                                                            </section>
+                                                        <?php endforeach; ?>
+                                                    </div>
+
+                                                <?php else: ?>
+                                                    <span class=""><?= htmlspecialchars($attr_value); ?></span>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                <span class="text-light-gray">N/A</span>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
 
 
                             <!-- Action buttons (edit and delete) -->
