@@ -103,24 +103,33 @@ class CategoryModel extends BaseModel
         return true;
     }
 
-    protected function createRaw($data): bool
-    {
-        return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " 
-        (" . self::getColumnName() . ", " . self::getColumnSoftware() . ", " . self::getColumnFirmware() . ", " . self::getColumnManual() . ", " . self::getColumnImg() . ")
-        VALUES (:name, :software, :firmware, :manual, :img)",
-            [
-                ':name' => strtolower(trim($data['name'])),
-                ':software' => !empty($data['software']) ? $data['software'] : null,
-                ':firmware' => !empty($data['firmware']) ? $data['firmware'] : null,
-                ':manual' => !empty($data['manual']) ? $data['manual'] : null,
-                ':img' => $data['img'] ?? null
-            ]
-        );
-    }
+    // protected function createRaw($data): bool
+    // {
+    //     return $this->db->execute(
+    //         "INSERT INTO " . self::getTableName() . " 
+    //     (" . self::getColumnName() . ", " . self::getColumnSoftware() . ", " . self::getColumnFirmware() . ", " . self::getColumnManual() . ", " . self::getColumnImg() . ")
+    //     VALUES (:name, :software, :firmware, :manual, :img)",
+    //         [
+    //             ':name' => strtolower(trim($data['name'])),
+    //             ':software' => !empty($data['software']) ? $data['software'] : null,
+    //             ':firmware' => !empty($data['firmware']) ? $data['firmware'] : null,
+    //             ':manual' => !empty($data['manual']) ? $data['manual'] : null,
+    //             ':img' => $data['img'] ?? null
+    //         ]
+    //     );
+    // }
 
-    protected function formatData($data, $null_filter=false): array
+    protected function formatData($data, $null_filter = false): array
     {
-        return $data;
+        $formattedData = [
+            'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
+            'software' => $data['software'] ?? null,
+            'firmware' => $data['firmware'] ?? null,
+            'manual' => $data['manual'] ?? null,
+            'img' => $data['img'] ?? null
+        ];
+
+        // Filter out null values to keep only the provided attributes
+        return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
 }

@@ -57,17 +57,17 @@ class SessionModel extends BaseModel
         ");
     }
 
-    protected function createRaw($data): bool
-    {
-        return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " (" . self::getColumnUserId() . ", " . self::getColumnToken() . ", " . self::getColumnExpiredAt() . ") VALUES (:user_id, :token, :expired_at)",
-            [
-                ':user_id' => $data['user_id'],
-                ':token' => $data['token'],
-                ':expired_at' => $data['expired_at']
-            ]
-        );
-    }
+    // protected function createRaw($data): bool
+    // {
+    //     return $this->db->execute(
+    //         "INSERT INTO " . self::getTableName() . " (" . self::getColumnUserId() . ", " . self::getColumnToken() . ", " . self::getColumnExpiredAt() . ") VALUES (:user_id, :token, :expired_at)",
+    //         [
+    //             ':user_id' => $data['user_id'],
+    //             ':token' => $data['token'],
+    //             ':expired_at' => $data['expired_at']
+    //         ]
+    //     );
+    // }
 
     public function getUserByToken($token): ?array
     {
@@ -81,8 +81,15 @@ class SessionModel extends BaseModel
         return $session ?? null;
     }
 
-    protected function formatData($data, $null_filter=false): array
+    protected function formatData($data, $null_filter = false): array
     {
-        return $data;
+        $formattedData = [
+            'user_id' => $data['user_id'] ?? null,
+            'token' => isset($data['token']) ? trim($data['token']) : null,
+            'expired_at' => $data['expired_at'] ?? null
+        ];
+
+        // Filter out null values to keep only the provided attributes
+        return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
 }

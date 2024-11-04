@@ -64,21 +64,29 @@ class UserModel extends BaseModel
         ");
     }
 
-    protected function createRaw($data): bool
-    {
-        return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " (" . self::getColumnEmail() . ", " . self::getColumnLastLoggedInAt() . ", " . self::getColumnIsActive() . ", " . self::getColumnRole() . ") VALUES (:email, :last_logged_in_at, :is_active, :role)",
-            [
-                ':email' => strtolower(trim($data['email'])),
-                ':last_logged_in_at' => $data['last_logged_in_at'] ?? null,
-                ':is_active' => $data['is_active'] ?? true,
-                ':role' => $data['role'] ?? 'user'
-            ]
-        );
-    }
+    // protected function createRaw($data): bool
+    // {
+    //     return $this->db->execute(
+    //         "INSERT INTO " . self::getTableName() . " (" . self::getColumnEmail() . ", " . self::getColumnLastLoggedInAt() . ", " . self::getColumnIsActive() . ", " . self::getColumnRole() . ") VALUES (:email, :last_logged_in_at, :is_active, :role)",
+    //         [
+    //             ':email' => strtolower(trim($data['email'])),
+    //             ':last_logged_in_at' => $data['last_logged_in_at'] ?? null,
+    //             ':is_active' => $data['is_active'] ?? true,
+    //             ':role' => $data['role'] ?? 'user'
+    //         ]
+    //     );
+    // }
 
-    protected function formatData($data, $null_filter=false): array
+    protected function formatData($data, $null_filter = false): array
     {
-        return $data;
+        $formattedData = [
+            'email' => isset($data['email']) ? strtolower(trim($data['email'])) : null,
+            'last_logged_in_at' => $data['last_logged_in_at'] ?? null,
+            'is_active' => $data['is_active'] ?? true,
+            'role' => $data['role'] ?? 'user'
+        ];
+
+        // Filter out null values to keep only the provided attributes
+        return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
 }

@@ -72,28 +72,37 @@ class InventoryModel extends BaseModel
     }
 
 
-    /**
-     * Inserts a new record into the 'inventories' table.
-     * @param array $data
-     * @return bool
-     */
-    protected function createRaw($data): bool
-    {
-        return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " 
-            (" . self::getColumnCode() . ", " . self::getColumnVariantId() . ", " . self::getColumnStockQuantity() . ", " . self::getColumnReorderLevel() . ") 
-            VALUES (:code, :variant_id, :stock_quantity, :reorder_level)",
-            [
-                ':code' => strtoupper(trim($data['code'])),  // Ensuring 'code' is formatted in uppercase
-                ':variant_id' => $data['variant_id'],
-                ':stock_quantity' => $data['stock_quantity'] ?? 0,
-                ':reorder_level' => $data['reorder_level'] ?? 0
-            ]
-        );
-    }
+    // /**
+    //  * Inserts a new record into the 'inventories' table.
+    //  * @param array $data
+    //  * @return bool
+    //  */
+    // protected function createRaw($data): bool
+    // {
+    //     return $this->db->execute(
+    //         "INSERT INTO " . self::getTableName() . " 
+    //         (" . self::getColumnCode() . ", " . self::getColumnVariantId() . ", " . self::getColumnStockQuantity() . ", " . self::getColumnReorderLevel() . ") 
+    //         VALUES (:code, :variant_id, :stock_quantity, :reorder_level)",
+    //         [
+    //             ':code' => strtoupper(trim($data['code'])),  // Ensuring 'code' is formatted in uppercase
+    //             ':variant_id' => $data['variant_id'],
+    //             ':stock_quantity' => $data['stock_quantity'] ?? 0,
+    //             ':reorder_level' => $data['reorder_level'] ?? 0
+    //         ]
+    //     );
+    // }
 
-    protected function formatData($data, $null_filter=false): array
+    protected function formatData($data, $null_filter = false): array
     {
-        return $data;
+        $formattedData = [
+            'code' => isset($data['code']) ? strtoupper(trim($data['code'])) : null,
+            'variant_id' => $data['variant_id'] ?? null,
+            'stock_quantity' => $data['stock_quantity'] ?? 0,
+            'reorder_level' => $data['reorder_level'] ?? 0,
+        ];
+    
+        // Filter out null values to keep only the provided attributes
+        return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
+    
 }

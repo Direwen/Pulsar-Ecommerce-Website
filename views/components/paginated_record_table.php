@@ -72,7 +72,7 @@ foreach ($metadata as $attr_title => $arr) {
     </div>
 
     <?php if (!empty($records)): ?>
-        <div class="overflow-x-auto border shadow rounded">
+        <div class="overflow-x-auto border shadow rounded hide-scrollbar">
             <table class="min-w-full border-collapse">
                 <thead>
                     <tr>
@@ -80,17 +80,23 @@ foreach ($metadata as $attr_title => $arr) {
                             <!-- Skip 'id' field in headers -->
                             <?php if (in_array($attr_title, $filtered_metadata)): ?>
                                 <th class="p-3 text-left font-semibold whitespace-nowrap">
-                                    <?= htmlspecialchars(ucwords(str_replace('_', ' ', $attr_title))) ?>
+                                    <span class="px-2 py-1 bg-accent text-secondary rounded shadow shadow-accent/50">
+                                        <?= htmlspecialchars(ucwords(str_replace('_', ' ', $attr_title))) ?>
+                                    </span>
                                 </th>
                             <?php endif; ?>
                         <?php endforeach; ?>
-                        <th class="p-3 text-left font-semibold whitespace-nowrap">Actions</th>
+                        <th class="p-3 text-left font-semibold whitespace-nowrap">
+                            <span class="px-2 py-1 bg-accent text-secondary rounded shadow shadow-accent/50">
+                                Actions
+                            </span>
+                        </th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php foreach ($records as $record): ?>
-                        <tr class="hover:bg-accent/20">
+                        <tr class="hover:bg-light-gray/50 transition ease-in-out transition-150">
 
                             <?php foreach ($record as $attr_name => $attr_value): ?>
                                 <?php if ($attr_name !== "id"): ?>
@@ -254,9 +260,9 @@ foreach ($metadata as $attr_title => $arr) {
 </div>
 
 <!-- Debugging Table -->
-<div class="w-3/12 bg-gray-200 overflow-x-auto mt-6 p-4 rounded">
+<div class="w-full bg-dark text-accent overflow-x-auto mt-6 p-4 rounded">
     <table class="min-w-full border-collapse border border-gray-300">
-        <thead class="bg-primary text-dark">
+        <thead class="bg-accent text-secondary">
             <tr>
                 <th class="border border-gray-300 p-2 text-left">Key</th>
                 <th class="border border-gray-300 p-2 text-left">Value</th>

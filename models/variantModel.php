@@ -17,39 +17,48 @@ class VariantModel extends BaseModel
     public const COLUMN_UPDATED_AT = 'updated_at';
 
     // Static getter methods for table and column names
-    public static function getTableName(): string {
+    public static function getTableName(): string
+    {
         return self::TABLE_NAME;
     }
 
-    public static function getColumnId(): string {
+    public static function getColumnId(): string
+    {
         return self::COLUMN_ID;
     }
 
-    public static function getColumnProductId(): string {
+    public static function getColumnProductId(): string
+    {
         return self::COLUMN_PRODUCT_ID;
     }
 
-    public static function getColumnType(): string {
+    public static function getColumnType(): string
+    {
         return self::COLUMN_TYPE;
     }
 
-    public static function getColumnName(): string {
+    public static function getColumnName(): string
+    {
         return self::COLUMN_NAME;
     }
 
-    public static function getColumnUnitPrice(): string {
+    public static function getColumnUnitPrice(): string
+    {
         return self::COLUMN_UNIT_PRICE;
     }
 
-    public static function getColumnImg(): string {
+    public static function getColumnImg(): string
+    {
         return self::COLUMN_IMG;
     }
 
-    public static function getColumnCreatedAt(): string {
+    public static function getColumnCreatedAt(): string
+    {
         return self::COLUMN_CREATED_AT;
     }
 
-    public static function getColumnUpdatedAt(): string {
+    public static function getColumnUpdatedAt(): string
+    {
         return self::COLUMN_UPDATED_AT;
     }
 
@@ -124,29 +133,38 @@ class VariantModel extends BaseModel
         return true;
     }
 
-    /**
-     * Inserts a new record into the 'variants' table.
-     * @param array $data
-     * @return bool
-     */
-    protected function createRaw($data): bool
-    {
-        return $this->db->execute(
-            "INSERT INTO " . self::getTableName() . " 
-            (" . self::getColumnProductId() . ", " . self::getColumnType() . ", " . self::getColumnName() . ", " . self::getColumnUnitPrice() . ", " . self::getColumnImg() . ")
-            VALUES (:product_id, :type, :name, :unit_price, :img)",
-            [
-                ':product_id' => $data['product_id'],
-                ':type' => strtolower(trim($data['type'])), // Standardize variant type
-                ':name' => strtolower(trim($data['name'])), // Standardize name
-                ':unit_price' => $data['unit_price'],
-                ':img' => $data['img']
-            ]
-        );
-    }
+    // /**
+    //  * Inserts a new record into the 'variants' table.
+    //  * @param array $data
+    //  * @return bool
+    //  */
+    // protected function createRaw($data): bool
+    // {
+    //     return $this->db->execute(
+    //         "INSERT INTO " . self::getTableName() . " 
+    //         (" . self::getColumnProductId() . ", " . self::getColumnType() . ", " . self::getColumnName() . ", " . self::getColumnUnitPrice() . ", " . self::getColumnImg() . ")
+    //         VALUES (:product_id, :type, :name, :unit_price, :img)",
+    //         [
+    //             ':product_id' => $data['product_id'],
+    //             ':type' => strtolower(trim($data['type'])), // Standardize variant type
+    //             ':name' => strtolower(trim($data['name'])), // Standardize name
+    //             ':unit_price' => $data['unit_price'],
+    //             ':img' => $data['img']
+    //         ]
+    //     );
+    // }
 
-    protected function formatData($data, $null_filter=false): array
+    protected function formatData($data, $null_filter = false): array
     {
-        return $data;
+        $formattedData = [
+            'product_id' => isset($data['product_id']) ? (int) $data['product_id'] : null,
+            'type' => isset($data['type']) ? strtolower(trim($data['type'])) : null,
+            'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
+            'unit_price' => isset($data['unit_price']) ? round((float) $data['unit_price'], 2) : null,
+            'img' => isset($data['img']) ? trim($data['img']) : null,
+        ];
+
+        // Apply null filtering if requested
+        return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
 }
