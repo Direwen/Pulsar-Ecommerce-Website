@@ -16,7 +16,9 @@ $navLinks = [
     <div class="py-5 sm:py-0 px-8 flex justify-between items-center">
         <!-- Logo Section -->
         <section class="w-3/12 sm:w-1/12 flex-none">
-            <img src="<?= $root_directory; ?>assets/pulsar_logo.jpg" alt="LOGO" class="h-fit">
+            <a href="<?= $root_directory; ?>" class="">
+                <img src="<?= $root_directory; ?>assets/pulsar_logo.jpg" alt="LOGO" class="h-fit">
+            </a>
         </section>
 
         <!-- Navigation Links -->

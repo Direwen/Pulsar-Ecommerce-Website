@@ -1,20 +1,17 @@
 <?php foreach ($categories as $category): ?>
-    <?php if($showImages): ?>
-        <div class="<?= $cssForContainer; ?>">
+    <div class="<?= $showImages ? $cssForContainer : ''; ?>">
+        <?php if ($showImages): ?>
             <img
-                class="<?= $cssForImg; ?>" 
-                src="<?= $category['image'] ?>"
+                class="<?= $cssForImg; ?>"
+                src="<?= $root_directory; ?>assets/categories/<?= $category['img']; ?>" 
                 alt="Category Pic"
             >
-    <?php endif; ?>
+        <?php endif; ?>
 
-    <a 
-        class="<?= $cssForCategoryName; ?>"
-        href="<?= $category['link']; ?>">
-        <?= $category['name']; ?>
-    </a>
-
-    <?php if($showImages): ?>
-        </div>
-    <?php endif; ?>
+        <a 
+            class="<?= $cssForCategoryName; ?>"
+            href="categories/<?= strtolower($category['name']); ?>/products">
+            <?= ucwords($category['name']); ?>
+        </a>
+    </div>
 <?php endforeach; ?>

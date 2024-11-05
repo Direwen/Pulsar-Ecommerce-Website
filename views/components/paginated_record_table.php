@@ -104,7 +104,7 @@ foreach ($metadata as $attr_title => $arr) {
                                         <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
                                             <?= $attr_value ? "true" : "false" ?>
                                         <?php else: ?>
-                                            <?php if ($attr_value !== null): ?>
+                                            <?php if ($attr_value != null): ?>
                                                 <?php
                                                 $decodedValue = json_decode($attr_value);
                                                 $valueType = gettype($decodedValue);
@@ -137,10 +137,10 @@ foreach ($metadata as $attr_title => $arr) {
                                                     </div>
 
                                                 <?php else: ?>
-                                                    <span class=""><?= htmlspecialchars($attr_value); ?></span>
+                                                    <span class=""><?= ucwords(htmlspecialchars($attr_value)); ?></span>
                                                 <?php endif; ?>
                                             <?php else: ?>
-                                                <span class="text-light-gray">N/A</span>
+                                                <span class="text-light-dark font-light">N/A</span>
                                             <?php endif; ?>
                                         <?php endif; ?>
                                     </td>
@@ -260,7 +260,7 @@ foreach ($metadata as $attr_title => $arr) {
 </div>
 
 <!-- Debugging Table -->
-<div class="w-full bg-dark text-accent overflow-x-auto mt-6 p-4 rounded">
+<!-- <div class="w-full bg-dark text-accent overflow-x-auto mt-6 p-4 rounded">
     <table class="min-w-full border-collapse border border-gray-300">
         <thead class="bg-accent text-secondary">
             <tr>
@@ -277,4 +277,4 @@ foreach ($metadata as $attr_title => $arr) {
             <?php endforeach; ?>
         </tbody>
     </table>
-</div>
+</div> -->

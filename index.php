@@ -62,9 +62,6 @@ $token_service = new TokenService($session_model);
 $session_service = new SessionService($token_service);
 $auth_service = new AuthService($mail_service, $otp_service, $session_service, $token_service, $user_model);
 
-// echo "<pre>";
-// echo "diddy";
-// echo "</pre>";
 // ErrorHandler::handle(fn () => $otp_service->clearOtpSession());
 
 // Function to check if the request is for an API route
@@ -80,16 +77,24 @@ if (isApiRequest()) {
 
 ErrorHandler::handle(fn() => $auth_service->maintainUserSession());
 $website_title = "Pulsar";
-$categories = [
-    ['name' => 'Mice', 'link' => null, 'image' => $root_directory . "assets/mouse_pad.webp"],
-    ['name' => 'Mouse Accessories', 'link' => null, 'image' => null],
-    ['name' => 'Superglides', 'link' => null, 'image' => null],
-    ['name' => 'SUPPORT', 'link' => null, 'image' => null],
-    ['name' => 'WHERE TO BUY', 'link' => null, 'image' => null],
-    ['name' => 'eSports', 'link' => null, 'image' => null],
-    ['name' => 'RELEASE', 'link' => null, 'image' => null],
-    ['name' => 'PULSAR BY YOU', 'link' => null, 'image' => null]
-];
+$categories = [];
+$page = 1;
+// Fetch the first page of results
+$result = ErrorHandler::handle(function() use ($category_model, $page) {
+    return $category_model->getAll(page: $page);
+});
+
+$hasMore = $result["hasMore"];
+// Collect the categories from the first page
+$categories = array_merge($categories, $result["records"] ?? []);
+// Continue fetching while there are more pages
+while ($hasMore) {
+    $result = ErrorHandler::handle(function() use ($category_model, &$page) {
+        return $category_model->getAll(page: ++$page);
+    });
+    $hasMore = $result["hasMore"];
+    $categories = array_merge($categories, $result["records"] ?? []);
+}
 
 require("./utils/render.php");
 require("./views/components/head.php");

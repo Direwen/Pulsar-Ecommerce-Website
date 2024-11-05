@@ -7,10 +7,40 @@ let startX, startY; // Store initial touch coordinates
 const dragThreshold = 10; // Minimum movement required to be considered dragging
 let lastTouchTime = 0; // Track the last touch time
 
-const dashboardMenuContent = `<a class="w-full py-2 text-center hover:shadow" href="?view=user-management">Users Management</a>
-<a class="w-full py-2 text-center hover:shadow" href="?view=product-management">Products Management</a>
-<a class="w-full py-2 text-center hover:shadow" href="?view=orders-management">Orders Management</a>
-<a class="w-full py-2 text-center hover:shadow" href="?view=logs">Logs</a>`;
+const dashboardMenuContent = `
+<section class="border-b border-light-dark pb-4">
+            <h2 class="text-xl font-semibold uppercase text-dark">Management</h2>
+        </section>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=user-management">
+    <section><span class="material-symbols-outlined text-md">group</span> <span class="text-md uppercase tracking-tighter">Users</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=category-management">
+    <section><span class="material-symbols-outlined text-md">category</span> <span class="text-md">Categories</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=product-management">
+    <section><span class="material-symbols-outlined text-md">mouse</span> <span class="text-md">Products</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=orders-management">
+    <section><span class="material-symbols-outlined text-md">shopping_bag</span> <span class="text-md">Orders</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=logs">
+    <section><span class="material-symbols-outlined text-md">inventory_2</span> <span class="text-md">Inventory</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
+<section class="border-b border-light-dark pb-4">
+    <h2 class="text-xl font-semibold text-dark">Reprots & Analytics</h2>
+</section>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=logs">
+    <section><span class="material-symbols-outlined text-md">monitoring</span> <span class="text-md">View Analytics</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
+`;
+
+
 
 // Get viewport dimensions
 const getViewportDimensions = () => {

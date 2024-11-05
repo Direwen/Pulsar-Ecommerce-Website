@@ -2,7 +2,7 @@
 
 function renderCategories($cssForCategoryName=null, $showImages=false, $cssForImg=null, $cssForContainer=null)
 {
-    global $categories;
+    global $categories, $root_directory;
     include("./views/components/categories.php");
 }
 

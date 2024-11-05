@@ -4,9 +4,17 @@ class ImageHandlerException extends Exception {}
 
 class ImageHandler
 {
-    private const MAX_FILE_SIZE = 1048576; // 1 MB limit
-    private const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
-
+    private const MAX_FILE_SIZE = 5242880; // 5 MB limit
+    private const ALLOWED_TYPES = [
+        'image/jpeg',  // JPEG images
+        'image/png',   // PNG images
+        'image/gif',   // GIF images
+        'image/bmp',   // BMP images
+        'image/tiff',  // TIFF images
+        'image/webp',  // WebP images
+        'image/svg+xml' // SVG images
+    ];
+    
     public static function prepareImageForStorage(string $temp_name, string $file_name, string $dir_to_save): array
     {
         // Validate the directory

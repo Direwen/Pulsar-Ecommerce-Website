@@ -93,8 +93,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             );
             break;
 
-        case 'product-management':
-
+        case 'category-management':
             $db_data = ErrorHandler::handle(fn() => $category_model->getAll(
                 page: $page
             ));
@@ -116,6 +115,9 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 delete_btn_class: "delete-category-button",
                 attribute_to_confirm_deletion: "name"
             );
+            break;
+            
+        case 'product-management':
 
             $db_data = ErrorHandler::handle(fn() => $variant_model->getAll(
                 page: $page,
@@ -164,10 +166,6 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     "api-for-products" => $root_directory . 'api/products'
                 ]
             );
-            
-            // echo "<pre>";
-            // var_dump($db_data);
-            // echo "</pre>";
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
