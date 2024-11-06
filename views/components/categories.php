@@ -10,7 +10,7 @@
 
         <a 
             class="<?= $cssForCategoryName; ?>"
-            href="categories/<?= strtolower($category['name']); ?>/products">
+            href="products/?category=<?= $category['id']; ?>">
             <?= ucwords($category['name']); ?>
         </a>
     </div>

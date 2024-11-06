@@ -34,7 +34,7 @@ const dashboardMenuContent = `
 <section class="border-b border-light-dark pb-4">
     <h2 class="text-xl font-semibold text-dark">Reprots & Analytics</h2>
 </section>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=logs">
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=analytics">
     <section><span class="material-symbols-outlined text-md">monitoring</span> <span class="text-md">View Analytics</span></section>
     <span class="material-symbols-outlined font-thin">chevron_right</span>
 </a>

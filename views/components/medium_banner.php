@@ -11,7 +11,9 @@
                 <h2 class="text-2xl tracking-tigher"><?= $subTitle; ?></h2>
             <?php endif; ?>
 
-            <?php renderLinkButton($buttonText, $buttonUrl); ?>
+            <?php if ($buttonText): ?>
+                <?php renderLinkButton($buttonText, $buttonUrl); ?>
+            <?php endif; ?>
         </section>
 
     </section>

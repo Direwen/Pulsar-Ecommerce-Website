@@ -57,6 +57,10 @@ return [
         'controller' => 'controllers/admin/product_management/delete.php',
         'middleware' => []
     ],
+    'products' => [
+        'controller' => 'controllers/ecommerce/products.php',
+        'middleware' => [],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],

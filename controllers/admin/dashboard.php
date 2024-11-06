@@ -186,7 +186,8 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             echo "Order management dashboard";
             // require('views/admin/orders-management.view.php');
             break;
-
+        case 'analytics':
+            break;
         default:
             echo "Invalid dashboard selection.";
             break;

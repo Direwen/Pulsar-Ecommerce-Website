@@ -133,7 +133,9 @@ abstract class BaseModel
         $sortField = null,
         $sortDirection = 'ASC',
         $joins = [],
-        $select = []
+        $select = [],
+        $aggregates = [],
+        $groupBy = null
     ) {
 
         // Validating inputs
@@ -141,7 +143,7 @@ abstract class BaseModel
         $recordsPerPage = $this->validateRecordsPerPage($recordsPerPage);
         $whereClauseData = $this->generateWhereClause($conditions);
         $joinClause = $this->generateJoinClause($joins);
-        $selectClause = $this->generateSelectClause($select, static::getTableName());
+        $selectClause = $this->generateSelectClause($select, $aggregates, static::getTableName());
         $sortDirection = $this->validateSortDirection($sortDirection);
         $offset = ($page - 1) * $recordsPerPage;
         $params  = $whereClauseData['params'];
@@ -152,11 +154,16 @@ abstract class BaseModel
 
         if ($whereClauseData["clauses"]) $query .= " WHERE " . $whereClauseData['clauses'];
 
+        // Add GROUP BY clause if specified
+        if ($groupBy) $query .= " GROUP BY {$groupBy}";
+
         // Conditionally add ORDER BY clause if $sortField is defined
         if ($sortField) $query .= " ORDER BY {$sortField} {$sortDirection}";
 
-        // var_dump($query);
-        // var_dump($params);
+        var_dump($query);
+        var_dump($params);
+        // return "success";
+
         // Fetch records
         $result = $this->db->fetchAll($query, $params, $recordsPerPage, $offset);
 
@@ -308,23 +315,28 @@ abstract class BaseModel
     }
 
     // Helper function to generate SELECT clause
-    private function generateSelectClause(array $select, string $mainTable)
+    private function generateSelectClause(array $select, array $aggregates = [], string $main_table)
     {
-        if (empty($select)) {
-            return '*'; // Default to all columns if none are specified
-        }
-
+    
         $selectClauses = [];
         foreach ($select as $item) {
             // Use the main table as the prefix if 'table' is not provided
-            $tablePrefix = isset($item['table']) ? "{$item['table']}." : "{$mainTable}.";
-
+            $tablePrefix = isset($item['table']) ? "{$item['table']}." : "{$main_table}.";
             // Check if an alias is specified for the column
-            $selectClauses[] = isset($item['alias'])
-                ? "{$tablePrefix}{$item['column']} AS {$item['alias']}"
-                : "{$tablePrefix}{$item['column']}";
+            $selectClauses[] = isset($item['alias']) ? "{$tablePrefix}{$item['column']} AS {$item['alias']}" : "{$tablePrefix}{$item['column']}";
         }
-        return implode(', ', $selectClauses);
+
+        foreach ($aggregates as $each) {
+            if (isset($each['function'], $each['column'])) {
+                $function = strtoupper($each['function']);
+                $column = $each['column'];
+                $alias = isset($each['alias']) ? " AS {$each['alias']}" : "";
+                $table = isset($each["table"]) ? $each["table"] : $main_table;
+                $selectClauses[] = "{$function}({$table}.{$column}){$alias}";
+            }
+        }
+
+        return empty($selectClauses) ? '*' : implode(', ', $selectClauses);
     }
 
 
@@ -346,6 +358,11 @@ abstract class BaseModel
 
         // Process each field in the select clause
         foreach ($selectFields as $field) {
+            // Check if the field contains an aggregate function (e.g., MIN, MAX, SUM, etc.)
+            if (preg_match('/\b(MIN|MAX|SUM|AVG|COUNT|GROUP_CONCAT)\b/i', $field)) {
+                continue; // Skip aggregate functions
+            }
+
             if ($field === "*") {
                 $this->addAllColumnsFromTables($selected_tables, $metadata, $columns_seen);
                 continue;

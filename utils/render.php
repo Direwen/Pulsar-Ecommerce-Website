@@ -6,7 +6,7 @@ function renderCategories($cssForCategoryName=null, $showImages=false, $cssForIm
     include("./views/components/categories.php");
 }
 
-function renderMediumBanner($mainTitle, $subTitle=null, $buttonText, $buttonUrl, $backgroundImage, $center=false) 
+function renderMediumBanner($mainTitle, $subTitle=null, $buttonText=null, $buttonUrl="", $backgroundImage, $center=false) 
 {
     include("./views/components/medium_banner.php");
 }
