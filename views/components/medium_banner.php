@@ -8,7 +8,7 @@
             <h1 class="text-4xl font-semibold tracking-tigher"><?= $mainTitle; ?></h1>
 
             <?php if ($subTitle): ?>
-                <h2 class="text-2xl tracking-tigher"><?= $subTitle; ?></h2>
+                <h2 class="text-2xl tracking-tighter"><?= $subTitle; ?></h2>
             <?php endif; ?>
 
             <?php if ($buttonText): ?>

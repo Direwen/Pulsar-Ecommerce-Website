@@ -44,6 +44,8 @@ $products = $fetched_overview_products_data["records"];
 
 <div class="">
 
+    <?php renderHeroSection($category[$category_model->getColumnName()], $category[$category_model->getColumnBannerImg()]); ?>
+
     <div class="text-dark border-b border-light-dark py-4 w-11/12 mx-auto flex justify-between items-center tracking-tigher">
         <section class="">
             <span class="material-symbols-outlined text-2xl">tune</span>

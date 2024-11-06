@@ -37,4 +37,10 @@ function renderProductCard(String $product_name, String $min_price, String $prod
     global $root_directory;
     include("./views/components/product_card.php");
 }
+
+function renderHeroSection(String $title, String $img)
+{
+    global $root_directory;
+    include("./views/components/hero.php");
+}
 ?>
