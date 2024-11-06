@@ -8,44 +8,65 @@ if($category && !is_array($category)) {
     exit();
 }
 
-$fetched_products_data = ErrorHandler::handle(fn () => $product_model->getAll());
+$fetched_overview_products_data = ErrorHandler::handle(fn () => $product_model->getAll(
+    select: [
+        ["column" => $product_model->getColumnId()],
+        ["column" => $product_model->getColumnName()],
+        ["column" => $product_model->getColumnImg()],
+    ],
+    aggregates: [
+        ["column" => $variant_model->getColumnUnitPrice(), "function" => "MIN", "alias" => "min_price", "table" => $variant_model->getTableName()],
+        ["column" => $variant_model->getColumnImg(), "function" => "Group_concat", "alias" => "variants", "table" => $variant_model->getTableName()]
+    ],
+    joins: [
+        [
+            'type' => "INNER JOIN",
+            'table' => $variant_model->getTableName(),
+            'on' => "variants.product_id = products.id"
+        ]
+    ],
+    groupBy: $product_model->getTableName() . "." . $product_model->getColumnId(),
+    conditions: [
+        [
+            'attribute' => 'products.category_id',
+            'operator' => "=",
+            'value' => $category["id"]
+        ]
+    ]
 
-$products = $fetched_products_data["records"];
+));;
+
+$products = $fetched_overview_products_data["records"];
 
 //If so, fetch products with the condition of its category id being the same as this category id
 //If not, fetch products with the default category id
 ?>
 
-<div class="bg-gray-300">
+<div class="">
 
-<div class="flex flex-wrap gap-4 justify-start  ">
-    <?php foreach($products as $product): ?>
-        <section class="border border-red-600 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
-            <section class="h-56 bg-black overflow-hidden">
-                <img src="<?= $root_directory ?>/assets/products/<?= $product['img'] ?>" alt="product image" class="w-full h-full object-cover object-center">
-            </section>
-            <p class="mt-2 text-center"><?= $product["name"]; ?></p>
+    <div class="text-dark border-b border-light-dark py-4 w-11/12 mx-auto flex justify-between items-center tracking-tigher">
+        <section class="">
+            <span class="material-symbols-outlined text-2xl">tune</span>
+            <span class="text-sm">Show Filters</span>
         </section>
-        <section class="border border-red-600 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
-            <section class="h-56 bg-black overflow-hidden">
-                <img src="<?= $root_directory ?>/assets/products/<?= $product['img'] ?>" alt="product image" class="w-full h-full object-cover object-center">
-            </section>
-            <p class="mt-2 text-center"><?= $product["name"]; ?></p>
+        <section class="text-sm">
+            <span class="mr-4">Sort By:</span>
+            <span>Best Selling</span>
         </section>
-        <section class="border border-red-600 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
-            <section class="h-56 bg-black overflow-hidden">
-                <img src="<?= $root_directory ?>/assets/products/<?= $product['img'] ?>" alt="product image" class="w-full h-full object-cover object-center">
-            </section>
-            <p class="mt-2 text-center"><?= $product["name"]; ?></p>
-        </section>
-        <section class="border border-red-600 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
-            <section class="h-56 bg-black overflow-hidden">
-                <img src="<?= $root_directory ?>/assets/products/<?= $product['img'] ?>" alt="product image" class="w-full h-full object-cover object-center">
-            </section>
-            <p class="mt-2 text-center"><?= $product["name"]; ?></p>
-        </section>
-    <?php endforeach; ?>
-</div>
+    </div>
+
+    <div class="flex flex-wrap justify-center items-start gap-x-2 gap-y-4">
+        <?php foreach($products as $product): ?>
+            
+            <?php renderProductCard(
+                product_name: $product["name"],
+                min_price: $product["min_price"],
+                product_img: $product["img"],
+                product_variant_img: $product["variants"]
+            ); ?>
+
+        <?php endforeach; ?>
+    </div>
 
 
 

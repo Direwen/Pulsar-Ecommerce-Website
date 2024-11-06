@@ -43,7 +43,7 @@ class ImageHandler
 
     private static function generateUniqueFileName(string $file_name): string
     {
-        return time() . "_" . strtolower($file_name);
+        return uniqid(time() . "_") . strtolower($file_name);
     }
 
     private static function validateDirectory(string $dir_to_save): bool

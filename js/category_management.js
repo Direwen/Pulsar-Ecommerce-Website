@@ -36,12 +36,27 @@ function editCategory(recordId, submissionPath, current_values) {
 
                 <!-- Option to change image -->
                 <label class="flex items-center gap-2 mt-2">
-                    <input type="checkbox" name="changeImage" id="changeImageCheckbox" class="accent-accent" onclick="toggleImageInput()">
+                    <input type="checkbox" name="changeImage" data-toggle="newImgInput" class="accent-accent" onclick="toggleImageInput(this)">
                     <span>Change Image</span>
                 </label>
 
                 <!-- New Image Upload Input, hidden initially -->
-                <input type="file" name="img" accept="image/*" id="newImageInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
+                <input type="file" name="img" accept="image/*" data-toggle="newImgInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
+            </section>
+            
+            <!-- Existing Banner Image Preview Section -->
+            <section class="flex flex-col justify-start items-start gap-2">
+                <label class="block text-sm font-medium text-dark">Current Image</label>
+                <img src="${current_values.rootDirectory + 'assets/categories/' + current_values.bannerImg}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
+
+                <!-- Option to change image -->
+                <label class="flex items-center gap-2 mt-2">
+                    <input type="checkbox" name="changeImage" data-toggle="newBannerImgInput" class="accent-accent" onclick="toggleImageInput(this)">
+                    <span>Change Image</span>
+                </label>
+
+                <!-- New Image Upload Input, hidden initially -->
+                <input type="file" name="banner_img" accept="image/*" data-toggle="newBannerImgInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
             </section>
 
             <section class="flex justify-end items-center gap-2">
@@ -103,6 +118,11 @@ function createCategory(submissionPath) {
                 <input type="file" name="img" accept="image/*" class="block w-full bg-primary border shadow rounded outline-accent p-2">
             </section>
 
+            <section class="flex flex-col justify-start items-start gap-2">
+                <label for="banner_img" class="block text-sm font-medium text-dark">Banner Image</label>
+                <input type="file" name="banner_img" accept="image/*" class="block w-full bg-primary border shadow rounded outline-accent p-2">
+            </section>
+
             <section class="flex justify-end items-center gap-2">
                 <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
                 <button type="submit" class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Create</button>
@@ -125,6 +145,7 @@ document.querySelectorAll('.edit-category-button').forEach(button => {
             firmware: this.getAttribute('firmware') ?? "",
             manual: this.getAttribute('manual') ?? "",
             img: this.getAttribute('img'),
+            bannerImg: this.getAttribute('banner_img'),
             rootDirectory: this.getAttribute('root-directory')
         };
 

@@ -160,9 +160,8 @@ abstract class BaseModel
         // Conditionally add ORDER BY clause if $sortField is defined
         if ($sortField) $query .= " ORDER BY {$sortField} {$sortDirection}";
 
-        var_dump($query);
-        var_dump($params);
-        // return "success";
+        // var_dump($query);
+        // var_dump($params);
 
         // Fetch records
         $result = $this->db->fetchAll($query, $params, $recordsPerPage, $offset);

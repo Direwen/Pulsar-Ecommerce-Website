@@ -11,6 +11,7 @@ class CategoryModel extends BaseModel
     private const COLUMN_FIRMWARE = 'firmware'; // Link for firmware resources
     private const COLUMN_MANUAL = 'manual';     // Link for manual resources
     private const COLUMN_IMG = 'img';
+    private const COLUMN_BANNER_IMG = 'banner_img'; // New attribute for banner image
     private const TABLE_NAME = 'categories';
 
     public static function getColumnId(): string
@@ -43,6 +44,11 @@ class CategoryModel extends BaseModel
         return self::COLUMN_IMG;
     }
 
+    public static function getColumnBannerImg(): string
+    {
+        return self::COLUMN_BANNER_IMG;
+    }
+
     public static function getTableName(): string
     {
         return self::TABLE_NAME;
@@ -58,6 +64,7 @@ class CategoryModel extends BaseModel
                 " . self::getColumnFirmware() . " VARCHAR(255) NULL,
                 " . self::getColumnManual() . " VARCHAR(255) NULL,
                 " . self::getColumnImg() . " VARCHAR(255) NOT NULL,
+                " . self::getColumnBannerImg() . " VARCHAR(255) NOT NULL,
                 INDEX idx_category_name (" . self::getColumnName() . ")
             );
         ");
@@ -65,6 +72,8 @@ class CategoryModel extends BaseModel
 
     public function validateFormData(array $post_data, array $files_data = [], bool $check_img = true): ?bool
     {
+        $errors = [];
+
         // Validate 'name' - required, unique, max length of 255 characters
         if (empty($post_data['name'])) {
             $errors[] = "Category name is required.";
@@ -91,6 +100,10 @@ class CategoryModel extends BaseModel
             if (empty($files_data["img"]["name"])) {
                 $errors[] = "Image is required.";
             }
+
+            if (empty($files_data["banner_img"]["name"])) {
+                $errors[] = "Banner Image is required";
+            }
         }
 
         // If there are any validation errors, return false and handle the errors
@@ -103,22 +116,6 @@ class CategoryModel extends BaseModel
         return true;
     }
 
-    // protected function createRaw($data): bool
-    // {
-    //     return $this->db->execute(
-    //         "INSERT INTO " . self::getTableName() . " 
-    //     (" . self::getColumnName() . ", " . self::getColumnSoftware() . ", " . self::getColumnFirmware() . ", " . self::getColumnManual() . ", " . self::getColumnImg() . ")
-    //     VALUES (:name, :software, :firmware, :manual, :img)",
-    //         [
-    //             ':name' => strtolower(trim($data['name'])),
-    //             ':software' => !empty($data['software']) ? $data['software'] : null,
-    //             ':firmware' => !empty($data['firmware']) ? $data['firmware'] : null,
-    //             ':manual' => !empty($data['manual']) ? $data['manual'] : null,
-    //             ':img' => $data['img'] ?? null
-    //         ]
-    //     );
-    // }
-
     protected function formatData($data, $null_filter = false): array
     {
         $formattedData = [
@@ -126,7 +123,8 @@ class CategoryModel extends BaseModel
             'software' => $data['software'] ?? null,
             'firmware' => $data['firmware'] ?? null,
             'manual' => $data['manual'] ?? null,
-            'img' => $data['img'] ?? null
+            'img' => $data['img'] ?? null,
+            'banner_img' => $data['banner_img'] ?? null // New attribute for banner image
         ];
 
         // Filter out null values to keep only the provided attributes
