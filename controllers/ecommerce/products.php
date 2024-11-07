@@ -60,12 +60,7 @@ $products = $fetched_overview_products_data["records"];
     <div class="flex flex-wrap justify-center items-start gap-x-2 gap-y-4">
         <?php foreach($products as $product): ?>
             
-            <?php renderProductCard(
-                product_name: $product["name"],
-                min_price: $product["min_price"],
-                product_img: $product["img"],
-                product_variant_img: $product["variants"]
-            ); ?>
+            <?php renderProductCard($product); ?>
 
         <?php endforeach; ?>
     </div>

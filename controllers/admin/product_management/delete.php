@@ -42,11 +42,12 @@ $variantDeletion = $error_handler->handleDbOperation(function () use ($variant_m
     );
 
     // Remove the variant image from the filesystem if it exists
-    $variant_img_path = './assets/products/' . $variant["img"];
-    if (file_exists($variant_img_path)) {
-        unlink($variant_img_path);
+    $variant_img = json_decode($variant["img"]);
+    foreach ($variant_img as $each) {
+        $img_file_path = './assets/products/' . $each;
+        if (file_exists($img_file_path)) unlink($img_file_path);
     }
-
+    
     // If this is the last variant, delete the associated product
     if ($removeProduct) {
         // Retrieve the product details

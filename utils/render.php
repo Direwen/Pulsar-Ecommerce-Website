@@ -32,7 +32,7 @@ function renderDashboardHeader(String $title_name, String $create_btn_desc, Stri
     include("./views/components/admin_dashboard_header.php");
 }
 
-function renderProductCard(String $product_name, String $min_price, String $product_img, String $product_variant_img)
+function renderProductCard(array $product)
 {
     global $root_directory;
     include("./views/components/product_card.php");

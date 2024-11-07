@@ -7,6 +7,29 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $id = $_POST["id"];
 
+$count = $category_model->getTotalCount(
+    conditions:[
+        [
+            "attribute" => $category_model->getTableName() . "." . $category_model->getColumnId(),
+            "operator" => "=",
+            "value" => $id
+        ]
+    ],
+    joins: [
+        [
+            "type" => "INNER JOIN",
+            "table" => $product_model->getTableName(),
+            "on" => "products.category_id = categories.id"
+        ]
+    ]
+);
+
+if ($count > 0) {
+    setMessage("Please Delete the products first before deleting the category", "error");
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+    exit;
+}
+
 // Retrieve the category record and handle errors
 $category = ErrorHandler::handle(fn() => $category_model->get([
     $category_model->getColumnId() => $id

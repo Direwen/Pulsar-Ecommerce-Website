@@ -36,17 +36,6 @@ function toggleImageInput(checkbox) {
     }
 }
 
-function toggleDropdown(button) {
-    // Find the corresponding section using the data-toggle attribute
-    const toggleId = button.getAttribute('data-toggle');
-    const section = document.querySelector(`section[data-toggle="${toggleId}"]`);
-
-    // Toggle the 'hidden' class to show or hide the section
-    if (section) {
-        section.classList.toggle('hidden');
-    }
-}
-
 // Function to handle adding new special feature containers dynamically
 function addSpecialFeatureCategory() {
     const container = document.getElementById('special-feature-container');
@@ -129,7 +118,7 @@ function addVariant() {
 
     <section class="block text-sm font-medium text-dark flex flex-col gap-2">
         <label for="variantImg_${variantCount}" class="text-gray-700">Image for the variant</label>
-        <input type="file" accept="image/*" id="variantImg_${variantCount}" name="variants[${variantCount - 1}]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
+        <input multiple type="file" accept="image/*" id="variantImg_${variantCount}" name="variants[${variantCount - 1}][]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
     </section>
 
     <button type="button" class="absolute -top-3 -right-2 w-fit interactive bg-secondary text-light-dark font-semibold rounded-full px-1 border shadow hover:bg-red-500 hover:text-primary" onclick="removeVariant(this)">

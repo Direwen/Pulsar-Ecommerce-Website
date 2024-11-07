@@ -61,6 +61,10 @@ return [
         'controller' => 'controllers/ecommerce/products.php',
         'middleware' => [],
     ],
+    'product/view' => [
+        'controller' => 'controllers/ecommerce/product_details.php',
+        'middleware' => [],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],

@@ -75,7 +75,7 @@ class VariantModel extends BaseModel
                 " . self::getColumnType() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnName() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnUnitPrice() . " DECIMAL(10, 2) NOT NULL,
-                " . self::getColumnImg() . " VARCHAR(255) NOT NULL,
+                " . self::getColumnImg() . " JSON NOT NULL,
                 " . self::getColumnCreatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (" . self::getColumnProductId() . ") REFERENCES " . ProductModel::getTableName() . "(" . ProductModel::getColumnId() . ") ON DELETE CASCADE
@@ -133,26 +133,6 @@ class VariantModel extends BaseModel
         return true;
     }
 
-    // /**
-    //  * Inserts a new record into the 'variants' table.
-    //  * @param array $data
-    //  * @return bool
-    //  */
-    // protected function createRaw($data): bool
-    // {
-    //     return $this->db->execute(
-    //         "INSERT INTO " . self::getTableName() . " 
-    //         (" . self::getColumnProductId() . ", " . self::getColumnType() . ", " . self::getColumnName() . ", " . self::getColumnUnitPrice() . ", " . self::getColumnImg() . ")
-    //         VALUES (:product_id, :type, :name, :unit_price, :img)",
-    //         [
-    //             ':product_id' => $data['product_id'],
-    //             ':type' => strtolower(trim($data['type'])), // Standardize variant type
-    //             ':name' => strtolower(trim($data['name'])), // Standardize name
-    //             ':unit_price' => $data['unit_price'],
-    //             ':img' => $data['img']
-    //         ]
-    //     );
-    // }
 
     protected function formatData($data, $null_filter = false): array
     {
@@ -161,7 +141,7 @@ class VariantModel extends BaseModel
             'type' => isset($data['type']) ? strtolower(trim($data['type'])) : null,
             'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
             'unit_price' => isset($data['unit_price']) ? round((float) $data['unit_price'], 2) : null,
-            'img' => isset($data['img']) ? trim($data['img']) : null,
+            'img' => isset($data['img']) ? json_encode($data['img']) : null,
         ];
 
         // Apply null filtering if requested
