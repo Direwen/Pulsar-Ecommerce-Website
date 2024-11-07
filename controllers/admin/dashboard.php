@@ -128,6 +128,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     ["column" => $variant_model->getColumnName(), "alias" => "variant_type_name"],
                     ["column" => $variant_model->getColumnUnitPrice()],
                     ["column" => $variant_model->getColumnImg(), "alias" => "Variant_Image"],
+                    ["column" => $variant_model->getColumnImgForAds(), "alias" => "variant_ads_image"],
                     ["column" => $variant_model->getColumnProductId()],
                     
                     ["column" => $category_model->getColumnName(), "alias" => "Category", "table" => $category_model->getTableName()],

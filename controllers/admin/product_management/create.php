@@ -85,30 +85,44 @@ if ($_POST["action-type"] == "create") {
         }
 
         $details_for_variant_img = [];
-        //Looping through each variant
-        for ($i = 0; $i < count($_FILES["variants"]["name"]); $i++) {
+        for ($i = 0; $i < count($_FILES["variants_img"]["name"]); $i++) {
             //Looping through images of each variant
-            for ($img_index = 0; $img_index < count($_FILES["variants"]["name"][$i]); $img_index++) {
+            $temp = ErrorHandler::handle(fn () => ImageHandler::prepareImageForStorage(
+                temp_name: $_FILES["variants_img"]["tmp_name"][$i],
+                file_name: $_FILES["variants_img"]["name"][$i],
+                dir_to_save: "./assets/products"
+            ));
+            if (!$temp) throw new Exception("Failed to prepare variant image");
+            $details_for_variant_img[] = $temp;
+        }
+
+        $details_for_variant_ads_img = [];
+        //Looping through each variant
+        for ($i = 0; $i < count($_FILES["variants_img_for_ads"]["name"]); $i++) {
+            //Looping through images of each variant
+            for ($img_index = 0; $img_index < count($_FILES["variants_img_for_ads"]["name"][$i]); $img_index++) {
                 $temp = ErrorHandler::handle(fn() => ImageHandler::prepareImageForStorage(
-                    temp_name: $_FILES["variants"]["tmp_name"][$i][$img_index],
-                    file_name: $_FILES["variants"]["name"][$i][$img_index],
+                    temp_name: $_FILES["variants_img_for_ads"]["tmp_name"][$i][$img_index],
+                    file_name: $_FILES["variants_img_for_ads"]["name"][$i][$img_index],
                     dir_to_save: "./assets/products"
                 ));
                 if (!$temp) throw new Exception("Failed to prepare variant image");
-                $details_for_variant_img[$i][] = $temp;
+                $details_for_variant_ads_img[$i][] = $temp;
             }
         }
 
         for ($i = 0; $i < count($_POST["variants"]); $i++) {
             $_POST["variants"][$i][$variant_model->getColumnProductId()] = $product[$product_model->getColumnId()];
-            $_POST["variants"][$i][$variant_model->getColumnImg()] = array_column($details_for_variant_img[$i], 'name');
+            $_POST["variants"][$i][$variant_model->getColumnImg()] = $details_for_variant_img[$i]["name"];
+            $_POST["variants"][$i][$variant_model->getColumnImgForAds()] = array_column($details_for_variant_ads_img[$i], 'name');
 
             $result = $variant_model->create([
                 $variant_model->getColumnProductId() => $_POST["variants"][$i]["product_id"],
                 $variant_model->getColumnType() => $_POST["variants"][$i]["type"],
                 $variant_model->getColumnName() => $_POST["variants"][$i]["name"],
                 $variant_model->getColumnUnitPrice() => $_POST["variants"][$i]["unit_price"],
-                $variant_model->getColumnImg() => $_POST["variants"][$i]["img"]
+                $variant_model->getColumnImg() => $_POST["variants"][$i]["img"],
+                $variant_model->getColumnImgForAds() => $_POST["variants"][$i]["img_for_ads"]
             ]);
 
             if (!$result) throw new Exception("Failed to create variant in database");
@@ -121,16 +135,18 @@ if ($_POST["action-type"] == "create") {
             }
         }
 
-        foreach ($details_for_variant_img as $variant) {
+        foreach ([$details_for_variant_img, ...$details_for_variant_ads_img] as $variant) {
             foreach ($variant as $each) {
                 if (!move_uploaded_file($each["temp_name"], $each["destination"])) {
                     throw new Exception("Failed to move images to final destination");
                 }
             }
         }
+
     }, "Failed to create product");
 
     if ($create_result) setMessage("Created", 'success');
+
 } else if ($_POST["action-type"] == "add-variant") {
 
     // Handle Variants
@@ -146,39 +162,53 @@ if ($_POST["action-type"] == "create") {
     }
 
     $details_for_variant_img = [];
-    //Looping through each variant
-    for ($i = 0; $i < count($_FILES["variants"]["name"]); $i++) {
+    for ($i = 0; $i < count($_FILES["variants_img"]["name"]); $i++) {
         //Looping through images of each variant
-        for ($img_index = 0; $img_index < count($_FILES["variants"]["name"][$i]); $img_index++) {
+        $temp = ErrorHandler::handle(fn () => ImageHandler::prepareImageForStorage(
+            temp_name: $_FILES["variants_img"]["tmp_name"][$i],
+            file_name: $_FILES["variants_img"]["name"][$i],
+            dir_to_save: "./assets/products"
+        ));
+        if (!$temp) throw new Exception("Failed to prepare variant image");
+        $details_for_variant_img[] = $temp;
+    }
+
+    $details_for_variant_ads_img = [];
+    //Looping through each variant
+    for ($i = 0; $i < count($_FILES["variants_img_for_ads"]["name"]); $i++) {
+        //Looping through images of each variant
+        for ($img_index = 0; $img_index < count($_FILES["variants_img_for_ads"]["name"][$i]); $img_index++) {
             $temp = ErrorHandler::handle(fn() => ImageHandler::prepareImageForStorage(
-                temp_name: $_FILES["variants"]["tmp_name"][$i][$img_index],
-                file_name: $_FILES["variants"]["name"][$i][$img_index],
+                temp_name: $_FILES["variants_img_for_ads"]["tmp_name"][$i][$img_index],
+                file_name: $_FILES["variants_img_for_ads"]["name"][$i][$img_index],
                 dir_to_save: "./assets/products"
             ));
             if (!$temp) throw new Exception("Failed to prepare variant image");
-            $details_for_variant_img[$i][] = $temp;
+            $details_for_variant_ads_img[$i][] = $temp;
         }
     }
 
-    $create_result = $error_handler->handleDbOperation(function () use ($variant_model, $details_for_variant_img) {
+    $create_result = $error_handler->handleDbOperation(function () use ($variant_model, $details_for_variant_img, $details_for_variant_ads_img) {
 
         for ($i = 0; $i < count($_POST["variants"]); $i++) {
             $_POST["variants"][$i][$variant_model->getColumnProductId()] = $_POST["product-id"];
-            $_POST["variants"][$i][$variant_model->getColumnImg()] = array_column($details_for_variant_img[$i], 'name');
+            $_POST["variants"][$i][$variant_model->getColumnImg()] = $details_for_variant_img[$i]["name"];
+            $_POST["variants"][$i][$variant_model->getColumnImgForAds()] = array_column($details_for_variant_ads_img[$i], 'name');
 
             $result = $variant_model->create([
                 $variant_model->getColumnProductId() => $_POST["variants"][$i]["product_id"],
                 $variant_model->getColumnType() => $_POST["variants"][$i]["type"],
                 $variant_model->getColumnName() => $_POST["variants"][$i]["name"],
                 $variant_model->getColumnUnitPrice() => $_POST["variants"][$i]["unit_price"],
-                $variant_model->getColumnImg() => $_POST["variants"][$i]["img"]
+                $variant_model->getColumnImg() => $_POST["variants"][$i]["img"],
+                $variant_model->getColumnImgForAds() => $_POST["variants"][$i]["img_for_ads"]
             ]);
 
             if (!$result) throw new Exception("Failed to create variant in database");
         }
 
         // Move images to final destinations
-        foreach ($details_for_variant_img as $variant) {
+        foreach ([$details_for_variant_img, ...$details_for_variant_ads_img] as $variant) {
             foreach ($variant as $each) {
                 if (!move_uploaded_file($each["temp_name"], $each["destination"])) {
                     throw new Exception("Failed to move images to final destination");

@@ -61,17 +61,39 @@ foreach ($fetched_data['records'] as $record) {
 
     // Add variant-specific data to the $variants array
     $variants[] = [
-        "variant_id" => $record['variant_id'],
+        "id" => $record['variant_id'],
         "type" => $record['type'],
-        "variant_name" => $record['variant_name'],
+        "name" => $record['variant_name'],
         "unit_price" => $record['unit_price'],
-        "variant_img" => $record['variant_img']
+        "img" => json_decode($record['variant_img'])
     ];
 }
 
 ?>
 
 <div>
+
+    <div class="flex h-screen">
+        <!-- Sidebar or Empty Space -->
+        <!-- <div class="grow bg-accent"></div> -->
+
+        <!-- Main Content -->
+        <div class="w-1/3 p-6">
+            <!-- Product Title and Price -->
+            <h1 class="text-2xl font-semibold mb-2"><?= htmlspecialchars(ucwords($product['name'])) ?> Gaming Mouse</h1>
+            <p class="text-lg font-bold mb-4">$<?= $variants[0]['unit_price'] ?></p>
+
+            <!-- Color Selection and Images -->
+            <section>
+                <section class="flex justify-start items-center gap-2">
+                    <?php foreach($variants as $variant): ?>
+                        <img src="<?= $root_directory . "assets/products/" . $variant["img"][0] ?>" alt="img" class="w-24 h-24">
+                    <?php endforeach; ?>
+                </section>
+            </section>
+
+        </div>
+    </div>
 
     <!-- description -->
     <section class="tracking-tigher text-dark flex flex-col justify-center items-center gap-4 p-16 md:p-48">
@@ -87,95 +109,95 @@ foreach ($fetched_data['records'] as $record) {
     <!-- Specifications -->
     <section class="w-10/12 mx-auto my-10">
         <h1 class="font-bold text-left text-xl md:text-5xl mb-4">Techinical Specifications</h1>
-<!-- Dimensions Section -->
-<section class="bg-secondary">
-    <div 
-        class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-        data-toggle="dimension"
-        onclick="toggleDropdown(this)"
-    >
-        <span>Dimensions</span>
-        <span class="material-symbols-outlined">add</span>
-    </div>
+        <!-- Dimensions Section -->
+        <section class="bg-secondary">
+            <div 
+                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
+                data-toggle="dimension"
+                onclick="toggleDropdown(this)"
+            >
+                <span>Dimensions</span>
+                <span class="material-symbols-outlined">add</span>
+            </div>
 
-    <section class="px-3 py-6 hidden" data-toggle="dimension">
-        <p class="tracking-tighter text-sm md:text-xl tracking-widest"><?= $product["dimension"]; ?></p>
-    </section>
-</section>
-
-<!-- Important Features Section -->
-<?php foreach($product["important_feature"] as $key => $value): ?>
-    <section class="bg-secondary">
-        <div 
-            class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter" 
-            data-toggle="<?= htmlspecialchars($key); ?>"
-            onclick="toggleDropdown(this)"
-        >
-            <span><?= htmlspecialchars($key); ?></span>
-            <span class="material-symbols-outlined">add</span>
-        </div>
-
-        <section class="px-3 py-6 hidden" data-toggle="<?= htmlspecialchars($key); ?>">
-            <?php foreach($value as $each): ?>
-                <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
-            <?php endforeach; ?>
+            <section class="px-3 py-6 hidden" data-toggle="dimension">
+                <p class="tracking-tighter text-sm md:text-xl tracking-widest"><?= $product["dimension"]; ?></p>
+            </section>
         </section>
-    </section>
-<?php endforeach; ?>
 
-<!-- General Features Section -->
-<section class="bg-secondary">
-    <div 
-        class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-        data-toggle="general"
-        onclick="toggleDropdown(this)"
-    >
-        <span>General</span>
-        <span class="material-symbols-outlined">add</span>
-    </div>
+        <!-- Important Features Section -->
+        <?php foreach($product["important_feature"] as $key => $value): ?>
+            <section class="bg-secondary">
+                <div 
+                    class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter" 
+                    data-toggle="<?= htmlspecialchars($key); ?>"
+                    onclick="toggleDropdown(this)"
+                >
+                    <span><?= htmlspecialchars($key); ?></span>
+                    <span class="material-symbols-outlined">add</span>
+                </div>
 
-    <section class="px-3 py-6 hidden" data-toggle="general">
-        <?php foreach($product["feature"] as $each): ?>
-            <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
+                <section class="px-3 py-6 hidden" data-toggle="<?= htmlspecialchars($key); ?>">
+                    <?php foreach($value as $each): ?>
+                        <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
+                    <?php endforeach; ?>
+                </section>
+            </section>
         <?php endforeach; ?>
-    </section>
-</section>
 
-<!-- Requirements Section -->
-<section class="bg-secondary">
-    <div 
-        class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-        data-toggle="requirement"
-        onclick="toggleDropdown(this)"
-    >
-        <span>Requirement</span>
-        <span class="material-symbols-outlined">add</span>
-    </div>
+        <!-- General Features Section -->
+        <section class="bg-secondary">
+            <div 
+                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
+                data-toggle="general"
+                onclick="toggleDropdown(this)"
+            >
+                <span>General</span>
+                <span class="material-symbols-outlined">add</span>
+            </div>
 
-    <section class="px-3 py-6 hidden" data-toggle="requirement">
-        <?php foreach($product["requirement"] as $each): ?>
-            <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
-        <?php endforeach; ?>
-    </section>
-</section>
+            <section class="px-3 py-6 hidden" data-toggle="general">
+                <?php foreach($product["feature"] as $each): ?>
+                    <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
+                <?php endforeach; ?>
+            </section>
+        </section>
 
-<!-- Package Content Section -->
-<section class="bg-secondary">
-    <div 
-        class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-        data-toggle="package_content"
-        onclick="toggleDropdown(this)"
-    >
-        <span>Package Content</span>
-        <span class="material-symbols-outlined">add</span>
-    </div>
+        <!-- Requirements Section -->
+        <section class="bg-secondary">
+            <div 
+                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
+                data-toggle="requirement"
+                onclick="toggleDropdown(this)"
+            >
+                <span>Requirement</span>
+                <span class="material-symbols-outlined">add</span>
+            </div>
 
-    <section class="px-3 py-6 hidden" data-toggle="package_content">
-        <?php foreach($product["package_content"] as $each): ?>
-            <p class="tracking-tighter text-sm sm:text-base md:text-xl tracking-widest">- <?= $each; ?></p>
-        <?php endforeach; ?>
-    </section>
-</section>
+            <section class="px-3 py-6 hidden" data-toggle="requirement">
+                <?php foreach($product["requirement"] as $each): ?>
+                    <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
+                <?php endforeach; ?>
+            </section>
+        </section>
+
+        <!-- Package Content Section -->
+        <section class="bg-secondary">
+            <div 
+                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
+                data-toggle="package_content"
+                onclick="toggleDropdown(this)"
+            >
+                <span>Package Content</span>
+                <span class="material-symbols-outlined">add</span>
+            </div>
+
+            <section class="px-3 py-6 hidden" data-toggle="package_content">
+                <?php foreach($product["package_content"] as $each): ?>
+                    <p class="tracking-tighter text-sm sm:text-base md:text-xl tracking-widest">- <?= $each; ?></p>
+                <?php endforeach; ?>
+            </section>
+        </section>
 
     </section>
     <!-- manual -->

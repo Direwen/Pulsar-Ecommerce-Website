@@ -41,9 +41,9 @@ $variantDeletion = $error_handler->handleDbOperation(function () use ($variant_m
         ]
     );
 
-    // Remove the variant image from the filesystem if it exists
-    $variant_img = json_decode($variant["img"]);
-    foreach ($variant_img as $each) {
+    $variant_img = $variant[$variant_model->getColumnImg()];
+    $variant_img_for_ads = json_decode($variant[$variant_model->getColumnImgForAds()]);
+    foreach ([$variant_img, ...$variant_img_for_ads] as $each) {
         $img_file_path = './assets/products/' . $each;
         if (file_exists($img_file_path)) unlink($img_file_path);
     }

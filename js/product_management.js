@@ -124,8 +124,12 @@ function createProduct(submissionPath, extra_info) {
                             <input type="number" step="0.01" id="variantUnitPrice_1" name="variants[0][unit_price]" class="block w-full border shadow rounded outline-accent p-2" required>
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                            <label for="variantImg_1" class="text-gray-700">Image for the variant</label>
-                            <input multiple type="file" accept="image/*" id="variantImg_1" name="variants[0][]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
+                            <label for="variantImg_1" class="text-gray-700">Provide Main Image</label>
+                            <input type="file" accept="image/*" id="variantImg_1" name="variants_img[0]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
+                        </section>
+                        <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+                            <label for="variantImg_1" class="text-gray-700">Provide Images for Ads</label>
+                            <input multiple type="file" accept="image/*" id="variantImg_1" name="variants_img_for_ads[0][]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
                         </section>
                         <button type="button" class="absolute -top-3 -right-2 w-fit interactive bg-secondary text-light-dark font-semibold rounded-full px-1 border shadow hover:bg-red-500 hover:text-primary" onclick="removeVariant(this)">
                             <span class="material-symbols-outlined">remove</span>
@@ -159,7 +163,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
         </div>`
     ).join('') ?? '';
     
-    const variantImagesHtml = currentValues.variantImage?.map((image, index) =>
+    const variantImagesHtml = currentValues.variantImageForAds?.map((image, index) =>
         `<div class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 overflow-hidden rounded shadow border border-gray-200">
             <img src="${currentValues.rootDirectory + 'assets/products/' + image}" alt="Variant Image ${index + 1}" class="object-cover w-full h-full">
         </div>`
@@ -263,16 +267,26 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                             <input type="number" step="0.01" id="variantUnitPrice_1" name="variants[0][unit_price]" value="${currentValues.unitPrice}" class="w-full border shadow rounded outline-accent p-2">
                         </section>
 
+                        <section class="flex flex-col justify-start items-start gap-2">
+                            <label class="block text-sm font-medium text-dark">Current Main Image</label>
+                            <img src="${currentValues.rootDirectory + 'assets/products/' + currentValues.variantImage}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
+                            <label class="flex items-center gap-2 mt-2">
+                                <input type="checkbox" name="changeImage" data-toggle="newVariantImageInput" class="accent-accent" onclick="toggleImageInput(this)">
+                                <span>Change Image</span>
+                            </label>
+                            <input type="file" name="variants_img[0]" accept="image/*" data-toggle="newVariantImageInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
+                        </section>
+
                         <section class="flex flex-col gap-2">
                             <label for="img" class="text-sm font-medium text-dark">Images for this Variant</label>
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                                 ${variantImagesHtml}
                             </div>
                             <label class="flex items-center gap-2 mt-2">
-                                <input type="checkbox" name="changeImage" data-toggle="newVariantImageInput" class="accent-accent" onclick="toggleImageInput(this)">
+                                <input type="checkbox" name="changeImage" data-toggle="newVariantAdsImageInput" class="accent-accent" onclick="toggleImageInput(this)">
                                 <span>Change Image</span>
                             </label>
-                            <input multiple type="file" name="variants[0][]" accept="image/*" data-toggle="newVariantImageInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
+                            <input multiple type="file" name="variants_img_for_ads[0][]" accept="image/*" data-toggle="newVariantAdsImageInput" class="block w-full bg-primary border shadow rounded outline-accent p-2 mt-2 hidden">
                         </section>
 
                     </div>
@@ -336,7 +350,8 @@ document.querySelectorAll('.edit-product-button').forEach(button => {
             variantType: this.getAttribute('variant_type'),
             variantTypeName: this.getAttribute('variant_type_name'),
             unitPrice: this.getAttribute('unit_price') ?? "",
-            variantImage: parseJSONorString(this.getAttribute('variant_image')),
+            variantImage: this.getAttribute('variant_image'),
+            variantImageForAds: parseJSONorString(this.getAttribute('variant_ads_image')),
             productName: this.getAttribute('product') ?? "",
             productId: this.getAttribute('product_id'),
             category: this.getAttribute('category'),

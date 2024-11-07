@@ -84,25 +84,44 @@ $update_result = $error_handler->handleDbOperation(function () use ($variant_mod
         }
     }
 
+
+
     // Handle variant images if uploaded
     $details_for_variant_img = [];
-    if (in_array("variants", $imgUploaded)) {
+    if (in_array("variants_img", $imgUploaded)) {
+    
+        for ($i = 0; $i < count($_FILES["variants_img"]["name"]); $i++) {
+            //Looping through images of each variant
+            $temp = ErrorHandler::handle(fn () => ImageHandler::prepareImageForStorage(
+                temp_name: $_FILES["variants_img"]["tmp_name"][$i],
+                file_name: $_FILES["variants_img"]["name"][$i],
+                dir_to_save: "./assets/products"
+            ));
+            if (!$temp) throw new Exception("Failed to prepare variant image");
+            $details_for_variant_img[] = $temp;
+        }
+
+    }
+    
+    $details_for_variant_ads_img = [];
+    if (in_array("variants_img_for_ads", $imgUploaded)) {
 
         //Looping through each variant
-        for ($i = 0; $i < count($_FILES["variants"]["name"]); $i++) {
+        for ($i = 0; $i < count($_FILES["variants_img_for_ads"]["name"]); $i++) {
             //Looping through images of each variant
-            for ($img_index = 0; $img_index < count($_FILES["variants"]["name"][$i]); $img_index++) {
+            for ($img_index = 0; $img_index < count($_FILES["variants_img_for_ads"]["name"][$i]); $img_index++) {
                 $temp = ErrorHandler::handle(fn() => ImageHandler::prepareImageForStorage(
-                    temp_name: $_FILES["variants"]["tmp_name"][$i][$img_index],
-                    file_name: $_FILES["variants"]["name"][$i][$img_index],
+                    temp_name: $_FILES["variants_img_for_ads"]["tmp_name"][$i][$img_index],
+                    file_name: $_FILES["variants_img_for_ads"]["name"][$i][$img_index],
                     dir_to_save: "./assets/products"
                 ));
                 if (!$temp) throw new Exception("Failed to prepare variant image");
-                $details_for_variant_img[$i][] = $temp;
+                $details_for_variant_ads_img[$i][] = $temp;
             }
         }
 
     }
+
 
     // Cleanup and deletion of images if necessary
     $variant = $variant_model->get([$variant_model->getColumnId() => $variant_id]);
@@ -116,7 +135,10 @@ $update_result = $error_handler->handleDbOperation(function () use ($variant_mod
             $variant_model->getColumnUnitPrice() => $variant_data["unit_price"],
         ];
         if (!empty($details_for_variant_img[$i])) {
-            $variant_update_data[$variant_model->getColumnImg()] = array_column($details_for_variant_img[$i], "name");
+            $variant_update_data[$variant_model->getColumnImg()] = $details_for_variant_img[$i]["name"];
+        }
+        if (!empty($details_for_variant_ads_img[$i])) {
+            $variant_update_data[$variant_model->getColumnImgForAds()] = array_column($details_for_variant_ads_img[$i], "name");
         }
         if (!$variant_model->update($variant_update_data, [$variant_model->getColumnId() => $variant_id])) {
             throw new Exception("Failed to update variant in database");
@@ -135,9 +157,13 @@ $update_result = $error_handler->handleDbOperation(function () use ($variant_mod
         }
     }
     
-    // Similarly, check for variants
-    if (in_array("variants", $imgUploaded)) {
-        $variant_img = json_decode($variant[$variant_model->getColumnImg()]);
+    if (in_array("variants_img", $imgUploaded)) {
+        $img = $variant[$variant_model->getColumnImg()];
+        ErrorHandler::handle(fn() => file_exists('./assets/products/' . $img) && unlink('./assets/products/' . $img));
+    }
+
+    if (in_array("variants_img_for_ads", $imgUploaded)) {
+        $variant_img = json_decode($variant[$variant_model->getColumnImgForAds()]);
         foreach ($variant_img as $each) {
             ErrorHandler::handle(fn() => file_exists('./assets/products/' . $each) && unlink('./assets/products/' . $each));
         }
@@ -148,16 +174,22 @@ $update_result = $error_handler->handleDbOperation(function () use ($variant_mod
         !move_uploaded_file($details_for_main_img["temp_name"], $details_for_main_img["destination"])) {
         throw new Exception("Failed to move main image to final destination");
     }
+    
+    if (in_array("variants_img", $imgUploaded) &&
+        !move_uploaded_file($details_for_variant_img[0]["temp_name"], $details_for_variant_img[0]["destination"])) {
+        throw new Exception("Failed to move variant image to final destination");
+    }
+
     foreach ($details_for_ads_img as $each) {
         if (!move_uploaded_file($each["temp_name"], $each["destination"])) {
             throw new Exception("Failed to move images to final destination");
         }
     }
 
-    foreach ($details_for_variant_img as $variant) {
+    foreach ($details_for_variant_ads_img as $variant) {
         foreach($variant as $each) {
             if (!move_uploaded_file($each["temp_name"], $each["destination"])) {
-                throw new Exception("Failed to move images to final destination");
+                throw new Exception("Failed to move variant ads images to final destination");
             }
         }
     }

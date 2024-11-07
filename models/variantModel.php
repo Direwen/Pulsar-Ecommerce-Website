@@ -13,6 +13,7 @@ class VariantModel extends BaseModel
     public const COLUMN_NAME = 'name';
     public const COLUMN_UNIT_PRICE = 'unit_price';
     public const COLUMN_IMG = 'img';
+    public const COLUMN_IMG_FOR_ADS = 'img_for_ads';
     public const COLUMN_CREATED_AT = 'created_at';
     public const COLUMN_UPDATED_AT = 'updated_at';
 
@@ -51,6 +52,11 @@ class VariantModel extends BaseModel
     {
         return self::COLUMN_IMG;
     }
+    
+    public static function getColumnImgForAds(): string
+    {
+        return self::COLUMN_IMG_FOR_ADS;
+    }
 
     public static function getColumnCreatedAt(): string
     {
@@ -75,7 +81,8 @@ class VariantModel extends BaseModel
                 " . self::getColumnType() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnName() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnUnitPrice() . " DECIMAL(10, 2) NOT NULL,
-                " . self::getColumnImg() . " JSON NOT NULL,
+                " . self::getColumnImg() . " VARCHAR(255) NOT NULL,
+                " . self::getColumnImgForAds() . " JSON NOT NULL,
                 " . self::getColumnCreatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (" . self::getColumnProductId() . ") REFERENCES " . ProductModel::getTableName() . "(" . ProductModel::getColumnId() . ") ON DELETE CASCADE
@@ -89,7 +96,7 @@ class VariantModel extends BaseModel
      * @param array $files_data The uploaded file data (if any).
      * @return bool|null Returns true if validation passes, false if it fails, or null if errors occur.
      */
-    public function validateFormData(array $post_data, array $files_data = []): ?bool
+    public function validateFormData(array $post_data, array $files_data = [], bool $check_img = true): ?bool
     {
         $errors = [];
 
@@ -118,8 +125,9 @@ class VariantModel extends BaseModel
         }
 
         // Validate 'img' - required, must be a valid image path
-        if (empty($files_data["variants"])) {
-            $errors[] = "Variant image is required.";
+        if ($check_img) {
+            if (empty($files_data["variants_img"])) $errors[] = "Variant image is required.";
+            if (empty($files_data["variants_img_for_ads"])) $errors[] = "Variant Ads image is required.";
         }
 
         // If there are any validation errors, return false and handle the errors
@@ -141,7 +149,8 @@ class VariantModel extends BaseModel
             'type' => isset($data['type']) ? strtolower(trim($data['type'])) : null,
             'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
             'unit_price' => isset($data['unit_price']) ? round((float) $data['unit_price'], 2) : null,
-            'img' => isset($data['img']) ? json_encode($data['img']) : null,
+            'img' => isset($data['img']) ? $data['img'] : null,
+            'img_for_ads' => isset($data['img_for_ads']) ? json_encode($data['img_for_ads']) : null,
         ];
 
         // Apply null filtering if requested
