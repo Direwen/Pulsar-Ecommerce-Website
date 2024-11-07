@@ -7,6 +7,7 @@ $currentPage = $fetched_data["currentPage"];
 $totalPages = $fetched_data["totalPages"];
 $hasMore = $fetched_data["hasMore"];
 $metadata = $fetched_data["metadata"];
+$toggleBtnCount = 0;
 
 $filtered_metadata = [];
 
@@ -112,26 +113,41 @@ foreach ($metadata as $attr_title => $arr) {
                                                 // Check if it's an array
                                                 if ($valueType === 'array'):
                                                 ?>
-                                                    <div class="flex flex-wrap gap-2">
-                                                        <?php foreach ($decodedValue as $each): ?>
-                                                            <span class="border shadow py-1 px-2 rounded"><?= htmlspecialchars($each); ?></span>
-                                                        <?php endforeach; ?>
+                                                    <div class="">
+                                                        <?php $toggleBtnCount++; ?>
+                                                        <button class="text-dark interactive px-3 rounded" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>" onclick="toggleDropdown(this)">
+                                                            Show
+                                                            <span class="material-symbols-outlined">arrow_drop_down</span>
+                                                        </button>
+                                                        <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
+                                                            <?php foreach ($decodedValue as $each): ?>
+                                                                <span><?= htmlspecialchars($each); ?></span>
+                                                            <?php endforeach; ?>
+                                                        </section>
                                                     </div>
 
                                                 <?php elseif ($valueType === 'object'): ?>
-                                                    <div class="flex flex-col gap-2">
+                                                    <div class="flex justify-center items-center gap-1">
                                                         <?php foreach ($decodedValue as $key => $value): ?>
-                                                            <section class="border shadow p-2">
-                                                                <strong class=""><?= htmlspecialchars($key); ?>:</strong>
+                                                            <?php $toggleBtnCount++; ?>
+                                                            <section class="">
+                                                                <button class="border shadow px-3 rounded" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>" onclick="toggleDropdown(this)">
+                                                                    <?= htmlspecialchars($key); ?>
+                                                                    <span class="material-symbols-outlined">arrow_drop_down</span>
+                                                                </button>
+
                                                                 <?php if (is_array($value)): ?>
-                                                                    <div class="flex flex-wrap gap-2">
-                                                                        <?php foreach ($value as $value2): ?>
-                                                                            <span class="border shadow py-1 px-2 rounded"><?= htmlspecialchars($value2); ?></span>
+                                                                    <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
+                                                                        <?php foreach ($value as $each): ?>
+                                                                            <span><?= htmlspecialchars($each); ?></span>
                                                                         <?php endforeach; ?>
-                                                                    </div>
+                                                                    </section>
                                                                 <?php else: ?>
-                                                                    <span class="border shadow py-1 px-2 rounded"><?= htmlspecialchars($value); ?></span>
+                                                                    <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
+                                                                        <span><?= htmlspecialchars($value); ?></span>
+                                                                    </section>
                                                                 <?php endif; ?>
+                                                                
                                                             </section>
                                                         <?php endforeach; ?>
                                                     </div>
@@ -141,7 +157,7 @@ foreach ($metadata as $attr_title => $arr) {
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <span class="text-light-dark font-light">N/A</span>
-                                            <?php endif; ?>
+                                            <?php endif; ?>                                         
                                         <?php endif; ?>
                                     </td>
                                 <?php endif; ?>
