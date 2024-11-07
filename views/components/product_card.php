@@ -1,5 +1,7 @@
 <section class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4 rounded-lg">
     <!-- Product main image -->
+    <!-- string(324) "["1730972814_672c8c8e3cc4epulsar_x2_wireless_gaming_mouse_011.webp","1730972814_672c8c8e3ccb7pulsar_x2v2_red_edition_gaming_mouse_gallery_01.webp","1730972814_672c8c8e3cd16pulsargaminggearssupergripgriptapeforx2hminigamingmouse_f13ee3b6-af6c-4303-adaa-51864b8d325a-416964_large.webp"],["1730972771_672c8c63c19e7images.jfif"]" -->
+
     <a href="<?= $root_directory . "product/view?id=" . urlencode($product["id"]); ?>">
         <div class="relative h-64 bg-secondary flex items-center justify-center rounded">
             <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($product["img"]) ?>" 
@@ -20,8 +22,11 @@
 
     <!-- Variant images -->
     <div class="flex flex-wrap justify-start mt-4 gap-1">
-        <?php foreach (explode(",", $product["variants"]) as $variant): ?>
-            <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars(trim($variant)) ?>" 
+        <?php foreach ($product['variants'] as $variant): ?>
+            <?php
+                $variant = json_decode($variant); 
+            ?>
+            <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($variant[0]) ?>" 
                  alt="variant image" 
                  class="interactive w-12 h-12 object-cover border border-light-gray rounded hover:border-accent cursor-pointer">
         <?php endforeach; ?>

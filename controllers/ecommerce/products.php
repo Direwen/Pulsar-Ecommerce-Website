@@ -16,7 +16,6 @@ $fetched_overview_products_data = ErrorHandler::handle(fn () => $product_model->
     ],
     aggregates: [
         ["column" => $variant_model->getColumnUnitPrice(), "function" => "MIN", "alias" => "min_price", "table" => $variant_model->getTableName()],
-        ["column" => $variant_model->getColumnImg(), "function" => "Group_concat", "alias" => "variants", "table" => $variant_model->getTableName()]
     ],
     joins: [
         [
@@ -38,8 +37,6 @@ $fetched_overview_products_data = ErrorHandler::handle(fn () => $product_model->
 
 $products = $fetched_overview_products_data["records"];
 
-//If so, fetch products with the condition of its category id being the same as this category id
-//If not, fetch products with the default category id
 ?>
 
 <div class="">
@@ -59,7 +56,21 @@ $products = $fetched_overview_products_data["records"];
 
     <div class="flex flex-wrap justify-center items-start gap-x-2 gap-y-4">
         <?php foreach($products as $product): ?>
-            
+            <?php
+                $variants = ErrorHandler::handle(fn () => $variant_model->getAll(
+                    select: [
+                        ["column" => $variant_model->getColumnImg()]
+                    ],
+                    conditions: [
+                        [
+                            "attribute" => $variant_model->getColumnProductId(),
+                            "operator" => "=",
+                            "value" => $product["id"],
+                        ]
+                    ]
+                ));
+                $product["variants"] = array_column($variants["records"], "img");
+            ?>
             <?php renderProductCard($product); ?>
 
         <?php endforeach; ?>
