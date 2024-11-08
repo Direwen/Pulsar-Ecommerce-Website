@@ -17,7 +17,7 @@ function createProduct(submissionPath, extra_info) {
         <!-- Form to choose between creating a new product or adding a variant -->
         <section class="flex items-center gap-4 my-2">
             <label for="productOption" class="block text-sm font-medium text-dark">Select an option:</label>
-            <select id="productOption" class="block grow border border-light-gray rounded-md p-2 shadow" onchange="toggleProductForm()">
+            <select id="productOption" class="block grow border border-light-gray rounded-md p-2 shadow outline-accent" onchange="toggleProductForm()">
                 <option value="create">Create New Product</option>
                 <option value="addVariant">Add Variant to Existing Product</option>
             </select>
@@ -57,9 +57,47 @@ function createProduct(submissionPath, extra_info) {
                     <textarea name="description" id="description" class="block w-full border shadow rounded outline-accent p-2"></textarea>
                 </section>
 
-                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                    <label for="dimension">Dimension</label>
-                    <input type="text" name="dimension" id="dimension" class="block w-full border shadow rounded outline-accent p-2">
+                <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+                    <label>Dimensions (cm/kg)</label>
+                    <div class="flex border rounded overflow-hidden shadow">
+                        <input 
+                            type="number" 
+                            name="dimension[length]" 
+                            id="length" 
+                            placeholder="Length (cm)" 
+                            min="1" 
+                            max="300" 
+                            class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                        />
+                        <input 
+                            type="number" 
+                            name="dimension[width]" 
+                            id="width" 
+                            placeholder="Width (cm)" 
+                            min="1" 
+                            max="300" 
+                            class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                        />
+                        <input 
+                            type="number" 
+                            name="dimension[height]" 
+                            id="height" 
+                            placeholder="Height (cm)" 
+                            min="1" 
+                            max="300" 
+                            class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                        />
+                        <input 
+                            type="number" 
+                            name="dimension[weight]" 
+                            id="weight" 
+                            placeholder="Weight (kg)" 
+                            min="0.1" 
+                            max="100" 
+                            step="0.1" 
+                            class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                        />
+                    </div>
                 </section>
 
                 <section class="block text-sm font-medium text-dark">
@@ -121,7 +159,16 @@ function createProduct(submissionPath, extra_info) {
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                             <label for="variantUnitPrice_1" class="text-gray-700">Unit Price</label>
-                            <input type="number" step="0.01" id="variantUnitPrice_1" name="variants[0][unit_price]" class="block w-full border shadow rounded outline-accent p-2" required>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                min="0.01" 
+                                max="10000" 
+                                id="variantUnitPrice_1" 
+                                name="variants[0][unit_price]" 
+                                class="block w-full border shadow rounded outline-accent p-2" 
+                                required
+                            >
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                             <label for="variantImg_1" class="text-gray-700">Provide Main Image</label>
@@ -205,10 +252,55 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                 <label for="description" class="text-sm font-medium text-dark">Description</label>
                 <textarea name="description" class="w-full border shadow rounded outline-accent p-2">${currentValues.description ?? ""}</textarea>
             </section>
-            <section class="flex flex-col gap-2">
-                <label for="dimension" class="text-sm font-medium text-dark">Dimension</label>
-                <input type="text" name="dimension" value="${currentValues.dimension ?? ""}" class="w-full border shadow rounded outline-accent p-2">
+
+            <section class="block text-sm font-medium text-dark flex flex-col gap-2">
+                <label>Dimensions (cm/kg)</label>
+                <div class="flex border rounded overflow-hidden shadow">
+                    <input 
+                        type="number" 
+                        value="${currentValues.dimension.length}" 
+                        name="dimension[length]" 
+                        id="length" 
+                        placeholder="Length (cm)" 
+                        min="1" 
+                        max="300" 
+                        class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                    />
+                    <input 
+                        type="number" 
+                        value="${currentValues.dimension.width}" 
+                        name="dimension[width]" 
+                        id="width" 
+                        placeholder="Width (cm)" 
+                        min="1" 
+                        max="300" 
+                        class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                    />
+                    <input 
+                        type="number" 
+                        value="${currentValues.dimension.height}" 
+                        name="dimension[height]" 
+                        id="height" 
+                        placeholder="Height (cm)" 
+                        min="1" 
+                        max="300" 
+                        class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                    />
+                    <input 
+                        type="number" 
+                        value="${currentValues.dimension.weight}" 
+                        name="dimension[weight]" 
+                        id="weight" 
+                        placeholder="Weight (kg)" 
+                        min="0.1" 
+                        max="100" 
+                        step="0.1" 
+                        class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
+                    />
+                </div>
             </section>
+
+
             <section class="flex flex-col gap-2">
                 <label for="feature" class="text-sm font-medium text-dark">Feature (separate by commas)</label>
                 <input type="text" name="feature" value="${currentValues.feature ? Object.values(currentValues.feature).join(", ") : ""}" class="w-full border shadow rounded outline-accent p-2">
@@ -264,9 +356,17 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         </section>
                         <section class="flex flex-col gap-2">
                             <label for="variantUnitPrice_1" class="text-sm font-medium text-dark">Unit Price</label>
-                            <input type="number" step="0.01" id="variantUnitPrice_1" name="variants[0][unit_price]" value="${currentValues.unitPrice}" class="w-full border shadow rounded outline-accent p-2">
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                min="0.01" 
+                                max="10000" 
+                                id="variantUnitPrice_1" 
+                                name="variants[0][unit_price]" 
+                                value="${currentValues.unitPrice}" 
+                                class="w-full border shadow rounded outline-accent p-2"
+                            >
                         </section>
-
                         <section class="flex flex-col justify-start items-start gap-2">
                             <label class="block text-sm font-medium text-dark">Current Main Image</label>
                             <img src="${currentValues.rootDirectory + 'assets/products/' + currentValues.variantImage}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
@@ -357,7 +457,7 @@ document.querySelectorAll('.edit-product-button').forEach(button => {
             category: this.getAttribute('category'),
             categoryId: this.getAttribute('category_id'),
             description: this.getAttribute('description'),
-            dimension: this.getAttribute('dimension'),
+            dimension: parseJSONorString(this.getAttribute('dimension')),
             feature: parseJSONorString(this.getAttribute('feature')),
             specials: parseJSONorString(this.getAttribute('specials')),
             requirement: parseJSONorString(this.getAttribute('requirement')),

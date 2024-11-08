@@ -120,8 +120,16 @@ class VariantModel extends BaseModel
         }
 
         // Validate 'unit_price' - required, must be a decimal number
-        if (empty($post_data[$this->getColumnUnitPrice()]) || !is_numeric($post_data[$this->getColumnUnitPrice()])) {
-            $errors[] = "Unit price is required and must be a valid number.";
+        if (empty($post_data[$this->getColumnUnitPrice()])) {
+            $errors[] = "Unit price is required";
+        } else {
+            if (!is_numeric($post_data[$this->getColumnUnitPrice()])) {
+                $errors[] = "Unit price must be a valid number.";
+            }
+
+            if ($post_data[$this->getColumnUnitPrice()] < 0.01 || $post_data[$this->getColumnUnitPrice()] > 10000) {
+                $errors[] = "Unit price must be between 0.01 and 10,000.";
+            }
         }
 
         // Validate 'img' - required, must be a valid image path

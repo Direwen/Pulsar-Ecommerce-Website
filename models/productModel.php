@@ -98,7 +98,7 @@ class ProductModel extends BaseModel
                 " . self::getColumnName() . " VARCHAR(255) NOT NULL,
                 " . self::getColumnCategoryId() . " INT NOT NULL,
                 " . self::getColumnDescription() . " TEXT NOT NULL,
-                " . self::getColumnDimension() . " VARCHAR(255) NOT NULL,
+                " . self::getColumnDimension() . " JSON NOT NULL,
                 " . self::getColumnFeature() . " JSON NOT NULL,
                 " . self::getColumnImportantFeature() . " JSON Null,
                 " . self::getColumnRequirement() . " JSON NULL,
@@ -134,9 +134,34 @@ class ProductModel extends BaseModel
             $errors[] = "Product description is required.";
         }
 
-        // Validate 'dimension' - optional but if provided, validate for max length
-        if (!empty($post_data[$this->getColumnDimension()]) && strlen($post_data[$this->getColumnDimension()]) > 255) {
-            $errors[] = "Product dimension cannot exceed 255 characters.";
+        // Validate 'dimension' fields individually
+        if (!empty($post_data['dimension'])) {
+            $dimension = $post_data['dimension'];
+
+            // Define realistic limits for each dimension (in cm and kg)
+            $limits = [
+                'length' => [1, 300],   // e.g., minimum 1 cm, maximum 300 cm
+                'width' => [1, 300],
+                'height' => [1, 300],
+                'weight' => [0.1, 100]  // e.g., minimum 0.1 kg, maximum 100 kg
+            ];
+
+            // Check if length, width, height, and weight exist and validate them
+            foreach ($limits as $field => [$min, $max]) {
+                if (isset($dimension[$field])) {
+                    // Check if the input is numeric
+                    if (!is_numeric($dimension[$field])) {
+                        $errors[] = ucfirst($field) . " must be a numeric value.";
+                    } else {
+                        // Check if the value falls within the specified range
+                        if ($dimension[$field] < $min || $dimension[$field] > $max) {
+                            $errors[] = ucfirst($field) . " must be between $min and $max.";
+                        }
+                    }
+                } else {
+                    $errors[] = ucfirst($field) . " must be provided a value.";
+                }
+            }
         }
 
         // Validate JSON fields ('feature', 'important_features', 'requirement', 'package_content')
@@ -183,7 +208,7 @@ class ProductModel extends BaseModel
             'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
             'category_id' => $data['category_id'] ?? null,
             'description' => $data['description'] ?? null,
-            'dimension' => $data['dimension'] ?? null,
+            'dimension' => isset($data['dimension']) ? json_encode($data['dimension']) : null,
             'feature' => isset($data['feature']) ? json_encode($data['feature']) : null,
             'important_feature' => isset($data['important_feature']) ? json_encode($data['important_feature']) : null,
             'requirement' => isset($data['requirement']) ? json_encode($data['requirement']) : null,
