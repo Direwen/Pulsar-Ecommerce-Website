@@ -12,7 +12,7 @@ class InventoryModel extends BaseModel
     private const COLUMN_VARIANT_ID = 'variant_id';
     private const COLUMN_STOCK_QUANTITY = 'stock_quantity';
     private const COLUMN_REORDER_LEVEL = 'reorder_level';
-    private const COLUMN_LAST_UPDATED = 'last_updated';
+    private const COLUMN_LAST_UPDATED = 'last_updated_at';
 
     // Static getters for table and column names
     public static function getTableName(): string
@@ -71,26 +71,46 @@ class InventoryModel extends BaseModel
         ");
     }
 
+    public function validateFormData(array $post_data): ?bool
+    {
+        $errors = [];
 
-    // /**
-    //  * Inserts a new record into the 'inventories' table.
-    //  * @param array $data
-    //  * @return bool
-    //  */
-    // protected function createRaw($data): bool
-    // {
-    //     return $this->db->execute(
-    //         "INSERT INTO " . self::getTableName() . " 
-    //         (" . self::getColumnCode() . ", " . self::getColumnVariantId() . ", " . self::getColumnStockQuantity() . ", " . self::getColumnReorderLevel() . ") 
-    //         VALUES (:code, :variant_id, :stock_quantity, :reorder_level)",
-    //         [
-    //             ':code' => strtoupper(trim($data['code'])),  // Ensuring 'code' is formatted in uppercase
-    //             ':variant_id' => $data['variant_id'],
-    //             ':stock_quantity' => $data['stock_quantity'] ?? 0,
-    //             ':reorder_level' => $data['reorder_level'] ?? 0
-    //         ]
-    //     );
-    // }
+        // Validate 'code' - required, must be a string, and max length of 50 characters
+        if (empty($post_data[$this->getColumnCode()])) {
+            $errors[] = "Inventory code is required.";
+        } elseif (strlen($post_data[$this->getColumnCode()]) > 50) {
+            $errors[] = "Inventory code cannot exceed 50 characters.";
+        }
+
+        // Validate 'variant_id' - required and must be an integer
+        if (empty($post_data[$this->getColumnVariantId()]) || !is_numeric($post_data[$this->getColumnVariantId()])) {
+            $errors[] = "Variant ID is required and must be a valid integer.";
+        }
+
+        // Validate 'stock_quantity' - optional, must be a non-negative integer
+        if (isset($post_data[$this->getColumnStockQuantity()])) {
+            if (!is_numeric($post_data[$this->getColumnStockQuantity()]) || (int) $post_data[$this->getColumnStockQuantity()] < 0) {
+                $errors[] = "Stock quantity must be a non-negative integer.";
+            }
+        }
+
+        // Validate 'reorder_level' - optional, must be a non-negative integer
+        if (isset($post_data[$this->getColumnReorderLevel()])) {
+            if (!is_numeric($post_data[$this->getColumnReorderLevel()]) || (int) $post_data[$this->getColumnReorderLevel()] < 0) {
+                $errors[] = "Reorder level must be a non-negative integer.";
+            }
+        }
+
+        // Check if there are any validation errors
+        if (!empty($errors)) {
+            setMessage(implode(", ", $errors), 'error');
+            return false;
+        }
+
+        // Return true if validation passed with no errors
+        return true;
+    }
+
 
     protected function formatData($data, $null_filter = false): array
     {
@@ -100,9 +120,9 @@ class InventoryModel extends BaseModel
             'stock_quantity' => $data['stock_quantity'] ?? 0,
             'reorder_level' => $data['reorder_level'] ?? 0,
         ];
-    
+
         // Filter out null values to keep only the provided attributes
         return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
-    
+
 }

@@ -27,7 +27,7 @@ const dashboardMenuContent = `
     <section><span class="material-symbols-outlined text-md">shopping_bag</span> <span class="text-md">Orders</span></section>
     <span class="material-symbols-outlined font-thin">chevron_right</span>
 </a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=logs">
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=inventory-management">
     <section><span class="material-symbols-outlined text-md">inventory_2</span> <span class="text-md">Inventory</span></section>
     <span class="material-symbols-outlined font-thin">chevron_right</span>
 </a>

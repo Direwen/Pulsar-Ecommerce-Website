@@ -42,7 +42,7 @@ function routeToController($uri, $routes)
         foreach ($routes[$uri]['middleware'] as $middleware) call_user_func($middleware . 'Middleware');
         
         // Render the script or page from controller
-        global $DB_METADATA, $root_directory, $error_handler, $user_model, $category_model, $product_model, $variant_model;
+        global $DB_METADATA, $root_directory, $error_handler, $user_model, $category_model, $product_model, $variant_model, $inventory_model;
 
         require $routes[$uri]['controller'];
     } else {

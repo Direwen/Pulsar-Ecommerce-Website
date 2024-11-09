@@ -57,6 +57,18 @@ return [
         'controller' => 'controllers/admin/product_management/delete.php',
         'middleware' => []
     ],
+    'admin/inventories/create' => [
+        'controller' => 'controllers/admin/inventory_management/create.php',
+        'middleware' => []
+    ],
+    'admin/inventories/update' => [
+        'controller' => 'controllers/admin/inventory_management/update.php',
+        'middleware' => []
+    ],
+    'admin/inventories/delete' => [
+        'controller' => 'controllers/admin/inventory_management/delete.php',
+        'middleware' => []
+    ],
     'products' => [
         'controller' => 'controllers/ecommerce/products.php',
         'middleware' => [],
@@ -76,6 +88,11 @@ return [
     ],
     'api/products' => [
         'controller' => 'controllers/api/get_products.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/variants' => [
+        'controller' => 'controllers/api/get_variants.php',
         'middleware' => [],
         'isApi' => true
     ],

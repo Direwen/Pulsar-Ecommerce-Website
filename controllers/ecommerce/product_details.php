@@ -23,12 +23,18 @@ $fetched_data = ErrorHandler::handle(fn() => $product_model->getAll(
         ["column" => $variant_model->getColumnUnitPrice(), "table" => $variant_model->getTableName()],
         ["column" => $variant_model->getColumnImg(), "alias" => "variant_img", "table" => $variant_model->getTableName()],
         ["column" => $variant_model->getColumnImgForAds(), "alias" => "variant_img_for_ads", "table" => $variant_model->getTableName()],
+        ["column" => $inventory_model->getColumnStockQuantity(), "alias" => "stock_quantity", "table" => $inventory_model->getTableName()]
     ],
     joins: [
         [
             'type' => 'LEFT JOIN',
             'table' => $variant_model->getTableName(),
             'on' => "{$product_model->getTableName()}.{$product_model->getColumnId()} = {$variant_model->getTableName()}.{$variant_model->getColumnProductId()}"
+        ],
+        [
+            'type' => 'LEFT JOIN',
+            'table' => $inventory_model->getTableName(),
+            'on' => "{$inventory_model->getTableName()}.{$inventory_model->getColumnVariantId()} = {$variant_model->getTableName()}.{$variant_model->getColumnId()}"
         ]
     ],
     conditions: [
@@ -67,7 +73,8 @@ foreach ($fetched_data['records'] as $record) {
         "name" => $record['variant_name'],
         "unit_price" => $record['unit_price'],
         "img" => $record['variant_img'],
-        "img_for_ads" => json_decode($record['variant_img_for_ads'])
+        "img_for_ads" => json_decode($record['variant_img_for_ads']),
+        "stock_quantity" => $record["stock_quantity"] ?? 0
     ];
 }
 
@@ -135,7 +142,7 @@ foreach ($fetched_data['records'] as $record) {
         </div>
 
         <!-- Main Content -->
-        <div class="grow p-6 flex flex-col gap-4">
+        <div class="pt-24 grow p-6 flex flex-col gap-4">
             <!-- Product Title -->
             <h1 class="text-2xl font-bold"><?= htmlspecialchars(ucwords($product['name'])) ?> Gaming Mouse</h1>
             <!-- Price of the selected variant -->
@@ -177,6 +184,10 @@ foreach ($fetched_data['records'] as $record) {
                     </button>
                 </div>
             </section>
+
+            <span>
+                Stock <?= $variants[0]['stock_quantity']; ?>
+            </span>
 
             <!-- add to cart button -->
             <button class="interactive uppercase font-semibold text-lg shadow shadow-accent bg-accent text-primary text-center py-2 rounded tracking-tighter">Add to Cart</button>

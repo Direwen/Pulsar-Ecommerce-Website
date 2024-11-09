@@ -11,7 +11,7 @@ if (isset($_GET['view'])) {
 }
 
 // Get the current page number from the query parameters for pagination
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 
 // Add handling for search parameters
 $search_attribute = isset($_GET['search_attribute']) ? $_GET['search_attribute'] : null;
@@ -60,6 +60,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
     // This will be responsible for choosing what management dashboard to render
     switch ($_SESSION['selected_dashboard']) {
+
         case 'user-management':
             // Fetch data for the current page from the model
             $db_data = ErrorHandler::handle(fn() => $user_model->getAll(
@@ -116,7 +117,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 attribute_to_confirm_deletion: "name"
             );
             break;
-            
+
         case 'product-management':
 
             $db_data = ErrorHandler::handle(fn() => $variant_model->getAll(
@@ -130,9 +131,9 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     ["column" => $variant_model->getColumnImg(), "alias" => "Variant_Image"],
                     ["column" => $variant_model->getColumnImgForAds(), "alias" => "variant_ads_image"],
                     ["column" => $variant_model->getColumnProductId()],
-                    
+
                     ["column" => $category_model->getColumnName(), "alias" => "Category", "table" => $category_model->getTableName()],
-                    
+
                     ["column" => $product_model->getColumnCategoryId(), "alias" => "Category_Id", "table" => $product_model->getTableName()],
                     ["column" => $product_model->getColumnDescription(), "alias" => "Description", "table" => $product_model->getTableName()],
                     ["column" => $product_model->getColumnDimension(), "alias" => "Dimension", "table" => $product_model->getTableName()],
@@ -183,12 +184,66 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
             break;
 
+        case 'inventory-management':
+
+            $db_data = ErrorHandler::handle( fn () => $inventory_model->getAll(
+                page: $page,
+                select: [
+                    ["column" => $inventory_model->getColumnId()],
+                    ["column" => $inventory_model->getColumnCode()],
+                    ["column" => $variant_model->getColumnName(), "alias" => "variant", "table" => $variant_model->getTableName()],
+                    ["column" => $variant_model->getColumnId(), "alias" => "variant_id", "table" => $variant_model->getTableName()],
+                    ["column" => $product_model->getColumnName(), "alias" => "product", "table" => $product_model->getTableName()],
+                    ["column" => $inventory_model->getColumnStockQuantity()],
+                    ["column" => $inventory_model->getColumnReorderLevel()],
+                ],
+                joins: [
+                    [
+                        'type' => 'INNER JOIN',
+                        'table' => $variant_model->getTableName(),
+                        'on' => "inventories.variant_id = variants.id",
+                    ],
+                    [
+                        'type' => 'INNER JOIN',
+                        'table' => $product_model->getTableName(),
+                        'on' => "variants.product_id = products.id",
+                    ]
+                ]
+            ));
+            
+            renderDashboardHeader(
+                title_name: "Inventory Management",
+                create_btn_desc: "a new inventory",
+                create_user_btn_class: "create-inventory-button",
+                submission_path: "admin/inventories/create",
+                extra_info: [
+                    "api-for-variants" => $root_directory . 'api/variants'
+                ]
+            );
+
+            renderPaginatedTable(
+                attributes_data: $DB_METADATA,
+                fetched_data: $db_data,
+                update_submission_file_path: "admin/inventories/update",
+                edit_btn_class: "edit-inventory-button",
+                delete_submission_file_path: "admin/inventories/delete",
+                delete_btn_class: "delete-inventory-button",
+                attribute_to_confirm_deletion: "code",
+                extra_info: [
+                    "api-for-variants" => $root_directory . 'api/variants'
+                ]
+            );
+
+            break;
+
         case 'orders-management':
             echo "Order management dashboard";
-            // require('views/admin/orders-management.view.php');
             break;
+
         case 'analytics':
+            echo "Analytics dashboard";
             break;
+
         default:
             echo "Invalid dashboard selection.";
             break;
@@ -196,8 +251,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
     ?>
 
-    <span
-        id="draggable"
+    <span id="draggable"
         class="material-symbols-outlined fixed bottom-40 right-5 z-50 flex w-fit h-fit px-3 py-2 cursor-pointer justify-center items-center rounded-full bg-accent/70 shadow hover:bg-accent text-primary transition-all duration-100 ease-in-out user-select-none touch-action-none"
         style="user-select: none; touch-action: none;">
         widgets
