@@ -43,4 +43,9 @@ function renderHeroSection(String $title, String $img)
     global $root_directory;
     include("./views/components/hero.php");
 }
+
+function renderSpecsToggleBox(String $title, $details, String $data_toggle_attr, array $extra_info = [])
+{
+    include("./views/components/specification_toggle_box.php");
+}
 ?>

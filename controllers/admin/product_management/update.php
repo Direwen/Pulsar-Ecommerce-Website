@@ -31,7 +31,7 @@ $update_result = $error_handler->handleDbOperation(function () use ($variant_mod
         $product_model->getColumnFeature() => array_unique(array_map('trim', explode(',', $_POST["feature"]))),
         $product_model->getColumnImportantFeature() => array_combine(
             $_POST['special-feature-title'] ?? [],
-            array_map(fn($details) => array_unique(explode(', ', $details)), $_POST['special-feature-details'] ?? [])
+            array_map(fn($details) => array_map("trim", array_unique(explode(',', $details))), $_POST['special-feature-details'] ?? [])
         ),
         $product_model->getColumnRequirement() => array_unique(array_map('trim', explode(',', $_POST["requirement"]))),
         $product_model->getColumnPackageContent() => array_unique(array_map('trim', explode(',', $_POST["package-content"])))

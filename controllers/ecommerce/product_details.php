@@ -5,7 +5,7 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
-$fetched_data = ErrorHandler::handle(fn () => $product_model->getAll(
+$fetched_data = ErrorHandler::handle(fn() => $product_model->getAll(
     select: [
         ["column" => $product_model->getColumnId()],
         ["column" => $product_model->getColumnName()],
@@ -22,6 +22,7 @@ $fetched_data = ErrorHandler::handle(fn () => $product_model->getAll(
         ["column" => $variant_model->getColumnName(), "alias" => "variant_name", "table" => $variant_model->getTableName()],
         ["column" => $variant_model->getColumnUnitPrice(), "table" => $variant_model->getTableName()],
         ["column" => $variant_model->getColumnImg(), "alias" => "variant_img", "table" => $variant_model->getTableName()],
+        ["column" => $variant_model->getColumnImgForAds(), "alias" => "variant_img_for_ads", "table" => $variant_model->getTableName()],
     ],
     joins: [
         [
@@ -34,9 +35,9 @@ $fetched_data = ErrorHandler::handle(fn () => $product_model->getAll(
         [
             'attribute' => "{$product_model->getTableName()}.{$product_model->getColumnId()}",
             'operator' => "=",
-            'value' => $_GET["id"] 
+            'value' => $_GET["id"]
         ]
-    ]    
+    ]
 ));
 
 // Initialize arrays to store product and variants
@@ -50,7 +51,7 @@ foreach ($fetched_data['records'] as $record) {
         "id" => $record['id'],
         "name" => $record['name'],
         "description" => $record['description'],
-        "dimension" => $record['dimension'],
+        "dimension" => json_decode($record['dimension']),
         "feature" => json_decode($record['feature'], true), // Decode feature string to array
         "important_feature" => json_decode($record['important_feature'], true), // Decode important_feature to array
         "requirement" => json_decode($record['requirement'], true),
@@ -65,7 +66,8 @@ foreach ($fetched_data['records'] as $record) {
         "type" => $record['type'],
         "name" => $record['variant_name'],
         "unit_price" => $record['unit_price'],
-        "img" => json_decode($record['variant_img'])
+        "img" => $record['variant_img'],
+        "img_for_ads" => json_decode($record['variant_img_for_ads'])
     ];
 }
 
@@ -73,132 +75,201 @@ foreach ($fetched_data['records'] as $record) {
 
 <div>
 
-    <div class="flex h-screen">
-        <!-- Sidebar or Empty Space -->
-        <!-- <div class="grow bg-accent"></div> -->
+    <div class="flex flex-col xl:flex-row xl:items-stretch">
+        <!-- Left Side to show varinat img and img_for_ads for the selected variant -->
+        <div class="w-full xl:w-8/12 bg-secondary xl:self-stretch">
+            <!-- Main Swiper Slider -->
+            <div class="swiper main-slider w-full xl:h-[35rem]">
+                <div class="swiper-wrapper">
+                    <?php foreach ($variants as $variant): ?>
+                        <div class="swiper-slide flex justify-center items-center drop-shadow-2xl">
+                            <a href="<?= $root_directory . "assets/products/" . $variant['img'] ?>"
+                                data-fancybox="<?= $product['name'] . '_gallery' ?>" data-caption=""
+                                class="w-72 h-72 md:w-96 md:h-96 flex items-center justify-center outline-none">
+                                <img src="<?= $root_directory . "assets/products/" . $variant['img'] ?>" alt=""
+                                    class="w-full h-full object-cover rounded-lg">
+                            </a>
+                        </div>
+
+                        <?php foreach ($variant["img_for_ads"] as $img): ?>
+                            <div class="swiper-slide flex justify-center items-center drop-shadow-2xl">
+                                <a href="<?= $root_directory . "assets/products/" . $img ?>"
+                                    data-fancybox="<?= $product['name'] . '_gallery' ?>" data-caption=""
+                                    class="w-72 h-72 md:w-96 md:h-96 flex items-center justify-center outline-none">
+                                    <img src="<?= $root_directory . "assets/products/" . $img ?>" alt=""
+                                        class="w-full h-full object-cover rounded-lg">
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
+                <div
+                    class="swiper-button-prev text-dark p-10 scale-50 rounded border border-transparent hover:shadow hover:rounded-full hover:border-light-gray hover:bg-primary">
+                </div>
+                <div
+                    class="swiper-button-next text-dark p-10 scale-50 rounded border border-transparent hover:shadow hover:rounded-full hover:border-light-gray hover:bg-primary">
+                </div>
+                <!-- <div class="swiper-pagination"></div> -->
+                <!-- <div class="swiper-scrollbar"></div> -->
+            </div>
+
+            <!-- Thumbnail Swiper Slider -->
+            <div class="swiper thumbs-slider w-8/12">
+                <div class="swiper-wrapper">
+                    <?php foreach ($variants as $variant): ?>
+                        <div class="swiper-slide flex justify-center items-center">
+                            <img src="<?= $root_directory . "assets/products/" . $variant['img'] ?>" alt="Thumbnail"
+                                class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg">
+                        </div>
+
+                        <?php foreach ($variant["img_for_ads"] as $img): ?>
+                            <div class="swiper-slide flex justify-center items-center">
+                                <img src="<?= $root_directory . "assets/products/" . $img ?>" alt="Thumbnail"
+                                    class="w-20 h-20 md:w-24 md:h-24 object-cover rounded-lg">
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+        </div>
 
         <!-- Main Content -->
-        <div class="w-1/3 p-6">
-            <!-- Product Title and Price -->
-            <h1 class="text-2xl font-semibold mb-2"><?= htmlspecialchars(ucwords($product['name'])) ?> Gaming Mouse</h1>
-            <p class="text-lg font-bold mb-4">$<?= $variants[0]['unit_price'] ?></p>
+        <div class="grow p-6 flex flex-col gap-4">
+            <!-- Product Title -->
+            <h1 class="text-2xl font-bold"><?= htmlspecialchars(ucwords($product['name'])) ?> Gaming Mouse</h1>
+            <!-- Price of the selected variant -->
+            <p class="font-bold">
+                <span class="text-sm">$</span><span class="text-base lg:text-lg"
+                    id="variant_price_tag"><?= $variants[0]['unit_price'] ?></span>
+            </p>
 
             <!-- Color Selection and Images -->
-            <section>
+            <section class="">
+                <!-- To Display Type and Name of the selected Variant -->
+                <section class="font-thin text-sm" id="variant_name_tag">
+                    <?= $variants[0]["type"] . ": " . $variants[0]["name"] ?>
+                </section>
+
+                <!-- Variant main images to select -->
                 <section class="flex justify-start items-center gap-2">
-                    <?php foreach($variants as $variant): ?>
-                        <img src="<?= $root_directory . "assets/products/" . $variant["img"][0] ?>" alt="img" class="w-24 h-24">
+                    <?php foreach ($variants as $variant): ?>
+                        <section class="bg-secondary border shadow cursor-pointer interactive"
+                            onclick="selectVariant(this, {'price': <?= $variant['unit_price'] ?>, 'type': '<?= $variant['type'] ?>', 'name': '<?= $variant['name'] ?>'})">
+                            <img src="<?= $root_directory . "assets/products/" . $variant["img"] ?>" alt="img"
+                                class="w-20 h-20">
+                        </section>
                     <?php endforeach; ?>
                 </section>
+
             </section>
 
+            <!-- quantity -->
+            <section class="flex gap-2 items-center">
+                <label for="quantity" class="font-thin tracking-tighter text-sm">Quantity:</label>
+                <div class="flex items-center px-2 py-1 border shadow w-fit gap-4 rounded">
+                    <button type="button" onclick="decrementQuantity()" class="interactive">
+                        <span class="material-symbols-outlined text-xl">remove</span>
+                    </button>
+                    <span id="quantity-display">1</span> <!-- Quantity Display with ID -->
+                    <button type="button" onclick="incrementQuantity()" class="interactive">
+                        <span class="material-symbols-outlined text-xl">add</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- add to cart button -->
+            <button class="interactive uppercase font-semibold text-lg shadow shadow-accent bg-accent text-primary text-center py-2 rounded tracking-tighter">Add to Cart</button>
+            <!-- sold out button -->
+            <button class="interactive uppercase font-semibold text-lg border shadow text-accent text-center py-2 rounded tracking-tighter">SOLD out</button>
+
+            <?php $details_toggle_count = 1; ?>
+            <?php foreach ($product["important_feature"] as $title => $details): ?>
+                
+                <?php
+                renderSpecsToggleBox(
+                    title: $title,
+                    details: $details,
+                    data_toggle_attr: "details_toggle_" . $details_toggle_count++,
+                    extra_info: [
+                        "title_css" => "bg-transparent",
+                        "trigger_css" => "cursor-pointer border-b border-light-dark flex justify-between items-center px-3 py-1 uppercase font-medium tracking-tighter",
+                        "details_css" => "tracking-tighter text-sm md:text-base font-thin"
+                    ]
+                );
+                ?>
+            <?php endforeach; ?>
+            <?php
+                renderSpecsToggleBox(
+                    title: "Specification",
+                    details: $product["feature"],
+                    data_toggle_attr: "details_toggle_0",
+                    extra_info: [
+                        "title_css" => "bg-transparent",
+                        "trigger_css" => "cursor-pointer border-b border-light-dark flex justify-between items-center px-3 py-1 uppercase font-medium tracking-tighter",
+                        "details_css" => "tracking-tighter text-sm md:text-base font-thin"
+                    ]
+                ); 
+            ?>
         </div>
     </div>
 
+    <!-- mini nav bar -->
+    <div class="border-y border shadow py-3">
+        <section
+            class="w-full md:w-8/12 lg:w-1/2 flex justify-around items-center mx-auto font-medium text-sm md:text-base tracking-tighter text-dark">
+            <a href="#product-desc-container" class="hover:text-accent">Product Details</a>
+            <a href="#specs-container" class="hover:text-accent">Techinical Specifications</a>
+            <a href="" class="hover:text-accent">Download</a>
+        </section>
+    </div>
+
     <!-- description -->
-    <section class="tracking-tigher text-dark flex flex-col justify-center items-center gap-4 p-16 md:p-48">
-        <span class="font-bold text-2xl md:text-6xl uppercase"><?= ucwords("Description"); ?></span>
-        <p class="text-justify text-sm w-full md:w-10/12 lg:w-8/12"><?= ucwords(htmlspecialchars($product["description"])); ?></p>
+    <section class="tracking-tighter text-dark flex flex-col justify-center items-center gap-4 px-8 py-16 md:p-48"
+        id="product-desc-container">
+        <p class="text-justify text-sm lg:text-base w-full indent-10 leading-loose md:w-10/12 lg:w-8/12">
+            <span
+                class="text-4xl font-bold text-dark"><?= ucwords(htmlspecialchars(explode(' ', $product["description"])[0])); ?></span>
+            <?= ucwords(htmlspecialchars(substr($product["description"], strpos($product["description"], ' ') + 1))); ?>
+        </p>
     </section>
 
     <!-- ads img -->
-    <?php foreach($product["img_for_ads"] as $each): ?>
-        <img src="<?= $root_directory . "assets/products/" . $each ?>" alt="ads image" class="w-full h-[45rem] object-cover">
+    <?php foreach ($product["img_for_ads"] as $each): ?>
+        <img src="<?= $root_directory . "assets/products/" . $each ?>" alt="ads image"
+            class="w-full min-h-fit max-h-[45rem] object-scale-down">
     <?php endforeach; ?>
 
     <!-- Specifications -->
-    <section class="w-10/12 mx-auto my-10">
+    <section class="w-10/12 mx-auto py-10" id="specs-container">
         <h1 class="font-bold text-left text-xl md:text-5xl mb-4">Techinical Specifications</h1>
-        <!-- Dimensions Section -->
-        <section class="bg-secondary">
-            <div 
-                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-                data-toggle="dimension"
-                onclick="toggleDropdown(this)"
-            >
-                <span>Dimensions</span>
-                <span class="material-symbols-outlined">add</span>
-            </div>
+        <section>
+            <?php
+            $specs_title = ['dimension', 'feature', 'requirement', 'package_content'];
+            $data_toggle_count = 1;
+            ?>
+            <?php foreach ($specs_title as $title): ?>
+                <?php
+                renderSpecsToggleBox(
+                    title: $title,
+                    details: $product[$title],
+                    data_toggle_attr: "specs_toggle_" . $data_toggle_count++,
+                    extra_info: ($title == "dimension") ? ["unit" => "cm", "unit_conversion" => true] : []
+                );
+                ?>
+            <?php endforeach; ?>
 
-            <section class="px-3 py-6 hidden" data-toggle="dimension">
-                <p class="tracking-tighter text-sm md:text-xl tracking-widest"><?= $product["dimension"]; ?></p>
-            </section>
+            <?php foreach ($product["important_feature"] as $title => $details): ?>
+                <?php
+                renderSpecsToggleBox(
+                    title: $title,
+                    details: $details,
+                    data_toggle_attr: "specs_toggle_" . $data_toggle_count++,
+                );
+                ?>
+            <?php endforeach; ?>
         </section>
-
-        <!-- Important Features Section -->
-        <?php foreach($product["important_feature"] as $key => $value): ?>
-            <section class="bg-secondary">
-                <div 
-                    class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter" 
-                    data-toggle="<?= htmlspecialchars($key); ?>"
-                    onclick="toggleDropdown(this)"
-                >
-                    <span><?= htmlspecialchars($key); ?></span>
-                    <span class="material-symbols-outlined">add</span>
-                </div>
-
-                <section class="px-3 py-6 hidden" data-toggle="<?= htmlspecialchars($key); ?>">
-                    <?php foreach($value as $each): ?>
-                        <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
-                    <?php endforeach; ?>
-                </section>
-            </section>
-        <?php endforeach; ?>
-
-        <!-- General Features Section -->
-        <section class="bg-secondary">
-            <div 
-                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-                data-toggle="general"
-                onclick="toggleDropdown(this)"
-            >
-                <span>General</span>
-                <span class="material-symbols-outlined">add</span>
-            </div>
-
-            <section class="px-3 py-6 hidden" data-toggle="general">
-                <?php foreach($product["feature"] as $each): ?>
-                    <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
-                <?php endforeach; ?>
-            </section>
-        </section>
-
-        <!-- Requirements Section -->
-        <section class="bg-secondary">
-            <div 
-                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-                data-toggle="requirement"
-                onclick="toggleDropdown(this)"
-            >
-                <span>Requirement</span>
-                <span class="material-symbols-outlined">add</span>
-            </div>
-
-            <section class="px-3 py-6 hidden" data-toggle="requirement">
-                <?php foreach($product["requirement"] as $each): ?>
-                    <p class="tracking-tighter text-sm md:text-xl tracking-widest">- <?= $each; ?></p>
-                <?php endforeach; ?>
-            </section>
-        </section>
-
-        <!-- Package Content Section -->
-        <section class="bg-secondary">
-            <div 
-                class="border-b border-light-dark flex justify-between items-center px-3 py-6 uppercase font-bold text-xl  md:text-2xl tracking-tighter"
-                data-toggle="package_content"
-                onclick="toggleDropdown(this)"
-            >
-                <span>Package Content</span>
-                <span class="material-symbols-outlined">add</span>
-            </div>
-
-            <section class="px-3 py-6 hidden" data-toggle="package_content">
-                <?php foreach($product["package_content"] as $each): ?>
-                    <p class="tracking-tighter text-sm sm:text-base md:text-xl tracking-widest">- <?= $each; ?></p>
-                <?php endforeach; ?>
-            </section>
-        </section>
-
     </section>
+
     <!-- manual -->
 </div>

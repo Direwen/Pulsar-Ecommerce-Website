@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="scroll-smooth" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -24,6 +24,8 @@
     <title><?php echo $website_title; ?></title>
     <link rel="icon" type="image/x-icon" href="<?= $root_directory ?>assets/pulsar_icon.webp">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
     <link rel="stylesheet" href="<?= $root_directory ?>css/common.css" />
     <link rel="stylesheet" href="<?= $root_directory ?>css/header.css" />
     <link rel="stylesheet" href="<?= $root_directory ?>css/interactive_components.css" />
