@@ -145,6 +145,7 @@ foreach ($fetched_data['records'] as $record) {
         <div class="pt-24 grow p-6 flex flex-col gap-4">
             <!-- Product Title -->
             <h1 class="text-2xl font-bold"><?= htmlspecialchars(ucwords($product['name'])) ?> Gaming Mouse</h1>
+
             <!-- Price of the selected variant -->
             <p class="font-bold">
                 <span class="text-sm">$</span><span class="text-base lg:text-lg"
@@ -152,7 +153,7 @@ foreach ($fetched_data['records'] as $record) {
             </p>
 
             <!-- Color Selection and Images -->
-            <section class="">
+            <section>
                 <!-- To Display Type and Name of the selected Variant -->
                 <section class="font-thin text-sm" id="variant_name_tag">
                     <?= $variants[0]["type"] . ": " . $variants[0]["name"] ?>
@@ -162,16 +163,15 @@ foreach ($fetched_data['records'] as $record) {
                 <section class="flex justify-start items-center gap-2">
                     <?php foreach ($variants as $variant): ?>
                         <section class="bg-secondary border shadow cursor-pointer interactive"
-                            onclick="selectVariant(this, {'price': <?= $variant['unit_price'] ?>, 'type': '<?= $variant['type'] ?>', 'name': '<?= $variant['name'] ?>'})">
+                            onclick="selectVariant(this, {'price': <?= $variant['unit_price'] ?>, 'type': '<?= $variant['type'] ?>', 'name': '<?= $variant['name'] ?>', 'stock_quantity': <?= $variant['stock_quantity'] ?>})">
                             <img src="<?= $root_directory . "assets/products/" . $variant["img"] ?>" alt="img"
                                 class="w-20 h-20">
                         </section>
                     <?php endforeach; ?>
                 </section>
-
             </section>
 
-            <!-- quantity -->
+            <!-- Quantity -->
             <section class="flex gap-2 items-center">
                 <label for="quantity" class="font-thin tracking-tighter text-sm">Quantity:</label>
                 <div class="flex items-center px-2 py-1 border shadow w-fit gap-4 rounded">
@@ -185,18 +185,27 @@ foreach ($fetched_data['records'] as $record) {
                 </div>
             </section>
 
-            <span>
-                Stock <?= $variants[0]['stock_quantity']; ?>
-            </span>
+            <!-- Stock Display -->
+            <span id="stock-display" class="hidden">Stock <?= $variants[0]['stock_quantity']; ?></span>
 
-            <!-- add to cart button -->
-            <button class="interactive uppercase font-semibold text-lg shadow shadow-accent bg-accent text-primary text-center py-2 rounded tracking-tighter">Add to Cart</button>
-            <!-- sold out button -->
-            <button class="interactive uppercase font-semibold text-lg border shadow text-accent text-center py-2 rounded tracking-tighter">SOLD out</button>
+            <!-- Add to Cart Button -->
+            <button id="add-to-cart-btn"
+                class="interactive uppercase font-semibold text-lg shadow shadow-accent bg-accent text-primary text-center py-2 rounded tracking-tighter"
+                style="display: <?= $variants[0]['stock_quantity'] > 0 ? 'block' : 'none' ?>;">
+                Add to Cart
+            </button>
+
+            <!-- Sold Out Button -->
+            <button id="sold-out-btn"
+                class="cursor-not-allowed uppercase font-semibold text-lg border shadow text-accent text-center py-2 rounded tracking-tighter"
+                style="display: <?= $variants[0]['stock_quantity'] > 0 ? 'none' : 'block' ?>;">
+                SOLD out
+            </button>
 
             <?php $details_toggle_count = 1; ?>
+
             <?php foreach ($product["important_feature"] as $title => $details): ?>
-                
+
                 <?php
                 renderSpecsToggleBox(
                     title: $title,
@@ -209,20 +218,24 @@ foreach ($fetched_data['records'] as $record) {
                     ]
                 );
                 ?>
+
             <?php endforeach; ?>
+
             <?php
-                renderSpecsToggleBox(
-                    title: "Specification",
-                    details: $product["feature"],
-                    data_toggle_attr: "details_toggle_0",
-                    extra_info: [
-                        "title_css" => "bg-transparent",
-                        "trigger_css" => "cursor-pointer border-b border-light-dark flex justify-between items-center px-3 py-1 uppercase font-medium tracking-tighter",
-                        "details_css" => "tracking-tighter text-sm md:text-base font-thin"
-                    ]
-                ); 
+            renderSpecsToggleBox(
+                title: "Specification",
+                details: $product["feature"],
+                data_toggle_attr: "details_toggle_0",
+                extra_info: [
+                    "title_css" => "bg-transparent",
+                    "trigger_css" => "cursor-pointer border-b border-light-dark flex justify-between items-center px-3 py-1 uppercase font-medium tracking-tighter",
+                    "details_css" => "tracking-tighter text-sm md:text-base font-thin"
+                ]
+            );
             ?>
+
         </div>
+
     </div>
 
     <!-- mini nav bar -->
