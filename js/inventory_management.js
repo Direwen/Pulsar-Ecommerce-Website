@@ -43,7 +43,7 @@ function createInventory(submissionPath, variants) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 function deleteInventory(recordId, code, submissionPath) {
@@ -60,7 +60,7 @@ function deleteInventory(recordId, code, submissionPath) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 function editInventory(recordId, submissionPath, current_values, variants) {
@@ -113,7 +113,7 @@ function editInventory(recordId, submissionPath, current_values, variants) {
         </form>`;
 
     // Display the overlay with the generated content
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 

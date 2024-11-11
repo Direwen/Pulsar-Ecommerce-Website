@@ -193,7 +193,7 @@ function createProduct(submissionPath, extra_info) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 function editProduct(recordId, submissionPath, categories, currentValues) {
@@ -398,7 +398,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 
@@ -417,7 +417,7 @@ function deleteProduct(recordId, name, productId, submissionPath) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 document.querySelectorAll('.create-product-button').forEach(button => {

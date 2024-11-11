@@ -96,6 +96,16 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/cart' => [
+        'controller' => 'controllers/api/add_to_cart.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/cart-items' => [
+        'controller' => 'controllers/api/get_cart_items.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'test' => [
         'controller' => 'controllers/test.php',
         'middleware' => []

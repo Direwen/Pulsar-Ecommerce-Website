@@ -163,7 +163,7 @@ foreach ($fetched_data['records'] as $record) {
                 <section class="flex justify-start items-center gap-2">
                     <?php foreach ($variants as $variant): ?>
                         <section class="bg-secondary border shadow cursor-pointer interactive"
-                            onclick="selectVariant(this, {'price': <?= $variant['unit_price'] ?>, 'type': '<?= $variant['type'] ?>', 'name': '<?= $variant['name'] ?>', 'stock_quantity': <?= $variant['stock_quantity'] ?>})">
+                            onclick="selectVariant(this, {'price': <?= $variant['unit_price'] ?>, 'type': '<?= $variant['type'] ?>', 'name': '<?= $variant['name'] ?>', 'stock_quantity': <?= $variant['stock_quantity'] ?>, 'id': <?= $variant['id'] ?>})">
                             <img src="<?= $root_directory . "assets/products/" . $variant["img"] ?>" alt="img"
                                 class="w-20 h-20">
                         </section>
@@ -175,21 +175,24 @@ foreach ($fetched_data['records'] as $record) {
             <section class="flex gap-2 items-center">
                 <label for="quantity" class="font-thin tracking-tighter text-sm">Quantity:</label>
                 <div class="flex items-center px-2 py-1 border shadow w-fit gap-4 rounded">
-                    <button type="button" onclick="decrementQuantity()" class="interactive">
+                    <button type="button" onclick="decrementQuantity('product-quantity-display')" class="interactive">
                         <span class="material-symbols-outlined text-xl">remove</span>
                     </button>
-                    <span id="quantity-display">1</span> <!-- Quantity Display with ID -->
-                    <button type="button" onclick="incrementQuantity()" class="interactive">
+                    <span id="product-quantity-display" class="quantity-display">1</span>
+                    <button type="button" onclick="incrementQuantity('product-quantity-display')" class="interactive">
                         <span class="material-symbols-outlined text-xl">add</span>
                     </button>
                 </div>
             </section>
 
+            <!-- variant id -->
+            <section id="variant-id-display" class="hidden"><?= $variants[0]["id"] ?></section>
+
             <!-- Stock Display -->
             <span id="stock-display" class="hidden">Stock <?= $variants[0]['stock_quantity']; ?></span>
 
             <!-- Add to Cart Button -->
-            <button id="add-to-cart-btn"
+            <button id="add-to-cart-btn" cart-api="<?= $root_directory . 'api/cart'; ?>" root="<?= $root_directory; ?>" onclick="addToCart(this)"
                 class="interactive uppercase font-semibold text-lg shadow shadow-accent bg-accent text-primary text-center py-2 rounded tracking-tighter"
                 style="display: <?= $variants[0]['stock_quantity'] > 0 ? 'block' : 'none' ?>;">
                 Add to Cart

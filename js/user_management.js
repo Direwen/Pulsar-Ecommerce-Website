@@ -24,7 +24,7 @@ function editUser(recordId, submissionPath) {
 
 
     // Show the overlay with the dynamic content
-    showOverlay(content);
+    openOverlayModal(content);
 
 }
 
@@ -42,7 +42,7 @@ function deleteUser(recordId, userEmail, submissionPath) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 function createUser(submissionPath) {
@@ -63,7 +63,7 @@ function createUser(submissionPath) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 

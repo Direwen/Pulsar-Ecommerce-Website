@@ -1,7 +1,7 @@
-<div id="navbar" class="w-10/12 fixed top-0 right-0 h-screen bg-white px-2 py-5 flex flex-col gap-2 justify-start items-start shadow-inner hidden z-50">
+<div id="navbar" class="w-8/12 h-screen bg-white px-2 py-5 flex flex-col gap-2 justify-start items-start shadow-inner hidden z-50">
 
     <section class="flex justify-end items-center w-full py-5">
-        <span class="material-symbols-outlined interactive text-4xl" id="menu-close-button">close</span>
+        <span class="material-symbols-outlined interactive text-4xl" onclick="forceOverlayToClose()">close</span>
     </section>
 
     <section class="w-full flex justify-between items-center cursor-pointer text-2xl" id="product-section">

@@ -40,8 +40,6 @@ const dashboardMenuContent = `
 </a>
 `;
 
-
-
 // Get viewport dimensions
 const getViewportDimensions = () => {
     return {
@@ -54,8 +52,7 @@ const getViewportDimensions = () => {
 draggable.addEventListener('mousedown', (e) => {
     // Check if the Ctrl key is pressed
     if (!e.ctrlKey) {
-        console.log(dashboardMenuContent)
-        showOverlay(dashboardMenuContent); // Show overlay if Ctrl is not pressed
+        openOverlayModal(dashboardMenuContent); // Show overlay if Ctrl is not pressed
         return; // Exit the function if Ctrl is not pressed
     }
 
@@ -70,7 +67,7 @@ draggable.addEventListener('mousedown', (e) => {
     // Start a timeout to show the overlay, but do not execute it while dragging
     overlayTimeout = setTimeout(() => {
         if (!isDragging) return;
-        showOverlay(dashboardMenuContent); // Show overlay if Ctrl is not pressed
+        openOverlayModal(dashboardMenuContent); // Show overlay if Ctrl is not pressed
     }, 200);
 });
 
@@ -118,7 +115,7 @@ draggable.addEventListener('touchstart', (e) => {
 
     // Check if the time between touches is less than 300ms for a double tap
     if (currentTime - lastTouchTime < 300) {
-        showOverlay(dashboardMenuContent); // Show overlay if Ctrl is not pressed
+        openOverlayModal(dashboardMenuContent); // Show overlay if Ctrl is not pressed
     }
     lastTouchTime = currentTime; // Update last touch time
 

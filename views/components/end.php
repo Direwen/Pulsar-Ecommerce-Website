@@ -1,8 +1,7 @@
 <?php
 
-// require("./views/components/header.php");
-require("./views/components/navbar.php");
-require("./views/components/admin_easytouch_overlay.php");
+require("./views/components/header.php");
+require("./views/components/overlay.php");
 
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];

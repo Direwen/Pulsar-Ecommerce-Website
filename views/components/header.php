@@ -32,7 +32,7 @@ $navLinks = [
 
         <!-- Right Side Icons (Menu, Search, Profile, Cart) -->
         <section class="flex justify-between items-center gap-4 sm:gap-5">
-            <span class="material-symbols-outlined interactive sm:hidden" id="menu-button">menu</span>
+            <span class="material-symbols-outlined interactive sm:hidden" onclick="openNavbar()">menu</span>
             <span class="material-symbols-outlined interactive" id="search-button">search</span>
 
 
@@ -42,9 +42,10 @@ $navLinks = [
                 <a href="<?= $root_directory; ?>login"><span class="material-symbols-outlined interactive">person</span></a>
             <?php endif; ?>
 
-            <div class="interactive">
+            <a class="interactive" onclick="openShoppingCart('<?= $root_directory ?>')">
                 <span class="material-symbols-outlined">shopping_cart</span>
-            </div>
+            </a>
+            
         </section>
     </div>
 

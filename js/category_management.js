@@ -66,7 +66,7 @@ function editCategory(recordId, submissionPath, current_values) {
         </form>`;
 
     // Show the overlay with the dynamic content
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 
@@ -84,7 +84,7 @@ function deleteCategory(recordId, name, submissionPath) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 function createCategory(submissionPath) {
@@ -129,7 +129,7 @@ function createCategory(submissionPath) {
             </section>
         </form>`;
 
-    showOverlay(content);
+    openOverlayModal(content);
 }
 
 // Function to attach the editUser function to all edit buttons in the User Management dashboard

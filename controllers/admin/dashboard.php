@@ -54,7 +54,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
 ?>
 
-<div class="relative py-24 sm:py-20 md:py-16">
+<div class="relative py-24 sm:py-20 md:py-24">
 
     <?php
 

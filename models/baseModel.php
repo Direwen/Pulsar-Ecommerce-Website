@@ -35,7 +35,7 @@ abstract class BaseModel
         return $this->db->execute($query, array_combine($placeholders, array_values($formattedData)));
     }
 
-    public function get($conditions): ?array
+    public function get($conditions, $select=[], $join=[]): ?array
     {
         $where_conditions_to_get = [];
 
@@ -46,12 +46,14 @@ abstract class BaseModel
                 "value" => $attr_value,
             ];
         }
-        $whereClauses = $this->generateWhereClause($where_conditions_to_get);
+        $whereClause = $this->generateWhereClause($where_conditions_to_get);
+        $joinClause = $this->generateJoinClause($join);
+        $selectClause = $this->generateSelectClause($select, [], static::getTableName());
 
-        $result = $this->db->fetch(
-            "SELECT * FROM " . static::getTableName() . " WHERE " . $whereClauses['clauses'],
-            $whereClauses['params']
-        );
+        $query = "SELECT {$selectClause} FROM " . static::getTableName() . " {$joinClause} ";
+        if ($whereClause["clauses"]) $query .= " WHERE " . $whereClause['clauses'];
+
+        $result = $this->db->fetch($query, $whereClause["params"]);
 
         return $result ? $this->normalizeFields($result) : null;
     }
