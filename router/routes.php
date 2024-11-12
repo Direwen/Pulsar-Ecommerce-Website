@@ -77,6 +77,10 @@ return [
         'controller' => 'controllers/ecommerce/product_details.php',
         'middleware' => [],
     ],
+    'checkout' => [
+        'controller' => 'controllers/ecommerce/checkout.php',
+        'middleware' => [],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],

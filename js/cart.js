@@ -175,9 +175,9 @@ function openShoppingCart(rootDirectory) {
                             <span>Subtotal</span>
                             <span>$${subtotal.toFixed(2)}</span>
                         </div>
-                        <button class="mt-4 w-full py-3 text-center text-primary bg-accent interactive rounded">
+                        <a href="${rootDirectory}checkout" class="inline-block mt-4 w-full py-3 text-center text-primary bg-accent interactive rounded">
                             CHECK OUT ➔
-                        </button>
+                        </a>
                     </div>
                 </div>`;
 
