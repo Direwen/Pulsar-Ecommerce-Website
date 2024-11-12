@@ -30,10 +30,10 @@ foreach ($metadata as $attr_title => $arr) {
 <div class="w-full md:w-10/12 mx-auto rounded px-2">
 
     <div class="w-full mb-4">
-        <form action="" method="GET" class="flex flex-col md:flex-row items-center gap-2">
+        <form action="" method="GET" class="flex flex-col md:flex-row items-center gap-2 overflow-hidden">
 
             <!-- Dropdown for selecting column to search -->
-            <select name="search_attribute" id="search_attribute" class="p-3 border rounded focus:outline-none focus:border-accent mb-2 md:mb-0 w-full md:w-2/12" onchange="updateInputField()">
+            <select name="search_attribute" id="search_attribute" class="p-3 border rounded focus:outline-accent mb-2 md:mb-0 w-full md:w-2/12" onchange="updateInputField()">
                 <?php foreach ($metadata as $attr_title => $arr): ?>
                     <!-- Skip 'id' field -->
                     <?php if (in_array($attr_title, $filtered_metadata)): ?>
@@ -46,7 +46,7 @@ foreach ($metadata as $attr_title => $arr) {
             </select>
 
             <!-- Dynamic Search Input (changes between text or date) -->
-            <div id="search_input_container" class="grow w-full">
+            <div id="search_input_container" class="relative grow w-full">
                 <!-- Initially, a text input if no attribute is selected -->
                 <input
                     type="text"
@@ -54,21 +54,25 @@ foreach ($metadata as $attr_title => $arr) {
                     name="record_search"
                     value="<?= isset($_GET['record_search']) ? htmlspecialchars($_GET['record_search']) : '' ?>"
                     placeholder="Search records..."
-                    class="w-full p-3 border rounded focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
+                    class="w-full p-3 pr-28 border-b-2 border-light-dark shadow-b focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" 
+                />
+
+                <section class="absolute top-0 right-0 w-fit flex items-stretch">
+                    <!-- Clear Button -->
+                    <a 
+                        href="<?= strtok($_SERVER["REQUEST_URI"], '?') ?>" 
+                        class="w-full interactive text-light-dark text-center flex justify-center items-center p-2">
+                        <span class="material-symbols-outlined">restart_alt</span>
+                    </a>
+
+                    <!-- Search Button -->
+                    <button type="submit" class="w-full text-light-dark interactive p-2">
+                        <span class="material-symbols-outlined">search</span>
+                    </button>
+                </section>
             </div>
 
-            <!-- Buttons for search and clear -->
-            <section class="w-full md:w-2/12 flex justify-between items-center gap-1">
-                <!-- Search Button -->
-                <button type="submit" class="w-full bg-accent text-white p-2 md:py-3 md:px-6 rounded interactive hover:bg-accent-dark">
-                    <span class="material-symbols-outlined">manage_search</span>
-                </button>
-
-                <!-- Clear Button -->
-                <a href="<?= strtok($_SERVER["REQUEST_URI"], '?') ?>" class="w-full bg-light-gray text-dark p-2 md:py-3 md:px-6 rounded interactive hover:bg-gray-400 text-center">
-                    <span class="material-symbols-outlined">search_off</span>
-                </a>
-            </section>
+            
         </form>
     </div>
 
@@ -111,9 +115,10 @@ foreach ($metadata as $attr_title => $arr) {
                                                 $valueType = gettype($decodedValue);
 
                                                 // Check if it's an array
-                                                if ($valueType === 'array'):
+                                                if ($valueType === 'array'): 
                                                 ?>
-                                                    <div class="">
+                                                    <?php if(count($decodedValue) > 0): ?>
+                                                        <div class="">
                                                         <?php $toggleBtnCount++; ?>
                                                         <button class="text-dark interactive px-3 rounded" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>" onclick="toggleDropdown(this)">
                                                             Show
@@ -125,6 +130,9 @@ foreach ($metadata as $attr_title => $arr) {
                                                             <?php endforeach; ?>
                                                         </section>
                                                     </div>
+                                                    <?php else: ?>
+                                                        <span>N/A</span>
+                                                        <?php endif; ?>
 
                                                 <?php elseif ($valueType === 'object'): ?>
                                                     <div class="flex justify-center items-center gap-1">
@@ -153,7 +161,7 @@ foreach ($metadata as $attr_title => $arr) {
                                                     </div>
 
                                                 <?php else: ?>
-                                                    <span class=""><?= ucwords(htmlspecialchars($attr_value)); ?></span>
+                                                    <p class=""><?= ucwords(htmlspecialchars($attr_value)); ?></p>
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <span class="text-light-dark font-light">N/A</span>

@@ -22,9 +22,11 @@ $navLinks = [
         </section>
 
         <!-- Navigation Links -->
-        <section id="navigation-links-container" class="hidden flex-grow sm:flex justify-center items-stretch gap-5 uppercase">
+        <section id="navigation-links-container"
+            class="hidden flex-grow sm:flex justify-center items-stretch gap-5 uppercase">
             <?php foreach ($navLinks as $link): ?>
-                <a href="<?php echo $link['url']; ?>" class="header_links interactive h-full <?php echo ($currentPage == basename($link['url'])) ? 'active' : ''; ?>">
+                <a href="<?php echo $link['url']; ?>"
+                    class="header_links interactive h-full <?php echo ($currentPage == basename($link['url'])) ? 'active' : ''; ?>">
                     <?php echo $link['label']; ?>
                 </a>
             <?php endforeach; ?>
@@ -37,15 +39,37 @@ $navLinks = [
 
 
             <?php if ($auth_service->getAuthUser()): ?>
-                <a href="<?= $root_directory; ?>logout"><span class="material-symbols-outlined interactive">logout</span></a>
+                <a href="<?= $root_directory; ?>logout"><span
+                        class="material-symbols-outlined interactive">logout</span></a>
             <?php else: ?>
                 <a href="<?= $root_directory; ?>login"><span class="material-symbols-outlined interactive">person</span></a>
             <?php endif; ?>
 
-            <a class="interactive" onclick="openShoppingCart('<?= $root_directory ?>')">
+            <a class="interactive relative" onclick="openShoppingCart('<?= $root_directory ?>')">
                 <span class="material-symbols-outlined">shopping_cart</span>
+
+                <?php
+                // Check if the cookie is set and contains valid JSON data
+                $item_count = 0;
+                if (isset($_COOKIE["CART"])) {
+                    $cart_data = json_decode($_COOKIE["CART"]);
+
+                    // Check if json_decode was successful and if it's an object or array
+                    if (json_last_error() === JSON_ERROR_NONE && (is_object($cart_data) || is_array($cart_data))) {
+                        $item_count = count((array) $cart_data);
+                    }
+                }
+                ?>
+
+                <?php if ($item_count > 0): ?>
+                    <span class="absolute -top-1 -right-3 bg-accent text-primary px-2 rounded-full text-sm">
+                        <?= $item_count; ?>
+                    </span>
+                <?php endif; ?>
+
+
             </a>
-            
+
         </section>
     </div>
 
@@ -71,11 +95,7 @@ $navLinks = [
                         search
                     </span>
                 </button>
-                <input
-                    type="text"
-                    id="search-input"
-                    name="query"
-                    placeholder="Search..."
+                <input type="text" id="search-input" name="query" placeholder="Search..."
                     class="border-b border-dark outline-none focus:outline-none focus:border-accent focus:border-b-2 p-2 w-full h-full" />
                 <span id="search-close-button" class="material-symbols-outlined interactive">close</span>
             </form>

@@ -28,7 +28,7 @@
         renderCategories(
             "block mt-2 font-semibold",
             true,
-            "w-max h-64 object-cover text-center",
+            "w-max h-64 object-cover text-center mx-auto",
             "floatable bg-secondary border inline-block rounded w-8/12 sm:w-5/12 md:w-3/12 xl:w-2/12 mr-4 text-center p-2"
         );
         ?>

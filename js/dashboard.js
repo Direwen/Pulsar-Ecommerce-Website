@@ -4,20 +4,46 @@ function updateInputField() {
     const dataType = selectedOption.getAttribute('data-type');
 
     const searchInputContainer = document.getElementById('search_input_container');
-    searchInputContainer.innerHTML = '';  // Clear previous input fields
+    
+    // Clear previous input field content
+    searchInputContainer.innerHTML = ''; 
+
+    let inputFieldHTML = '';
 
     if (dataType.includes('timestamp')) {
-        // If the data type is a timestamp, show date inputs
-        searchInputContainer.innerHTML = `
-            <input type="date" id="end_date" name="record_search_end_date" class="w-full p-3 border rounded focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" placeholder="End Date" />
+        // If the data type is a timestamp, show a date input field
+        inputFieldHTML = `
+            <input type="date" id="search_input" name="record_search" 
+                placeholder="Select date..."
+                class="w-full p-3 pr-28 border-b-2 border-light-dark shadow-b focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
         `;
     } else {
-        // For other data types, show a text input
-        searchInputContainer.innerHTML = `
-            <input type="text" id="search_input" name="record_search" placeholder="Search records..." class="w-full p-3 border rounded focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
+        // For other data types, show a text input field
+        inputFieldHTML = `
+            <input type="text" id="search_input" name="record_search" 
+                placeholder="Search records..."
+                class="w-full p-3 border-b-2 border-light-dark shadow-b focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
         `;
     }
+
+    // Add search and clear button icons
+    const buttonsHTML = `
+        <section class="absolute top-0 right-0 w-fit flex items-stretch">
+            <!-- Clear Button -->
+            <a href="${window.location.pathname}" class="w-full interactive text-light-dark text-center flex justify-center items-center p-2">
+                <span class="material-symbols-outlined">restart_alt</span>
+            </a>
+            <!-- Search Button -->
+            <button type="submit" class="w-full text-light-dark interactive p-2">
+                <span class="material-symbols-outlined">search</span>
+            </button>
+        </section>
+    `;
+
+    // Append input field and buttons to the container
+    searchInputContainer.innerHTML = inputFieldHTML + buttonsHTML;
 }
+
 
 // function toggleImageInput() {
 //     const checkbox = document.getElementById('changeImageCheckbox');
