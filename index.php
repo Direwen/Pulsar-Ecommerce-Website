@@ -20,6 +20,10 @@ require_once './models/categoryModel.php';
 require_once './models/productModel.php';
 require_once './models/variantModel.php';
 require_once './models/inventoryModel.php';
+require_once './models/orderModel.php';
+require_once './models/orderVariantModel.php';
+require_once './models/addressModel.php';
+require_once './models/discountModel.php';
 
 $error_handler = null; 
 $user_model = null; 
@@ -27,7 +31,11 @@ $session_model = null;
 $category_model = null;
 $product_model = null; 
 $variant_model = null;
-$inventory_model = null; 
+$inventory_model = null;
+$address_model = null;
+$discount_model = null;
+$order_model = null; 
+$order_variant_model = null;
 $DB_METADATA = null;
 
 $root_directory = "/E-Commerce%20Assignment%20Project/";
@@ -36,13 +44,19 @@ $error_handler = ErrorHandler::getInstance($pdo);
 
 $result = $error_handler->handleDbOperation(function () use ($pdo) {
 
-    global $user_model, $session_model, $category_model, $product_model, $variant_model, $inventory_model, $DB_METADATA;
+    global $user_model, $session_model, $category_model, $product_model, $variant_model, $inventory_model, 
+    $address_model, $discount_model, $order_model, $order_variant_model, $DB_METADATA;
+
     $user_model = new UserModel($pdo);
     $session_model = new SessionModel($pdo);
     $category_model = new CategoryModel($pdo);
     $product_model = new ProductModel($pdo);
     $variant_model = new VariantModel($pdo);
     $inventory_model = new InventoryModel($pdo);
+    $discount_model = new DiscountModel($pdo);
+    $address_model = new AddressModel($pdo);
+    $order_model = new OrderModel($pdo);
+    $order_variant_model = new OrderVariantModel($pdo);
     $DB_METADATA = [
         UserModel::getTableName() => $user_model->getColumnMetadata(),
         SessionModel::getTableName() => $session_model->getColumnMetadata(),
@@ -50,6 +64,10 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
         ProductModel::getTableName() => $product_model->getColumnMetadata(),
         VariantModel::getTableName() => $variant_model->getColumnMetadata(),
         InventoryModel::getTableName() => $inventory_model->getColumnMetadata(),
+        OrderModel::getTableName() => $order_model->getColumnMetadata(),
+        OrderVariantModel::getTableName() => $order_variant_model->getColumnMetadata(),
+        AddressModel::getTableName() => $address_model->getColumnMetadata(),
+        DiscountModel::getTableName() => $discount_model->getColumnMetadata(),
     ];
 
     return true;
