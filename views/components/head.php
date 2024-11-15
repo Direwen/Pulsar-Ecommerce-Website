@@ -15,7 +15,8 @@
                         accent: '#1878b8',
                         dark: '#24292c',
                         "light-dark": '#898888',
-                        "light-gray": '#e5e6ea'
+                        "light-gray": '#e5e6ea',
+                        "danger": '#a60202'
                     },
                 }
             }

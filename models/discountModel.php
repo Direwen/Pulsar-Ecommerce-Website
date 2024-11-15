@@ -8,7 +8,6 @@ class DiscountModel extends BaseModel
     private const COLUMN_ID = 'id';
     private const COLUMN_CODE = 'code';
     private const COLUMN_AMOUNT = 'amount';
-    private const COLUMN_MIN_AMOUNT = 'min_amount';
     private const COLUMN_MAX_USAGE = 'max_usage';
     private const COLUMN_USED_COUNT = 'used_count';
     private const COLUMN_EXPIRED_AT = 'expired_at';
@@ -30,11 +29,6 @@ class DiscountModel extends BaseModel
     public static function getColumnAmount(): string
     {
         return self::COLUMN_AMOUNT;
-    }
-
-    public static function getColumnMinAmount(): string
-    {
-        return self::COLUMN_MIN_AMOUNT;
     }
 
     public static function getColumnMaxUsage(): string
@@ -75,13 +69,11 @@ class DiscountModel extends BaseModel
                 " . self::getColumnId() . " INT AUTO_INCREMENT PRIMARY KEY,
                 " . self::getColumnCode() . " VARCHAR(255) UNIQUE NOT NULL,
                 " . self::getColumnAmount() . " INT NOT NULL,
-                " . self::getColumnMinAmount() . " DECIMAL(10, 2) DEFAULT NULL,
-                " . self::getColumnMaxUsage() . " INT DEFAULT NULL,
+                " . self::getColumnMaxUsage() . " INT NOT NULL DEFAULT 5,
                 " . self::getColumnUsedCount() . " INT DEFAULT 0,
-                " . self::getColumnExpiredAt() . " DATE DEFAULT NULL,
+                " . self::getColumnExpiredAt() . " TIMESTAMP NULL,
                 " . self::getColumnCreatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                CONSTRAINT UNIQUE (" . self::getColumnCode() . ")
+                " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             );
         ");
     }
@@ -90,12 +82,11 @@ class DiscountModel extends BaseModel
     protected function formatData($data, $null_filter = false): array
     {
         $formattedData = [
-            'code' => $data['code'] ?? null,
+            'code' => isset($data['code']) ? strtoupper($data['code']) : null,
             'amount' => $data['amount'] ?? null,
-            'min_amount' => $data['min_amount'] ?? null,
             'max_usage' => $data['max_usage'] ?? null,
-            'used_count' => $data['used_count'] ?? 0,
-            'expired_at' => $data['expired_at'] ?? null,
+            'used_count' => $data['used_count'] ?? null,
+            'expired_at' => isset($data['expired_at']) ? strtotime($data['expired_at']) : null,
         ];
 
         // Filter out null values if needed
@@ -104,8 +95,8 @@ class DiscountModel extends BaseModel
 
     public function validateDiscount(array $record): bool {
         // Check if 'expired_at' is set and if the discount is still valid
-        if ($record['expired_at'] != 0) {
-            if (strtotime($record['expired_at']) < time()) {
+        if ($record['expired_at'] !== '0000-00-00 00:00:00') {
+            if ($record['expired_at'] < time()) {
                 return false; // Discount has expired
             }
         }
@@ -116,5 +107,39 @@ class DiscountModel extends BaseModel
         }
 
         return true; // Discount is valid
+    }
+
+    public function validateFormData(array $post_data): ?bool
+    {
+        $errors = [];
+
+        // Validate 'code' - required and must be unique
+        if (!isset($post_data[$this->getColumnCode()]) || empty($post_data[$this->getColumnCode()]) || strlen($post_data[$this->getColumnCode()]) > 255) {
+            $errors[] = "Discount code is required and must not exceed 255 characters.";
+        }
+
+        // Validate 'amount' - required, must be a valid number and positive
+        if (!isset($post_data[$this->getColumnAmount()]) || !is_numeric($post_data[$this->getColumnAmount()]) || $post_data[$this->getColumnAmount()] < 1 || $post_data[$this->getColumnAmount()] > 100) {
+            $errors[] = "Amount is required, must be a valid number, and must be between 1 and 100 inclusive.";
+        }
+
+        // Validate 'max_usage' - required, must be a valid positive integer
+        if (!isset($post_data[$this->getColumnMaxUsage()]) || !is_numeric($post_data[$this->getColumnMaxUsage()]) || $post_data[$this->getColumnMaxUsage()] <= 0) {
+            $errors[] = "Max usage is required and must be a valid positive integer.";
+        }
+
+        // Validate 'expired_at' - optional, must be a valid date if provided
+        if (!empty($post_data[$this->getColumnExpiredAt()]) && !strtotime($post_data[$this->getColumnExpiredAt()])) {
+            $errors[] = "Expired date must be a valid date.";
+        }
+
+        // Return errors if any
+        if (!empty($errors)) {
+            setMessage(implode(", ", $errors), 'error');
+            return false;
+        }
+
+        // Return true if no errors
+        return true;
     }
 }

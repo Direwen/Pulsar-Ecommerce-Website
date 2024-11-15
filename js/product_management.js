@@ -413,7 +413,7 @@ function deleteProduct(recordId, name, productId, submissionPath) {
                 <input type="hidden" name="id" value="${recordId}">
                 <input type="hidden" name="product_id" value="${productId}">
                 <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
-                <button type="submit" class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Delete</button>
+                <button type="submit" class="w-fit bg-danger interactive text-primary font-semibold py-2 px-6 rounded shadow">Delete</button>
             </section>
         </form>`;
 

@@ -20,7 +20,7 @@ function deleteOrder(recordId, orderCode, submissionPath) {
                     Cancel
                 </button>
                 <button type="submit" 
-                    class="bg-red-600 interactive text-white font-medium py-2 px-5 rounded shadow">
+                    class="bg-danger interactive text-primary font-medium py-2 px-5 rounded shadow">
                     Delete Record
                 </button>
             </section>

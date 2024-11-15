@@ -31,6 +31,10 @@ const dashboardMenuContent = `
     <section><span class="material-symbols-outlined text-md">inventory_2</span> <span class="text-md">Inventory</span></section>
     <span class="material-symbols-outlined font-thin">chevron_right</span>
 </a>
+<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=discount-management">
+    <section><span class="material-symbols-outlined text-md">price_change</span> <span class="text-md">Discount</span></section>
+    <span class="material-symbols-outlined font-thin">chevron_right</span>
+</a>
 <section class="border-b border-light-dark pb-4">
     <h2 class="text-xl font-semibold text-dark">Reprots & Analytics</h2>
 </section>

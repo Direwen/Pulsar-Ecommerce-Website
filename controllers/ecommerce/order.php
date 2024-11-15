@@ -87,7 +87,7 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $us
     // Load countries data
     $countries = require './utils/countries.php';
     $country = $countries[$filtered_data['delivery']['country']];
-    $subtotal = array_reduce($selected_variants, function($carry, $each) use ($variant_model) {
+    $subtotal = array_reduce($selected_variants, function ($carry, $each) use ($variant_model) {
         return $carry + ($each[$variant_model->getColumnUnitPrice()] * $each["quantity"]);
     }, 0);
 
@@ -143,6 +143,22 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $us
             throw new Exception("Order variant creation failed.");
         }
 
+        // Update Discount
+        if ($discount) {
+            $update_successful = $discount_model->update(
+                [
+                    $discount_model->getColumnUsedCount() => ++$discount[$discount_model->getColumnUsedCount()]
+                ],
+                [
+                    $discount_model->getColumnId() => $discount[$discount_model->getColumnId()]
+                ]
+            );
+
+            if (!$update_successful) {
+                throw new Exception("Discount update failed.");
+            }
+        }
+
         // Reduce Quantity in Inventory
         $inventory = $inventory_model->get(
             conditions: [
@@ -164,21 +180,7 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $us
         }
     }
 
-    // Update Discount
-    if ($discount) {
-        $update_successful = $discount_model->update(
-            [
-                $discount_model->getColumnUsedCount() => ++$discount[$discount_model->getColumnUsedCount()]
-            ],
-            [
-                $discount_model->getColumnId() => $discount[$discount_model->getColumnId()]
-            ]
-        );
 
-        if (!$update_successful) {
-            throw new Exception("Discount update failed.");
-        }
-    }
 
     if ($filtered_data["delivery"]["save_address"]) {
         $address_created = $address_model->create([

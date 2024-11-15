@@ -11,7 +11,7 @@ $navLinks = [
 ];
 ?>
 
-<div class="fixed top-0 left-0 w-screen h-fit bg-primary shadow z-40">
+<div class="fixed opacity-50 top-0 left-0 w-screen h-fit bg-primary shadow z-40">
     <!-- Primary Header (Permanent Section) -->
     <div class="py-5 sm:py-0 px-8 flex justify-between items-center">
         <!-- Logo Section -->

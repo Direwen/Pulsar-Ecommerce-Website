@@ -81,7 +81,7 @@ abstract class BaseModel
     public function update($attributesWithValues, $conditions)
     {
 
-        $setData = $this->generateSetClause($this->formatData($this->ensureStorageCompatibility($attributesWithValues), true));
+        $setData = $this->generateSetClause($this->ensureStorageCompatibility($this->formatData($attributesWithValues, true)));
 
         $where_conditions_to_update = [];
 

@@ -279,6 +279,32 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
             break;
 
+        case 'discount-management':
+
+            $db_data = ErrorHandler::handle(fn() => $discount_model->getAll(
+                page: $page,
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+            ));
+
+            renderDashboardHeader(
+                title_name: "Discount Management",
+                create_btn_desc: "a new discount",
+                create_user_btn_class: "create-discount-button",
+                submission_path: "admin/discounts/create",
+            );
+
+            renderPaginatedTable(
+                attributes_data: $DB_METADATA,
+                fetched_data: $db_data,
+                update_submission_file_path: "admin/discounts/update",
+                edit_btn_class: "edit-discount-button",
+                delete_submission_file_path: "admin/discounts/delete",
+                delete_btn_class: "delete-discount-button",
+                attribute_to_confirm_deletion: "code",
+            );
+
+            break;
+
         case 'analytics':
             echo "Analytics dashboard";
             break;

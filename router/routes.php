@@ -77,6 +77,18 @@ return [
         'controller' => 'controllers/admin/order_management/delete.php',
         'middleware' => []
     ],
+    'admin/discounts/create' => [
+        'controller' => 'controllers/admin/discount_management/create.php',
+        'middleware' => []
+    ],
+    'admin/discounts/update' => [
+        'controller' => 'controllers/admin/discount_management/update.php',
+        'middleware' => []
+    ],
+    'admin/discounts/delete' => [
+        'controller' => 'controllers/admin/discount_management/delete.php',
+        'middleware' => []
+    ],
     'products' => [
         'controller' => 'controllers/ecommerce/products.php',
         'middleware' => [],

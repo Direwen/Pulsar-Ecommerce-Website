@@ -80,7 +80,7 @@ function deleteCategory(recordId, name, submissionPath) {
             <section class="flex justify-end items-center gap-2">
                 <input type="hidden" name="id" value="${recordId}">
                 <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
-                <button type="submit" class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Delete</button>
+                <button type="submit" class="w-fit bg-danger interactive text-primary font-semibold py-2 px-6 rounded shadow">Delete</button>
             </section>
         </form>`;
 

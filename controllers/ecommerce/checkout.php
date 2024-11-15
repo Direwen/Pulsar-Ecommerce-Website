@@ -1,6 +1,13 @@
 <?php
 
 $countries = require './utils/countries.php';
+//Get Address
+$address = ErrorHandler::handle(fn () => $address_model->get(
+    conditions: [
+        $address_model->getColumnUserId() => $_SESSION["user_id"]
+    ]
+));
+
 // Decode the JSON string from the CART cookie to get cart items (variant_id => quantity)
 $cart = json_decode($_COOKIE["CART"]);
 

@@ -168,7 +168,7 @@ class OrderModel extends BaseModel
             'apartment' => trim(ucwords($data['apartment'])) ?? null,
             'postal_code' => strtoupper($data['postal_code']) ?? null,
             'city' => trim(ucwords($data['city'])) ?? null,
-            'country' => trim(strtoupper($data['country'])) ?? null,
+            'country' => trim(ucwords($data['country'])) ?? null,
             'phone' => $data['phone'] ?? null,
             'order_code' => $data['order_code'] ?? $this->generateOrderCode(),
             'is_refunded' => $data['is_refunded'] ?? false,
