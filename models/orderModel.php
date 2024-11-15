@@ -239,5 +239,25 @@ class OrderModel extends BaseModel
         return true;
     }
 
+    public function validateOrderStatus(array $record, string $status): bool
+    {
+        $validTransitions = [
+            'pending' => ['confirmed', 'cancelled'],
+            'confirmed' => ['processing', 'cancelled'],
+            'processing' => ['shipped'],
+            'shipped' => ['delivered'],
+            'delivered' => [],
+            'cancelled' => []
+        ];
+
+        $currentStatus = $record[$this->getColumnStatus()];
+
+        // Check if the new status is a valid transition from the current status
+        if (isset($validTransitions[$currentStatus]) && in_array($status, $validTransitions[$currentStatus])) {
+            return true;
+        }
+
+        return false; // Invalid status transition
+    }
 
 }

@@ -26,7 +26,7 @@ function renderPaginatedTable($attributes_data, $fetched_data, $update_submissio
     include("./views/components/paginated_record_table.php");
 }
 
-function renderDashboardHeader(String $title_name, String $create_btn_desc, String $create_user_btn_class, String $submission_path, array $extra_info = [])
+function renderDashboardHeader(String $title_name, String $create_btn_desc = '', String $create_user_btn_class = '', String $submission_path = '', array $extra_info = [])
 {
     global $root_directory;
     include("./views/components/admin_dashboard_header.php");

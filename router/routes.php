@@ -69,6 +69,14 @@ return [
         'controller' => 'controllers/admin/inventory_management/delete.php',
         'middleware' => []
     ],
+    'admin/orders/update' => [
+        'controller' => 'controllers/admin/order_management/update.php',
+        'middleware' => []
+    ],
+    'admin/orders/delete' => [
+        'controller' => 'controllers/admin/order_management/delete.php',
+        'middleware' => []
+    ],
     'products' => [
         'controller' => 'controllers/ecommerce/products.php',
         'middleware' => [],

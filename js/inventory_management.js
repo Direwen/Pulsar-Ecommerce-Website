@@ -166,7 +166,5 @@ document.querySelectorAll('.edit-inventory-button').forEach(button => {
             .catch(error => {
                 console.log(error);
             });
-
-
     });
 });

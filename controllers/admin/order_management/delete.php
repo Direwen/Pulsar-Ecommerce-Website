@@ -5,20 +5,20 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$inventory = ErrorHandler::handle(fn () => $inventory_model->get(
+$order = ErrorHandler::handle(fn () => $order_model->get(
     [
-        $inventory_model->getColumnId() => $_POST["id"] ?? '0'
+        $order_model->getColumnId() => $_POST["id"] ?? '0'
     ]
 ));
 
-if (!$inventory) {
-    setMessage("Inventory is not found", "error");
+if (!$order) {
+    setMessage("Order is not found", "error");
     header("Location: " . $_SERVER['HTTP_REFERER']);
     exit;
 }
 
-$isDeleted = ErrorHandler::handle(fn () => $inventory_model->delete([
-    $inventory_model->getColumnId() => $_POST["id"]
+$isDeleted = ErrorHandler::handle(fn () => $order_model->delete([
+    $order_model->getColumnId() => $_POST["id"]
 ]));
 
 if (!$isDeleted) {

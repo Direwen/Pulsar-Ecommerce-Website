@@ -237,7 +237,46 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             break;
 
         case 'orders-management':
-            echo "Order management dashboard";
+
+            $db_data = ErrorHandler::handle( fn () => $order_model->getAll(
+                page: $page,
+                select: [
+                    ["column" => $order_model->getColumnId()],
+                    ["column" => $user_model->getColumnEmail(), "alias" => "email", "table" => $user_model->getTableName()],
+                    ["column" => $order_model->getColumnOrderCode()],
+                    ["column" => $order_model->getColumnStatus()],
+                    ["column" => $order_model->getColumnTotalPrice()],
+                    ["column" => $discount_model->getColumnCode(), "alias" => "used_discount_code", "table" => $discount_model->getTableName()],
+                    
+                ],
+                joins: [
+                    [
+                        'type' => 'INNER JOIN',
+                        'table' => $user_model->getTableName(),
+                        'on' => "orders.user_id = users.id",
+                    ],
+                    [
+                        'type' => 'LEFT JOIN',
+                        'table' => $discount_model->getTableName(),
+                        'on' => "orders.used_discount_id = discounts.id",
+                    ]
+                ]
+            ));
+            
+            renderDashboardHeader(
+                title_name: "Order Management",
+            );
+
+            renderPaginatedTable(
+                attributes_data: $DB_METADATA,
+                fetched_data: $db_data,
+                update_submission_file_path: "admin/orders/update",
+                edit_btn_class: "edit-order-button",
+                delete_submission_file_path: "admin/orders/delete",
+                delete_btn_class: "delete-order-button",
+                attribute_to_confirm_deletion: "order_code",
+            );
+
             break;
 
         case 'analytics':
