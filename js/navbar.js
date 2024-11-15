@@ -4,4 +4,8 @@ window.addEventListener('resize', () => {
     if (window.innerWidth >= 640) { // Adjust the width as needed
         forceOverlayToClose();
     }
+
+    if (window.innerWidth >= 1024) {
+        closeCartItemsContainer();
+    }
 });

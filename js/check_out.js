@@ -151,4 +151,14 @@ function toggleDiscount(button) {
     }
 }
 
+function toggleCartItemsContainer() {
+    const itemsContainer = document.getElementById('cart-items-for-checkout-container');
+    itemsContainer.classList.toggle('hidden');
+}
+
+function closeCartItemsContainer() {
+    const itemsContainer = document.getElementById('cart-items-for-checkout-container');
+    itemsContainer.classList.remove('hidden');
+}
+
 

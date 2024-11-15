@@ -1,16 +1,17 @@
 <div class="px-4 lg:px-10 ">
     <form action="<?= $root_directory . 'order' ?>" method="POST"
-        class="py-12 pt-24 flex flex-col lg:flex-row lg:flex-row-reverse lg:h-screen">
+        class="py-12 pt-24 flex flex-col gap-10 lg:gap-0 lg:flex-row lg:flex-row-reverse lg:h-screen">
 
-        <div class="lg:w-1/3 bg-secondary p-4 border shadow flex flex-col gap-6 items-stretch">
-            <div class="flex flex-col gap-4 overflow-y-scroll flex-1 p-4 hide-scrollbar">
+        <div class="lg:w-1/3 bg-secondary p-4 border shadow flex flex-col items-center gap-6 lg:items-stretch relative">
+            <div class="w-full hidden lg:flex flex-col gap-4 overflow-y-scroll flex-1 p-4 hide-scrollbar"
+                id="cart-items-for-checkout-container">
                 <?php
                 $subtotal = 0; // Initialize subtotal
                 foreach ($selected_variants as $item):
                     $itemTotal = $item["quantity"] * $item["unit_price"];
                     $subtotal += $itemTotal; // Calculate subtotal
                     ?>
-                    <section class="flex justify-between items-start gap-1">
+                    <section class="flex justify-between items-center gap-1">
                         <!-- LEFT SIDE of ITEM LIST -->
                         <section class="flex justify-start items-center gap-4">
                             <section class="relative border bg-secondary shadow">
@@ -20,7 +21,7 @@
                                     class="absolute -top-1 -right-1 bg-light-dark text-primary px-2 rounded-full text-sm"><?= $item['quantity']; ?></span>
                             </section>
 
-                            <section class="flex flex-col items-start justify-center text-dark grow">
+                            <section class="flex flex-col items-start justify-start text-dark grow">
                                 <span
                                     class="text-xl text-wrap"><?= ucwords(htmlspecialchars($item["product_name"])); ?></span>
                                 <span
@@ -33,21 +34,23 @@
                 <?php endforeach; ?>
             </div>
 
-            <div class="flex flex-col gap-4">
-                <section class="w-full flex justify-between items-stretch gap-2">
+            <div class="w-full flex flex-col gap-4">
+                <section class="w-full flex flex-col lg:flex-row justify-between items-stretch gap-2">
                     <input type="text" name="discount_code" id="discount_input"
-                        class="grow px-4 py-3 bg-transparent border-2 border-light-gray focus:outline-accent"
+                        class="flex-grow px-4 py-3 bg-transparent border-2 border-light-gray focus:outline-accent"
                         placeholder="Gift card or Coupon Code">
                     <input type="hidden" name="applied_discount_code" id="applied_discount_code">
                     <button path_to_validate="<?= $root_directory . 'api/discount' ?>" type='button'
                         onclick="toggleDiscount(this)"
-                        class="w-fit px-6 self-stretch bg-accent text-secondary border rounded interactive shadow">
+                        class="w-full py-2 lg:py-0 lg:w-1/4 px-6 self-stretch bg-accent text-secondary border rounded interactive shadow">
                         Apply
                     </button>
                 </section>
 
                 <section class="flex justify-between items-center text-dark">
-                    <p>Subtotal • <?= count($selected_variants); ?> items</p>
+                    <p>Subtotal • <?= count($selected_variants); ?>
+                        <?= (count($selected_variants) > 1) ? 'items' : 'item' ?>
+                    </p>
                     <p>
                         <span>$</span><span id="sub-total"><?= number_format($subtotal, 2); ?></span>
                     </p>
@@ -75,16 +78,22 @@
                     </p>
                 </section>
             </div>
+
+            <button type="button" onclick="toggleCartItemsContainer()"
+                class="absolute -bottom-4 bg-primary text-light-dark rounded-full border px-1 shadow bg-danger interactive lg:hidden">
+                <span class="material-symbols-outlined text-lg">unfold_more</span>
+            </button>
+
         </div>
 
         <div class="md:grow md:overflow-y-scroll hide-scrollbar">
             <!-- Main Container for Form Sections -->
-            <div class="w-full md:w-8/12 mx-auto space-y-4">
+            <div class="w-full space-y-8 md:w-8/12 mx-auto lg:space-y-4">
 
                 <!-- Express Checkout Section -->
                 <div class="w-full flex flex-col items-center gap-2">
                     <span class="text-light-dark text-lg tracking-tighter">Express Checkout</span>
-                    <button class="bg-light-gray w-1/2 py-2 rounded border shadow">
+                    <button type="button" onclick="alert('Not Available Yet')" class="interactive bg-light-gray w-1/2 py-2 rounded border shadow">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png"
                             alt="payment logo" class="mx-auto w-24 h-8">
                     </button>
@@ -98,7 +107,7 @@
                 <!-- Contact Section -->
                 <div>
                     <section class="flex justify-between items-center mb-3">
-                        <span class="text-light-dark text-xl md:text-2xl tracking-tighter">Contact</span>
+                        <span class="text-dark text-xl md:text-2xl tracking-tighter">Contact</span>
                     </section>
 
                     <input type="email" name="email" required disabled
@@ -108,7 +117,7 @@
 
                 <!-- Delivery Section -->
                 <div>
-                    <span class="text-light-dark text-xl md:text-2xl tracking-tighter mb-3">Delivery</span>
+                    <span class="text-dark text-xl md:text-2xl tracking-tighter mb-3">Delivery</span>
                     <div class="mt-4 space-y-4">
                         <!-- Country Selector -->
                         <select name="delivery[country]" onchange="updateShippingAndTotal(this)" required
@@ -126,37 +135,45 @@
                         <div class="flex gap-4">
                             <input type="text" name="delivery[first_name]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
-                                placeholder="First name" value="<?= !empty($address) ? htmlspecialchars($address['first_name']) : ''; ?>">
+                                placeholder="First name"
+                                value="<?= !empty($address) ? htmlspecialchars($address['first_name']) : ''; ?>">
                             <input type="text" name="delivery[last_name]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
-                                placeholder="Last name" value="<?= !empty($address) ? htmlspecialchars($address['last_name']) : ''; ?>">
+                                placeholder="Last name"
+                                value="<?= !empty($address) ? htmlspecialchars($address['last_name']) : ''; ?>">
                         </div>
 
                         <!-- Company, Address, and Additional Address Information -->
                         <input type="text" name="delivery[company]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
-                            placeholder="Company (optional)" value="<?= !empty($address) ? htmlspecialchars($address['company']) : ''; ?>">
+                            placeholder="Company (optional)"
+                            value="<?= !empty($address) ? htmlspecialchars($address['company']) : ''; ?>">
                         <input type="text" name="delivery[address]" required
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
-                            placeholder="Address" value="<?= !empty($address) ? htmlspecialchars($address['address']) : ''; ?>">
+                            placeholder="Address"
+                            value="<?= !empty($address) ? htmlspecialchars($address['address']) : ''; ?>">
                         <input type="text" name="delivery[apartment]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
-                            placeholder="Apartment, suite, etc. (optional)" value="<?= !empty($address) ? htmlspecialchars($address['apartment']) : ''; ?>">
+                            placeholder="Apartment, suite, etc. (optional)"
+                            value="<?= !empty($address) ? htmlspecialchars($address['apartment']) : ''; ?>">
 
                         <!-- Postal Code and City Inputs -->
                         <div class="flex gap-4">
                             <input type="text" name="delivery[postal_code]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
-                                placeholder="Postal code" value="<?= !empty($address) ? htmlspecialchars($address['postal_code']) : ''; ?>">
+                                placeholder="Postal code"
+                                value="<?= !empty($address) ? htmlspecialchars($address['postal_code']) : ''; ?>">
                             <input type="text" name="delivery[city]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
-                                placeholder="City" value="<?= !empty($address) ? htmlspecialchars($address['city']) : ''; ?>">
+                                placeholder="City"
+                                value="<?= !empty($address) ? htmlspecialchars($address['city']) : ''; ?>">
                         </div>
 
                         <!-- Phone Input -->
                         <input type="text" name="delivery[phone]" required
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
-                            placeholder="Phone" value="<?= !empty($address) ? htmlspecialchars($address['phone']) : ''; ?>">
+                            placeholder="Phone"
+                            value="<?= !empty($address) ? htmlspecialchars($address['phone']) : ''; ?>">
 
                         <!-- Save Information Checkbox -->
                         <div class="flex items-center gap-2 mt-2">
@@ -168,7 +185,7 @@
 
                 <!-- Payment Section -->
                 <div>
-                    <p class="text-light-dark text-xl md:text-2xl tracking-tighter mb-3">Payment</p>
+                    <p class="text-dark text-xl md:text-2xl tracking-tighter mb-3">Payment</p>
                     <p class="text-light-dark text-sm mb-4">All transactions are secure and encrypted.</p>
 
                     <div>
@@ -187,8 +204,8 @@
                                 class="inner-section mt-2 bg-secondary flex flex-col justify-center items-center p-4"
                                 style="display: none;">
                                 <img src="<?= $root_directory . 'assets/design/card.gif' ?>" alt="card"
-                                    class="w-64 h-48 grayscale">
-                                <p class="w-9/12 text-center">After clicking "Pay with PayPal", you will be redirected
+                                    class="w-32 h-32 lg:w-64 lg:h-48 grayscale">
+                                <p class="w-9/12 lg:text-center">After clicking "Pay with PayPal", you will be redirected
                                     to
                                     PayPal to complete your purchase securely.</p>
                             </section>
@@ -209,8 +226,8 @@
                                 class="inner-section mt-2 bg-secondary flex flex-col justify-center items-center p-4"
                                 style="display: none;">
                                 <img src="<?= $root_directory . 'assets/design/card.gif' ?>" alt="card"
-                                    class="w-64 h-48 grayscale">
-                                <p class="w-9/12 text-center">After clicking “Pay now”, you will be redirected to
+                                    class="w-32 h-32 lg:w-64 lg:h-48 grayscale">
+                                <p class="w-9/12 lg:text-center">After clicking “Pay now”, you will be redirected to
                                     Paymentwall to complete your purchase securely.</p>
                             </section>
                         </div>
@@ -219,7 +236,7 @@
 
                 <!-- Billing Address Section -->
                 <div>
-                    <p class="text-light-dark text-xl md:text-2xl tracking-tighter mb-4">Billing Address</p>
+                    <p class="text-dark text-xl md:text-2xl tracking-tighter mb-4">Billing Address</p>
 
                     <!-- Same as Shipping Address Option -->
                     <div class="billing-option px-4 py-2 border border-light-gray rounded-t cursor-pointer">
