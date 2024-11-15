@@ -25,7 +25,6 @@ class ErrorHandler {
     
         } catch (Exception $error) {
             $this->db->rollBack();
-            var_dump($error->getMessage());
             setMessage($error->getMessage(), 'error');
             return false;
         }

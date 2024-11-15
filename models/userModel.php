@@ -64,19 +64,6 @@ class UserModel extends BaseModel
         ");
     }
 
-    // protected function createRaw($data): bool
-    // {
-    //     return $this->db->execute(
-    //         "INSERT INTO " . self::getTableName() . " (" . self::getColumnEmail() . ", " . self::getColumnLastLoggedInAt() . ", " . self::getColumnIsActive() . ", " . self::getColumnRole() . ") VALUES (:email, :last_logged_in_at, :is_active, :role)",
-    //         [
-    //             ':email' => strtolower(trim($data['email'])),
-    //             ':last_logged_in_at' => $data['last_logged_in_at'] ?? null,
-    //             ':is_active' => $data['is_active'] ?? true,
-    //             ':role' => $data['role'] ?? 'user'
-    //         ]
-    //     );
-    // }
-
     protected function formatData($data, $null_filter = false): array
     {
         $formattedData = [

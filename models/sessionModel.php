@@ -57,18 +57,6 @@ class SessionModel extends BaseModel
         ");
     }
 
-    // protected function createRaw($data): bool
-    // {
-    //     return $this->db->execute(
-    //         "INSERT INTO " . self::getTableName() . " (" . self::getColumnUserId() . ", " . self::getColumnToken() . ", " . self::getColumnExpiredAt() . ") VALUES (:user_id, :token, :expired_at)",
-    //         [
-    //             ':user_id' => $data['user_id'],
-    //             ':token' => $data['token'],
-    //             ':expired_at' => $data['expired_at']
-    //         ]
-    //     );
-    // }
-
     public function getUserByToken($token): ?array
     {
         $session = $this->db->fetch(

@@ -13,6 +13,7 @@ require_once './utils/database.php';
 require_once './utils/errorHandler.php';
 require_once './utils/imageHandler.php';
 require_once './utils/messageHandler.php';
+require_once './utils/clearCookie.php';
 
 require_once './models/userModel.php';
 require_once './models/sessionModel.php';
@@ -121,7 +122,7 @@ require("./views/components/end.php");
 
 ?>
 
-<div class="fixed hidden w-fit bottom-5 left-10 z-50 bg-secondary border-2 border-red-900 text-red-900 px-4 py-8 rounded">
+<div class="fixed hidden opacity-45 w-fit bottom-5 left-10 z-50 bg-secondary border-2 border-red-900 text-red-900 px-4 py-8 rounded">
 
     <h3>Session Data:</h3>
     <ul>

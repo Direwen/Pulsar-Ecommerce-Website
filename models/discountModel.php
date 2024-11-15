@@ -74,7 +74,7 @@ class DiscountModel extends BaseModel
             CREATE TABLE IF NOT EXISTS " . self::getTableName() . " (
                 " . self::getColumnId() . " INT AUTO_INCREMENT PRIMARY KEY,
                 " . self::getColumnCode() . " VARCHAR(255) UNIQUE NOT NULL,
-                " . self::getColumnAmount() . " DECIMAL(10, 2) NOT NULL,
+                " . self::getColumnAmount() . " INT NOT NULL,
                 " . self::getColumnMinAmount() . " DECIMAL(10, 2) DEFAULT NULL,
                 " . self::getColumnMaxUsage() . " INT DEFAULT NULL,
                 " . self::getColumnUsedCount() . " INT DEFAULT 0,
@@ -100,5 +100,21 @@ class DiscountModel extends BaseModel
 
         // Filter out null values if needed
         return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
+    }
+
+    public function validateDiscount(array $record): bool {
+        // Check if 'expired_at' is set and if the discount is still valid
+        if ($record['expired_at'] != 0) {
+            if (strtotime($record['expired_at']) < time()) {
+                return false; // Discount has expired
+            }
+        }
+
+        // Check if 'max_usage' is set and if there are usages left
+        if ($record['used_count'] >= $record['max_usage']) {
+            return false; // No usages left
+        }
+
+        return true; // Discount is valid
     }
 }

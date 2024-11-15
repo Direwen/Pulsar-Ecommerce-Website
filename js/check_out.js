@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Select payment options and billing address containers
     const paymentOptions = document.querySelectorAll(".payment-option");
     const billingOptions = document.querySelectorAll(".billing-option");
@@ -61,15 +61,94 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function updateShippingAndTotal(selector) {
-    const selectedOption = selector.options[selector.selectedIndex];
-    const shippingFee = parseFloat(selectedOption.getAttribute("shipping"));
+let currentDiscount = 0; // Store discount percentage here
 
-    // // Update the shipping fee and total price in the DOM
-    document.getElementById("shipping-fee").textContent = shippingFee.toFixed(2);
-    let subtotalPriceDisplay = document.getElementById("sub-total");
-    let totalPriceDisplay = document.getElementById("total");
+// Centralized function to calculate and display the total
+function calculateTotal() {
+    const subtotalPriceDisplay = document.getElementById("sub-total");
+    console.log(subtotalPriceDisplay.textContent);
+    const shippingFeeDisplay = document.getElementById("shipping-fee");
+    const totalPriceDisplay = document.getElementById("total");
 
-    let newTotal = parseFloat(subtotalPriceDisplay.textContent) + shippingFee;
+    // Remove commas from the subtotal before parsing
+    const subtotal = parseFloat(subtotalPriceDisplay.textContent.replace(/,/g, '')) || 0;
+    const shippingFee = parseFloat(shippingFeeDisplay.textContent) || 0;
+
+    // Calculate the discount value based on the subtotal
+    const discountValue = subtotal * (currentDiscount / 100);
+
+    // Calculate final total
+    const newTotal = subtotal + shippingFee - discountValue;
     totalPriceDisplay.textContent = newTotal.toFixed(2);
 }
+
+// Update shipping fee and call calculateTotal()
+function updateShippingAndTotal(selector) {
+    const selectedOption = selector.options[selector.selectedIndex];
+    const shippingFee = parseFloat(selectedOption.getAttribute("shipping")) || 0;
+
+    document.getElementById("shipping-fee").textContent = shippingFee.toFixed(2);
+
+    // Recalculate total with updated shipping fee
+    calculateTotal();
+}
+
+// Toggle discount code application and call calculateTotal()
+function toggleDiscount(button) {
+    const discountInput = document.getElementById("discount_input");
+    const discountCode = discountInput.value.trim();
+    const discountMessage = document.getElementById("discount-message");
+    const hiddenDiscountCode = document.getElementById("applied_discount_code");
+
+    if (discountInput.readOnly) {
+        // Clear discount if already applied
+        discountInput.value = "";
+        discountInput.readOnly = false;
+        discountMessage.textContent = "Not Applied";
+        button.textContent = "Apply";
+        hiddenDiscountCode.value = ""; // Clear hidden input value
+
+        button.classList.add("bg-accent", "text-secondary");
+        button.classList.remove("bg-light-gray", "text-dark");
+
+        // Reset current discount to 0 and recalculate total
+        currentDiscount = 0;
+        calculateTotal();
+    } else {
+        // Apply discount if code is valid
+        if (!discountCode) {
+            discountMessage.textContent = "Invalid";
+            return;
+        }
+
+        axios.post(button.getAttribute('path_to_validate'), { code: discountCode })
+            .then(response => {
+                if (response.data.valid) {
+                    const discountAmount = response.data.data.amount; // Assuming percentage discount
+
+                    discountMessage.textContent = discountAmount + '% OFF';
+                    discountInput.readOnly = true;
+                    button.textContent = "Clear";
+
+                    button.classList.add("bg-light-gray", "text-dark");
+                    button.classList.remove("bg-accent", "text-secondary");
+
+                    // Update current discount and recalculate total
+                    currentDiscount = discountAmount;
+
+                    // Set hidden input with discount code for form submission
+                    hiddenDiscountCode.value = discountCode;
+
+                    calculateTotal();
+                } else {
+                    discountMessage.textContent = "Invalid";
+                }
+            })
+            .catch(error => {
+                discountMessage.textContent = "Invalid";
+                console.error("Error applying discount:", error);
+            });
+    }
+}
+
+

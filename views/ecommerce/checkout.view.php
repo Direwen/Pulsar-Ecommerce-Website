@@ -1,9 +1,15 @@
 <div class="px-4 lg:px-10 ">
-    <form action="<?= $root_directory . 'order' ?>" method="POST" class="py-12 pt-24 flex flex-col lg:flex-row lg:flex-row-reverse lg:h-screen">
+    <form action="<?= $root_directory . 'order' ?>" method="POST"
+        class="py-12 pt-24 flex flex-col lg:flex-row lg:flex-row-reverse lg:h-screen">
 
         <div class="lg:w-1/3 bg-secondary p-4 border shadow flex flex-col gap-6 items-stretch">
             <div class="flex flex-col gap-4 overflow-y-scroll flex-1 p-4 hide-scrollbar">
-                <?php foreach ($selected_variants as $item): ?>
+                <?php
+                $subtotal = 0; // Initialize subtotal
+                foreach ($selected_variants as $item):
+                    $itemTotal = $item["quantity"] * $item["unit_price"];
+                    $subtotal += $itemTotal; // Calculate subtotal
+                    ?>
                     <section class="flex justify-between items-start gap-1">
                         <!-- LEFT SIDE of ITEM LIST -->
                         <section class="flex justify-start items-center gap-4">
@@ -22,25 +28,35 @@
                             </section>
                         </section>
                         <!-- RIGHT SIDE OF ITEM LIST -->
-                        <?php $subtotal += $item["quantity"] * $item["unit_price"] ?>
-                        <span class="">$<?= $item["quantity"] * $item["unit_price"] ?></span>
+                        <span class="">$<?= number_format($itemTotal, 2); ?></span>
                     </section>
                 <?php endforeach; ?>
             </div>
 
             <div class="flex flex-col gap-4">
                 <section class="w-full flex justify-between items-stretch gap-2">
-                    <input type="text" name="discount_code"
+                    <input type="text" name="discount_code" id="discount_input"
                         class="grow px-4 py-3 bg-transparent border-2 border-light-gray focus:outline-accent"
                         placeholder="Gift card or Coupon Code">
-                    <button
-                        class="w-fit px-6 self-stretch bg-light-gray text-light-dark border interactive shadow">Apply</button>
+                    <input type="hidden" name="applied_discount_code" id="applied_discount_code">
+                    <button path_to_validate="<?= $root_directory . 'api/discount' ?>" type='button'
+                        onclick="toggleDiscount(this)"
+                        class="w-fit px-6 self-stretch bg-accent text-secondary border rounded interactive shadow">
+                        Apply
+                    </button>
                 </section>
 
                 <section class="flex justify-between items-center text-dark">
                     <p>Subtotal • <?= count($selected_variants); ?> items</p>
                     <p>
-                        <span>$</span><span id="sub-total"><?= $subtotal; ?></span>
+                        <span>$</span><span id="sub-total"><?= number_format($subtotal, 2); ?></span>
+                    </p>
+                </section>
+
+                <section class="flex justify-between items-center text-dark">
+                    <p>Discount</p>
+                    <p class="text-dark tracking-tighter" id="discount-message">
+                        Not Applied
                     </p>
                 </section>
 
@@ -55,7 +71,7 @@
                     <p class="">Total</p>
                     <p>
                         <span class="text-sm text-light-dark mr-2">USD</span>
-                        <span>$</span><span id="total"><?= $subtotal; ?></span>
+                        <span>$</span><span id="total"><?= number_format($subtotal, 2); ?></span>
                     </p>
                 </section>
             </div>
@@ -83,11 +99,11 @@
                 <div>
                     <section class="flex justify-between items-center mb-3">
                         <span class="text-light-dark text-xl md:text-2xl tracking-tighter">Contact</span>
-                        <a href="" class="text-accent underline">Login</a>
                     </section>
-                    <input type="email" name="email" required
-                        class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
-                        placeholder="Email">
+
+                    <input type="email" name="email" required disabled
+                        class="border border-light-dark w-full px-4 py-2 rounded cursor-not-allowed focus:outline-accent"
+                        placeholder="Email" value="<?= $_SESSION['user_email']; ?>">
                 </div>
 
                 <!-- Delivery Section -->
@@ -100,7 +116,7 @@
                             <option value="" disabled selected>Select a country</option>
 
                             <?php foreach ($countries as $name => $value): ?>
-                                <option value="<?= $value['code'] ?>" shipping="<?= $value['shipping'] ?>">
+                                <option value="<?= $name ?>" shipping="<?= $value['shipping'] ?>">
                                     <?= $name ?>
                                 </option>
                             <?php endforeach; ?>
@@ -160,8 +176,8 @@
                         <div class="payment-option border border-light-gray rounded-t cursor-pointer">
                             <section class="flex justify-between items-center px-4 py-2">
                                 <span>
-                                    <input type="radio" name="payment[method]" value="paypal" class="align-middle mr-1"
-                                        disabled>Paypal
+                                    <input type="radio" name="payment[method]" value="paypal"
+                                        class="align-middle mr-1">Paypal
                                 </span>
                                 <img class="w-32 h-8"
                                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/2560px-PayPal.svg.png"
@@ -183,7 +199,7 @@
                             <section class="flex justify-between items-center px-4 py-2">
                                 <span>
                                     <input type="radio" name="payment[method]" value="paymentwall"
-                                        class="align-middle mr-1" disabled>All Payment Methods (by Paymentwall)
+                                        class="align-middle mr-1">All Payment Methods (by Paymentwall)
                                 </span>
                                 <img class="w-32 h-8"
                                     src="https://www.openbucks.com/fileadmin/user_upload/assets/partners/paymentwall-%403x.png"
@@ -226,35 +242,38 @@
                     <!-- Billing Form Section (Initially Hidden) -->
                     <div class="billing-form mt-4 space-y-4" style="display: none;">
                         <div class="flex gap-4">
-                            <input type="text" name="billing[first_name]" required
+                            <input type="text" name="billing[first_name]"
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="First name">
-                            <input type="text" name="billing[last_name]" required
+                            <input type="text" name="billing[last_name]"
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="Last name">
                         </div>
                         <input type="text" name="billing[company]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Company (optional)">
-                        <input type="text" name="billing[address]" required
+                        <input type="text" name="billing[address]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Address">
                         <input type="text" name="billing[apartment]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Apartment, suite, etc. (optional)">
                         <div class="flex gap-4">
-                            <input type="text" name="billing[postal_code]" required
+                            <input type="text" name="billing[postal_code]"
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="Postal code">
-                            <input type="text" name="billing[city]" required
+                            <input type="text" name="billing[city]"
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="City">
                         </div>
-                        <input type="text" name="billing[phone]" required
+                        <input type="text" name="billing[phone]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Phone">
                     </div>
                 </div>
+
+                <input type="text" name="user_id" class="hidden" value="<?= $_SESSION["user_id"]; ?>">
+                <input type="email" name="user_email" class="hidden" value="<?= $_SESSION["user_email"]; ?>">
 
                 <button type="submit" class="bg-accent interactive py-3 w-full text-primary rounded font-semibold">Pay
                     now</button>

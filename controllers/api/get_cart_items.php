@@ -2,6 +2,11 @@
 
 header('Content-Type: application/json');
 
+if (!isset($_COOKIE["CART"])) {
+    echo json_encode([]);
+    exit();
+}
+
 // Decode the JSON string from the CART cookie to get cart items (variant_id => quantity)
 $cart = json_decode($_COOKIE["CART"]);
 

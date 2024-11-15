@@ -79,7 +79,7 @@ return [
     ],
     'checkout' => [
         'controller' => 'controllers/ecommerce/checkout.php',
-        'middleware' => [],
+        'middleware' => ['auth', 'checkout'],
     ],
     'order' => [
         'controller' => 'controllers/ecommerce/order.php',
@@ -111,6 +111,11 @@ return [
     ],
     'api/cart-items' => [
         'controller' => 'controllers/api/get_cart_items.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/discount' => [
+        'controller' => 'controllers/api/validate_discount.php',
         'middleware' => [],
         'isApi' => true
     ],
