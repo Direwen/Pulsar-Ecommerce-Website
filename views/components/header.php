@@ -40,24 +40,31 @@ $navLinks = [
 
             <?php if ($auth_service->getAuthUser()): ?>
                 <div class="relative sm:inline-block hidden">
-                    <button class="flex justify-between items-center gap-2 lg:shadow lg:border lg:px-3 rounded interactive text-dark" onclick="toggleUserInfo()">
+                    <button
+                        class="flex justify-between items-center gap-2 lg:shadow lg:border lg:px-3 rounded interactive text-dark"
+                        onclick="toggleUserInfo()">
                         <span class="font-medium tracking-tighter hidden lg:inline"><?= $_SESSION["user_email"] ?></span>
                         <span class="material-symbols-outlined">account_circle</span>
                     </button>
-                    <div id="user-info-menu" class="hidden absolute w-auto min-w-[200px] right-0 bg-primary border shadow rounded mt-2">
-                        <?php if($_SESSION["user_role"] != "user"): ?>
-                            <a href="<?= $root_directory; ?>admin/dashboard" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive"> 
+                    <div id="user-info-menu"
+                        class="hidden absolute w-auto min-w-[200px] right-0 bg-primary border shadow rounded mt-2">
+                        <?php if ($_SESSION["user_role"] != "user"): ?>
+                            <a href="<?= $root_directory; ?>admin/dashboard"
+                                class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                                 <span class="material-symbols-outlined interactive">widgets</span> Dashboard
                             </a>
                         <?php endif; ?>
-                        
-                        <a href="<?= $root_directory; ?>history" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive"> 
+
+                        <a href="<?= $root_directory; ?>history"
+                            class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">history</span> Order History
                         </a>
-                        <a href="<?= $root_directory; ?>disable" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                        <a href="<?= $root_directory; ?>disable"
+                            class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">block</span> Disable Account
                         </a>
-                        <a href="<?= $root_directory; ?>logout" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                        <a href="<?= $root_directory; ?>logout"
+                            class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">logout</span> Logout
                         </a>
                     </div>
@@ -110,13 +117,13 @@ $navLinks = [
 
         <!-- Search Box (hidden by default) -->
         <div id="search-container" class="hidden w-full h-full">
-            <form action="" method="GET" class="w-full flex items-center gap-5">
+            <form action="<?= $root_directory . 'products' ?>" method="GET" class="w-full flex items-center gap-5">
                 <button type="submit" class="interactive">
                     <span class="material-symbols-outlined">
                         search
                     </span>
                 </button>
-                <input type="text" id="search-input" name="query" placeholder="Search..."
+                <input type="text" id="search-input" name="search" placeholder="Search Products"
                     class="border-b border-dark outline-none focus:outline-none focus:border-accent focus:border-b-2 p-2 w-full h-full" />
                 <span id="search-close-button" class="material-symbols-outlined interactive">close</span>
             </form>
