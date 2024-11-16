@@ -8,3 +8,8 @@ function toggleDropdown(button) {
         section.classList.toggle('hidden');
     }
 }
+
+function toggleUserInfo() {
+    const dropdown = document.getElementById('user-info-menu');
+    dropdown.classList.toggle('hidden');
+}

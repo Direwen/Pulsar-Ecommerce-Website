@@ -39,8 +39,29 @@ $navLinks = [
 
 
             <?php if ($auth_service->getAuthUser()): ?>
-                <a href="<?= $root_directory; ?>logout"><span
-                        class="material-symbols-outlined interactive">logout</span></a>
+                <div class="relative sm:inline-block hidden">
+                    <button class="flex justify-between items-center gap-2 lg:shadow lg:border lg:px-3 rounded interactive text-dark" onclick="toggleUserInfo()">
+                        <span class="font-medium tracking-tighter hidden lg:inline"><?= $_SESSION["user_email"] ?></span>
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </button>
+                    <div id="user-info-menu" class="hidden absolute w-auto min-w-[200px] right-0 bg-primary border shadow rounded mt-2">
+                        <?php if($_SESSION["user_role"] != "user"): ?>
+                            <a href="<?= $root_directory; ?>admin/dashboard" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive"> 
+                                <span class="material-symbols-outlined interactive">widgets</span> Dashboard
+                            </a>
+                        <?php endif; ?>
+                        
+                        <a href="<?= $root_directory; ?>history" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive"> 
+                            <span class="material-symbols-outlined interactive">history</span> Order History
+                        </a>
+                        <a href="<?= $root_directory; ?>disable" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                            <span class="material-symbols-outlined interactive">block</span> Disable Account
+                        </a>
+                        <a href="<?= $root_directory; ?>logout" class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                            <span class="material-symbols-outlined interactive">logout</span> Logout
+                        </a>
+                    </div>
+                </div>
             <?php else: ?>
                 <a href="<?= $root_directory; ?>login"><span class="material-symbols-outlined interactive">person</span></a>
             <?php endif; ?>
