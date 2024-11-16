@@ -13,3 +13,8 @@ function toggleUserInfo() {
     const dropdown = document.getElementById('user-info-menu');
     dropdown.classList.toggle('hidden');
 }
+
+function toggleSortOptions() {
+    const sortOptions = document.getElementById('sort-options');
+    sortOptions.classList.toggle('hidden'); // Toggle visibility
+}
