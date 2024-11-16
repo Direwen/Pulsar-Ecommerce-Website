@@ -26,6 +26,7 @@ if (!$order_model->validateOrderStatus($order, $_POST["status"] ?? '')) {
 $isUpdated = ErrorHandler::handle(fn() => $order_model->update(
     [
         $order_model->getColumnStatus() => $_POST["status"],
+        $order_model->getColumnIsRefunded() => ($_POST["status"] == 'cancelled') ? true : false
     ],
     [
         $order_model->getColumnId() => $_POST["id"],

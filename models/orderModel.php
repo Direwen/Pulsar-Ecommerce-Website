@@ -23,6 +23,7 @@ class OrderModel extends BaseModel
     private const COLUMN_PHONE = 'phone';
     private const COLUMN_ORDER_CODE = 'order_code';
     private const COLUMN_IS_REFUNDED = 'is_refunded';
+    private const COLUMN_SHIPPING_FEE = 'shipping_fee';
     private const TABLE_NAME = 'orders';
 
     // Getter methods for column names
@@ -116,6 +117,11 @@ class OrderModel extends BaseModel
         return self::COLUMN_IS_REFUNDED;
     }
 
+    public static function getColumnShippingFee(): string
+    {
+        return self::COLUMN_SHIPPING_FEE;
+    }
+
     public static function getTableName(): string
     {
         return self::TABLE_NAME;
@@ -144,6 +150,7 @@ class OrderModel extends BaseModel
                 " . self::getColumnCreatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 " . self::getColumnIsRefunded() . " BOOLEAN NOT NULL DEFAULT FALSE,
+                " . self::getColumnShippingFee() . " DECIMAL(10, 2) NOT NULL DEFAULT 0,
                 CONSTRAINT FOREIGN KEY (" . self::getColumnUserId() . ") REFERENCES " . UserModel::getTableName() . "(" . UserModel::getColumnId() . ") ON DELETE SET NULL,
                 CONSTRAINT FOREIGN KEY (" . self::getColumnUsedDiscountId() . ") REFERENCES " . DiscountModel::getTableName() . "(" . DiscountModel::getColumnId() . ") ON DELETE SET NULL,
                 INDEX (" . self::getColumnUserId() . "),
@@ -157,21 +164,22 @@ class OrderModel extends BaseModel
     protected function formatData($data, $null_filter = false): array
     {
         $formattedData = [
-            'user_id' => $data['user_id'] ?? null,
-            'status' => $data['status'] ?? 'pending',
-            'total_price' => $data['total_price'] ?? null,
-            'used_discount_id' => $data['used_discount_id'] ?? null,
-            'first_name' => trim(ucwords($data['first_name'])) ?? null,
-            'last_name' => trim(ucwords($data['last_name'])) ?? null,
-            'company' => trim(ucwords($data['company'])) ?? null,
-            'address' => trim(ucwords($data['address'])) ?? null,
-            'apartment' => trim(ucwords($data['apartment'])) ?? null,
-            'postal_code' => strtoupper($data['postal_code']) ?? null,
-            'city' => trim(ucwords($data['city'])) ?? null,
-            'country' => trim(ucwords($data['country'])) ?? null,
-            'phone' => $data['phone'] ?? null,
-            'order_code' => $data['order_code'] ?? $this->generateOrderCode(),
-            'is_refunded' => $data['is_refunded'] ?? false,
+            'user_id' => isset($data['user_id']) ? $data['user_id'] : null,
+            'status' => isset($data['status']) ? $data['status'] : 'pending',
+            'total_price' => isset($data['total_price']) ? $data['total_price'] : null,
+            'used_discount_id' => isset($data['used_discount_id']) ? $data['used_discount_id'] : null,
+            'first_name' => isset($data['first_name']) ? trim(ucwords($data['first_name'])) : null,
+            'last_name' => isset($data['last_name']) ? trim(ucwords($data['last_name'])) : null,
+            'company' => isset($data['company']) ? trim(ucwords($data['company'])) : null,
+            'address' => isset($data['address']) ? trim(ucwords($data['address'])) : null,
+            'apartment' => isset($data['apartment']) ? trim(ucwords($data['apartment'])) : null,
+            'postal_code' => isset($data['postal_code']) ? strtoupper($data['postal_code']) : null,
+            'city' => isset($data['city']) ? trim(ucwords($data['city'])) : null,
+            'country' => isset($data['country']) ? trim(ucwords($data['country'])) : null,
+            'phone' => isset($data['phone']) ? $data['phone'] : null,
+            'order_code' => isset($data['order_code']) ? $data['order_code'] : $this->generateOrderCode(),
+            'is_refunded' => isset($data['is_refunded']) ? $data['is_refunded'] : false,
+            'shipping_fee' => isset($data['shipping_fee']) ? $data['shipping_fee'] : 0,
         ];
 
         // Filter out null values if needed
@@ -227,6 +235,11 @@ class OrderModel extends BaseModel
         // Additional validation for phone format (example regex)
         if (!empty($post_data['phone']) && !preg_match('/^\+?[0-9]{10,15}$/', $post_data['phone'])) {
             $errors[] = "Phone number must be valid and between 10 to 15 digits.";
+        }
+
+        // Validate 'shipping_fee' - optional, but must be a valid number and non-negative
+        if (isset($post_data[$this->getColumnShippingFee()]) && (!is_numeric($post_data[$this->getColumnShippingFee()]) || $post_data[$this->getColumnShippingFee()] < 0)) {
+            $errors[] = "Shipping fee must be a valid number and cannot be negative.";
         }
 
         // Return errors if any

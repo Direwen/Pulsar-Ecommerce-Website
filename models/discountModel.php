@@ -93,16 +93,17 @@ class DiscountModel extends BaseModel
         return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
 
-    public function validateDiscount(array $record): bool {
+    public function validateDiscount(array $record): bool
+    {
         // Check if 'expired_at' is set and if the discount is still valid
-        if ($record['expired_at'] !== '0000-00-00 00:00:00') {
-            if ($record['expired_at'] < time()) {
-                return false; // Discount has expired
-            }
+        if ($record[self::getColumnExpiredAt()] > 0 && $record[self::getColumnExpiredAt()] < time()) {
+
+            return false; // Discount has expired
         }
 
         // Check if 'max_usage' is set and if there are usages left
-        if ($record['used_count'] >= $record['max_usage']) {
+        if (($record[self::getColumnUsedCount()] ?? 0) >= $record[self::getColumnMaxUsage()]) {
+
             return false; // No usages left
         }
 

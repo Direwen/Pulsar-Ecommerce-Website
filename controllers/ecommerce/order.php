@@ -1,5 +1,10 @@
 <?php
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+    exit;
+}
+
 // Sanitize and assign POST data directly
 $filtered_data = [
     'applied_discount_code' => $_POST['applied_discount_code'] ?? '',
@@ -112,7 +117,8 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $us
         $order_model->getColumnApartment() => $filtered_data["delivery"]["apartment"],
         $order_model->getColumnPostalCode() => $filtered_data["delivery"]["postal_code"],
         $order_model->getColumnCity() => $filtered_data["delivery"]["city"],
-        $order_model->getColumnCountry() => $country["code"],
+        $order_model->getColumnCountry() => $filtered_data['delivery']['country'],
+        $order_model->getColumnShippingFee() => $country["shipping"],
         $order_model->getColumnPhone() => $filtered_data["delivery"]["phone"],
         $order_model->getColumnOrderCode() => $order_code
     ];

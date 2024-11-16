@@ -59,6 +59,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+
+    const countrySelector = document.querySelector('select[name="delivery[country]"]');
+    if (countrySelector.value) {
+        updateShippingAndTotal(countrySelector);
+    }
 });
 
 let currentDiscount = 0; // Store discount percentage here

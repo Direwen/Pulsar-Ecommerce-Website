@@ -105,6 +105,14 @@ return [
         'controller' => 'controllers/ecommerce/order.php',
         'middleware' => [],
     ],
+    'cancel-order' => [
+        'controller' => 'controllers/admin/order_management/update.php',
+        'middleware' => [],
+    ],
+    'history' => [
+        'controller' => 'controllers/ecommerce/history.php',
+        'middleware' => [],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],
@@ -136,6 +144,11 @@ return [
     ],
     'api/discount' => [
         'controller' => 'controllers/api/validate_discount.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/order-details' => [
+        'controller' => 'controllers/api/get_order.php',
         'middleware' => [],
         'isApi' => true
     ],
