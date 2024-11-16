@@ -19,6 +19,7 @@ class SessionService
     {
         $_SESSION['user_id'] = $sessionData['id'];
         $_SESSION['user_email'] = $sessionData['email'];
+        $_SESSION['user_role'] = $sessionData['role'];
         $_SESSION['is_active'] = true;
     }
 

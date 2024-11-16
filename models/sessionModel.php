@@ -60,7 +60,7 @@ class SessionModel extends BaseModel
     public function getUserByToken($token): ?array
     {
         $session = $this->db->fetch(
-            "SELECT u.id, u.email FROM " . self::getTableName() . " s JOIN users u ON s." . self::getColumnUserId() . " = u.id WHERE s." . self::getColumnToken() . " = :token",
+            "SELECT u.id, u.email, u.role FROM " . self::getTableName() . " s JOIN users u ON s." . self::getColumnUserId() . " = u.id WHERE s." . self::getColumnToken() . " = :token",
             [
                 ':token' => $token
             ]
