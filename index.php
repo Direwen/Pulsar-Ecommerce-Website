@@ -8,6 +8,7 @@ require_once './services/authService.php';
 require_once './services/tokenService.php';
 require_once './services/sessionService.php';
 require_once './services/otpService.php';
+require_once './services/browsingHistoryService.php';
 
 require_once './utils/database.php';
 require_once './utils/errorHandler.php';
@@ -80,6 +81,7 @@ $otp_service = new OtpService();
 $token_service = new TokenService($session_model);
 $session_service = new SessionService($token_service);
 $auth_service = new AuthService($mail_service, $otp_service, $session_service, $token_service, $user_model);
+$browsing_history_service = new BrowsingHistoryService();
 
 // ErrorHandler::handle(fn () => $otp_service->clearOtpSession());
 
