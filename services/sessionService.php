@@ -27,6 +27,7 @@ class SessionService
     {
         unset($_SESSION['user_id']);
         unset($_SESSION['user_email']);
+        unset($_SESSION['user_role']);
         $_SESSION['is_active'] = false;
     }
 

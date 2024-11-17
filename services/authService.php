@@ -38,12 +38,8 @@ class AuthService
 
     public function verifyOtp($userOtp)
     {
-        // $result = $this->otpService->validateOtp($userOtp);
 
         if ($this->otpService->validateOtp($userOtp)) {
-
-            unset($_SESSION["else"]);
-            $_SESSION["if"] = "triggered";
 
             $email = $this->otpService->getStoredEmail();
             $userId = $this->getUserId($email);
@@ -58,9 +54,6 @@ class AuthService
             return true;
         }
 
-        unset($_SESSION["if"]);
-        $_SESSION["else"] = "triggered";
-
         return false;
     }
 
@@ -74,7 +67,13 @@ class AuthService
 
     public function getUserId($email)
     {
-        $user = $this->userModel->getOrCreate([$this->userModel->getColumnEmail() => $email], [$this->userModel->getColumnEmail() => $email]);
+        $user = $this->userModel->getOrCreate(
+            [
+                $this->userModel->getColumnEmail() => $email,
+                $this->userModel->getColumnRole() => 'user'
+            ], 
+            [$this->userModel->getColumnEmail() => $email]
+        );
         return $user['id'];
     }
 }

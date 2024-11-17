@@ -5,7 +5,7 @@ class OtpService
     private const SESSION_OTP = 'otp';
     private const SESSION_OTP_EMAIL = 'otp_email';
     private const SESSION_OTP_EXPIRATION = 'otp_expiration';
-    private const OTP_EXPIRATION_TIME = 3600; // 1 hour
+    private const OTP_EXPIRATION_TIME = 60 * 5; // 5 mins
 
     public function generateOtp()
     {

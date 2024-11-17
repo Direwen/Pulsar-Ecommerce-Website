@@ -70,7 +70,7 @@ class UserModel extends BaseModel
             'email' => isset($data['email']) ? strtolower(trim($data['email'])) : null,
             'last_logged_in_at' => $data['last_logged_in_at'] ?? null,
             'is_active' => $data['is_active'] ?? true,
-            'role' => $data['role'] ?? 'user'
+            'role' => isset($data['role']) ? $data['role'] : null
         ];
 
         // Filter out null values to keep only the provided attributes

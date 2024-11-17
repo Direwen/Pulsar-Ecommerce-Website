@@ -18,6 +18,10 @@ if (isset($_SESSION['message'])) {
     }
 
     require("./views/components/message.php");
+
+    // Clear the session variable for subsequent requests
+    unset($_SESSION['message']);
+    unset($_SESSION['message-state']);
 }
 
 require("./views/components/footer.php");

@@ -98,14 +98,11 @@ if (is_array($category)) {
                 <section class="relative text-sm">
                     <span class="mr-4">Sort By:</span>
                     <div class="relative inline-block">
-                        <button id="sort-toggle"
-                            class="px-2 border shadow rounded interactive"
-                            onclick="toggleSortOptions()">
+                        <button id="sort-toggle" class="px-2 border shadow rounded interactive" onclick="toggleSortOptions()">
                             <span id="current-sort"><?= !empty($sort_input) ? ucfirst($sort_input) : 'Default' ?></span>
                             <span class="material-symbols-outlined ml-2">expand_more</span>
                         </button>
-                        <div id="sort-options"
-                            class="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-20 hidden">
+                        <div id="sort-options" class="absolute right-0 mt-2 w-48 bg-white border rounded shadow z-20 hidden">
                             <a href="?<?= !empty($search_input) ? 'search=' . urlencode($search_input) . '&' : '' ?><?= !empty($category_input) ? 'category=' . urlencode($category_input) : '' ?>"
                                 class="block px-2 py-1 text-light-dark bg-primary hover:bg-secondary interactive">Default</a>
                             <a href="?<?= !empty($search_input) ? 'search=' . urlencode($search_input) . '&' : '' ?><?= !empty($category_input) ? 'category=' . urlencode($category_input) . '&' : '' ?>sort=new"
