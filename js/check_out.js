@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const countrySelector = document.querySelector('select[name="delivery[country]"]');
-    if (countrySelector.value) {
+    if (countrySelector && countrySelector.value) {
         updateShippingAndTotal(countrySelector);
     }
 });

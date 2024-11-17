@@ -76,4 +76,45 @@ class UserModel extends BaseModel
         // Filter out null values to keep only the provided attributes
         return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
+
+    public function getTotalActiveUsers()
+    {
+        $total_active_users = [];
+        $page = 0;
+        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+
+            aggregates: [
+                ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "total_active_users", "table" => $this->getTableName()],
+            ],
+            conditions: [
+                [
+                    'attribute' => $this->getColumnIsActive(),
+                    'operator' => "=",
+                    'value' => "1",
+                ]
+            ],
+            page: ++$page
+        ));
+        $total_active_users[] = $fetched_orders["records"][0]["total_active_users"];
+
+        while ($fetched_orders["hasMore"]) {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+
+                aggregates: [
+                    ["column" => $this->getColumnId(), "function" => "SUM", "alias" => "total_active_users", "table" => $this->getTableName()],
+                ],
+                conditions: [
+                    [
+                        'attribute' => $this->getColumnIsActive(),
+                        'operator' => "=",
+                        'value' => "1",
+                    ]
+                ],
+                page: ++$page
+            ));
+            $total_active_users[] = $fetched_orders["records"][0]["total_active_users"];
+        }
+
+        return array_sum($total_active_users);
+    }
 }

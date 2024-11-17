@@ -273,4 +273,244 @@ class OrderModel extends BaseModel
         return false; // Invalid status transition
     }
 
+    public function getTotalSales()
+    {
+        $total_sales = [];
+        $page = 0;
+        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+            aggregates: [
+                ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "total_sales", "table" => $this->getTableName()],
+            ],
+            conditions: [
+                [
+                    'attribute' => $this->getColumnStatus(),
+                    'operator' => "<>",
+                    'value' => "cancelled",
+                ]
+            ],
+            page: ++$page
+        ));
+        $total_sales[] = $fetched_orders["records"][0]["total_sales"];
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                aggregates: [
+                    ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "total_sales", "table" => $this->getTableName()],
+                ],
+                conditions: [
+                    [
+                        'attribute' => $this->getColumnStatus(),
+                        'operator' => "<>",
+                        'value' => "cancelled",
+                    ]
+                ],
+                page: ++$page
+            ));
+            $total_sales[] = $fetched_orders["records"][0]["total_sales"];
+        } while ($fetched_orders["hasMore"]);
+
+        return array_sum($total_sales);
+    }
+
+    public function getTotalOrders()
+    {
+        $total_orders = [];
+        $page = 0;
+        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+            aggregates: [
+                ["column" => $this->getColumnTotalPrice(), "function" => "COUNT", "alias" => "orders_count", "table" => $this->getTableName()],
+            ],
+            page: ++$page
+        ));
+        $total_orders[] = $fetched_orders["records"][0]["orders_count"];
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                aggregates: [
+                    ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "orders_count", "table" => $this->getTableName()],
+                ],
+                page: ++$page
+            ));
+            $total_orders[] = $fetched_orders["records"][0]["orders_count"];
+        } while ($fetched_orders["hasMore"]);
+
+        return array_sum($total_orders);
+    }
+
+    public function getPendingOrdersCount()
+    {
+        $pending_order_counts = [];
+        $page = 0;
+        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+            aggregates: [
+                ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "pending_count", "table" => $this->getTableName()],
+            ],
+            conditions: [
+                [
+                    'attribute' => $this->getColumnStatus(),
+                    'operator' => "=",
+                    'value' => "pending",
+                ]
+            ],
+            page: ++$page
+        ));
+        $pending_order_counts[] = $fetched_orders["records"][0]["pending_count"];
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                aggregates: [
+                    ["column" => $this->getColumnId(), "function" => "SUM", "alias" => "pending_count", "table" => $this->getTableName()],
+                ],
+                conditions: [
+                    [
+                        'attribute' => $this->getColumnStatus(),
+                        'operator' => "=",
+                        'value' => "pending",
+                    ]
+                ],
+                page: ++$page
+            ));
+            $pending_order_counts[] = $fetched_orders["records"][0]["pending_count"];
+        } while ($fetched_orders["hasMore"]);
+
+        return array_sum($pending_order_counts);
+    }
+
+    public function getTotalRefunds()
+    {
+        $total_refunds = [];
+        $page = 0;
+        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+            aggregates: [
+                ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "total_refunds", "table" => $this->getTableName()],
+            ],
+            conditions: [
+                [
+                    'attribute' => $this->getColumnStatus(),
+                    'operator' => "=",
+                    'value' => "cancelled",
+                ]
+            ],
+            page: ++$page
+        ));
+        $total_refunds[] = $fetched_orders["records"][0]["total_refunds"];
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                aggregates: [
+                    ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "total_refunds", "table" => $this->getTableName()],
+                ],
+                conditions: [
+                    [
+                        'attribute' => $this->getColumnStatus(),
+                        'operator' => "=",
+                        'value' => "pending",
+                    ]
+                ],
+                page: ++$page
+            ));
+            $total_refunds[] = $fetched_orders["records"][0]["total_refunds"];
+        } while ($fetched_orders["hasMore"]);
+
+        return array_sum($total_refunds);
+    }
+
+    public function getRevenueTrend()
+    {
+        $data = [];
+        $page = 0;
+        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+            select: [
+                ["column" => $this->getColumnCreatedAt()]
+            ],
+            aggregates: [
+                [
+                    "column" => $this->getColumnTotalPrice(),
+                    "function" => "SUM",
+                    "alias" => "total_price",
+                    "table" => $this->getTableName()
+                ],
+            ],
+            sortField: $this->getColumnCreatedAt(),
+            groupBy: $this->getColumnCreatedAt(),
+            conditions: [
+                [
+                    'attribute' => $this->getColumnCreatedAt(),
+                    'operator' => '>=',
+                    'value' => date('Y-m-d H:i:s', strtotime('-30 days')),
+                ]
+            ],
+            page: ++$page
+        ));
+        $data = array_merge($fetched_orders["records"], $data);
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                select: [
+                    ["column" => $this->getColumnCreatedAt()]
+                ],
+                aggregates: [
+                    [
+                        "column" => $this->getColumnTotalPrice(),
+                        "function" => "SUM",
+                        "alias" => "total_price",
+                        "table" => $this->getTableName()
+                    ],
+                ],
+                sortField: $this->getColumnCreatedAt(),
+                groupBy: $this->getColumnCreatedAt(),
+                conditions: [
+                    [
+                        'attribute' => $this->getColumnCreatedAt(),
+                        'operator' => '>=',
+                        'value' => date('Y-m-d H:i:s', strtotime('-30 days')),
+                    ]
+                ],
+                page: ++$page
+            ));
+            $data = array_merge($fetched_orders["records"], $data);
+        } while ($fetched_orders["hasMore"]);
+
+        return $data;
+    }
+
+    public function getOrderStatus()
+    {
+        $data = [];
+        $page = 0;
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                select: [
+                    ["column" => $this->getColumnStatus()]
+                ],
+                aggregates: [
+                    [
+                        "column" => $this->getColumnStatus(),
+                        "function" => "COUNT",
+                        "alias" => "status_count",
+                        "table" => $this->getTableName()
+                    ],
+                ],
+                sortField: "status_count",
+                groupBy: $this->getColumnStatus(),
+                page: ++$page
+            ));
+
+            foreach ($fetched_orders["records"] as $record) {
+                $status = $record["status"];
+                $count = $record["status_count"];
+
+                if (isset($data[$status])) {
+                    $data[$status] += $count; // Aggregate the count
+                } else {
+                    $data[$status] = $count; // Initialize if not set
+                }
+            }
+        } while ($fetched_orders["hasMore"]);
+
+        // Convert the result back to the desired array format
+        return array_map(fn($status, $count) => ["status" => $status, "status_count" => $count], array_keys($data), $data);
+    }
+
 }

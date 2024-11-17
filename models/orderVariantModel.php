@@ -66,5 +66,97 @@ class OrderVariantModel extends BaseModel
         // Filter out null values if needed
         return $null_filter ? array_filter($formattedData, fn($value) => $value !== null) : $formattedData;
     }
+
+    public function getTotalProductsSold()
+    {
+        global $order_model;
+
+        $sold_out_products_counts = [];
+        $page = 0;
+
+        do {
+            $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
+                aggregates: [
+                    ["column" => $this->getColumnQuantity(), "function" => "SUM", "alias" => "products_count", "table" => $this->getTableName()],
+                ],
+                joins: [
+                    [
+                        'type' => "INNER JOIN",
+                        'table' => $order_model->getTableName(),
+                        'on' => "order_variants.order_id = orders.id"
+                    ]
+                ],
+                conditions: [
+                    [
+                        'attribute' => $order_model->getTableName() . '.' . $order_model->getColumnStatus(),
+                        'operator' => "<>",
+                        'value' => "cancelled",
+                    ]
+                ],
+                page: ++$page
+            ));
+            $sold_out_products_counts[] = $fetched_orders["records"][0]["products_count"];
+        } while ($fetched_orders["hasMore"]);
+
+        return array_sum($sold_out_products_counts);
+    }
+
+    public function getTopSellingProducts()
+    {
+        global $order_model, $product_model, $variant_model;
+
+        $products = [];
+        $page = 0;
+
+        do {
+            $fetched_records = ErrorHandler::handle(fn() => $this->getAll(
+                select: [
+                    ["column" => $product_model->getColumnName(), "alias" => "product_name", "table" => $product_model->getTableName()]
+                ],
+                aggregates: [
+                    ["column" => $this->getColumnQuantity(), "function" => "SUM", "alias" => "total_sold", "table" => $this->getTableName()],
+                ],
+                joins: [
+                    [
+                        'type' => "INNER JOIN",
+                        'table' => $order_model->getTableName(),
+                        'on' => "order_variants.order_id = orders.id"
+                    ],
+                    [
+                        'type' => "INNER JOIN",
+                        'table' => $variant_model->getTableName(),
+                        'on' => "order_variants.variant_id = variants.id"
+                    ],
+                    [
+                        'type' => "INNER JOIN",
+                        'table' => $product_model->getTableName(),
+                        'on' => "variants.product_id = products.id"
+                    ],
+                ],
+                groupBy: $product_model->getTableName() . "." . $product_model->getColumnId(),
+                conditions: [],
+                page: ++$page
+            ));
+
+            foreach ($fetched_records["records"] as $record) {
+                $productName = $record["product_name"];
+                $totalSold = $record["total_sold"];
+
+                if (isset($products[$productName])) {
+                    $products[$productName] += $totalSold; // Aggregate the total sold
+                } else {
+                    $products[$productName] = $totalSold; // Initialize if not set
+                }
+            }
+        } while ($fetched_records["hasMore"]);
+
+        // Convert the result to the desired array format
+        return array_map(
+            fn($productName, $totalSold) => ["product_name" => $productName, "total_sold" => $totalSold],
+            array_keys($products),
+            $products
+        );
+    }
+
 }
 ?>

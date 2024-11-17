@@ -2,7 +2,7 @@ var messageBox = document.getElementById("message-box");
 
 // Hide the message box after 5 seconds
 setTimeout(() => {
-    messageBox.classList.add('hidden');
+    if (messageBox) messageBox.classList.add('hidden');
 }, 5000); // 5000 milliseconds = 5 seconds
 
 function hideMessageNoti() {

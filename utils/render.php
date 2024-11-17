@@ -48,4 +48,8 @@ function renderSpecsToggleBox(String $title, $details, String $data_toggle_attr,
 {
     include("./views/components/specification_toggle_box.php");
 }
+
+function renderDataSummaryCard(String $title, $value, $show_dollar_sign = false) {
+    include("./views/components/data_summary_card.php");
+}
 ?>

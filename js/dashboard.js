@@ -1,3 +1,8 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const searchAttribute = document.getElementById('search_attribute');
+    if (searchAttribute && searchAttribute.value) updateInputField();
+});
+
 function updateInputField() {
     const searchAttribute = document.getElementById('search_attribute');
     const selectedOption = searchAttribute.options[searchAttribute.selectedIndex];
@@ -15,14 +20,14 @@ function updateInputField() {
         inputFieldHTML = `
             <input type="date" id="search_input" name="record_search" 
                 placeholder="Select date..."
-                class="w-full p-3 pr-28 border-b-2 border-light-dark shadow-b focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
+                class="w-full p-3 pr-28 border shadow focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
         `;
     } else {
         // For other data types, show a text input field
         inputFieldHTML = `
             <input type="text" id="search_input" name="record_search" 
                 placeholder="Search records..."
-                class="w-full p-3 border-b-2 border-light-dark shadow-b focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
+                class="w-full p-3 pr-28 border shadow rounded focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2"  />
         `;
     }
 
@@ -43,13 +48,6 @@ function updateInputField() {
     // Append input field and buttons to the container
     searchInputContainer.innerHTML = inputFieldHTML + buttonsHTML;
 }
-
-
-// function toggleImageInput() {
-//     const checkbox = document.getElementById('changeImageCheckbox');
-//     const imageInput = document.getElementById('newImageInput');
-//     imageInput.classList.toggle('hidden', !checkbox.checked); // Show input if checkbox is checked
-// }
 
 function toggleImageInput(checkbox) {
     // Find the corresponding file input using the data-toggle attribute

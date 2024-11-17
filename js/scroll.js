@@ -6,6 +6,8 @@ function applyClickAndDragScroll(containerSelector) {
     let scrollLeft;
     let animationFrameId;
     let lastScrollLeft; // Store the last scrollLeft value
+
+    if (!scrollContainer) return;
   
     scrollContainer.addEventListener('mousedown', (e) => {
       isDown = true;
@@ -46,5 +48,5 @@ function applyClickAndDragScroll(containerSelector) {
     });
   }
   
-  // Apply the function
-  applyClickAndDragScroll('#scroll-container');
+// Apply the function
+applyClickAndDragScroll('#scroll-container');

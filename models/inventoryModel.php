@@ -90,7 +90,7 @@ class InventoryModel extends BaseModel
         // Validate 'stock_quantity' - optional, must be a non-negative integer
         if (isset($post_data[$this->getColumnStockQuantity()])) {
             if (!is_numeric($post_data[$this->getColumnStockQuantity()]) || (int) $post_data[$this->getColumnStockQuantity()] < 0) {
-                $errors[] = "Stock quantity must be a non-negative integer.";
+                $errors[] = "Stock quantity must not be a non-negative integer.";
             }
         }
 

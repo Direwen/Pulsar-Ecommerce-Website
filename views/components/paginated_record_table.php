@@ -22,6 +22,10 @@ foreach ($metadata as $attr_title => $arr) {
     }
 }
 
+$search_attribute = isset($_GET['search_attribute']) ? $_GET['search_attribute'] : null;
+$record_search = isset($_GET['record_search']) ? $_GET['record_search'] : null;
+$record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record_search_end_date'] : null;
+
 ?>
 
 
@@ -34,11 +38,15 @@ foreach ($metadata as $attr_title => $arr) {
 
             <!-- Dropdown for selecting column to search -->
             <select name="search_attribute" id="search_attribute" class="p-3 border rounded focus:outline-accent mb-2 md:mb-0 w-full md:w-2/12" onchange="updateInputField()">
+                <option value="" <?= empty($search_attribute) ? 'selected' : '' ?>  disabled>Search By</option>
                 <?php foreach ($metadata as $attr_title => $arr): ?>
                     <!-- Skip 'id' field -->
                     <?php if (in_array($attr_title, $filtered_metadata)): ?>
-                        <option value="<?= htmlspecialchars($arr['sql_name']) ?>" data-type="<?= htmlspecialchars($arr['type']) ?>"
-                            <?= isset($_GET['search_attribute']) && $_GET['search_attribute'] === $attr_title ? 'selected' : '' ?>>
+                        <option 
+                            value="<?= htmlspecialchars($arr['sql_name']) ?>" 
+                            data-type="<?= htmlspecialchars($arr['type']) ?>"
+                            <?= (htmlspecialchars($search_attribute) == htmlspecialchars($arr['sql_name'])) ? 'selected' : '' ?>
+                        >
                             <?= ucwords(str_replace('_', ' ', $attr_title)) ?>
                         </option>
                     <?php endif; ?>
@@ -54,7 +62,7 @@ foreach ($metadata as $attr_title => $arr) {
                     name="record_search"
                     value="<?= isset($_GET['record_search']) ? htmlspecialchars($_GET['record_search']) : '' ?>"
                     placeholder="Search records..."
-                    class="w-full p-3 pr-28 border-b-2 border-light-dark shadow-b focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" 
+                    class="w-full p-3 pr-28 border shadow rounded focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" 
                 />
 
                 <section class="absolute top-0 right-0 w-fit flex items-stretch">
@@ -237,7 +245,7 @@ foreach ($metadata as $attr_title => $arr) {
         <?php if ($hasMore): ?>
             <a href="?page=<?= $currentPage + 1 ?>" class="block bg-accent text-white py-3 text-center rounded interactive">Next</a>
         <?php else: ?>
-            <span class="block bg-light-dark text-white py-3 text-center rounded cursor-not-allowed">Next</span>
+            <span class="block bg-light-gray text-light-dark py-3 text-center rounded cursor-not-allowed">Next</span>
         <?php endif; ?>
     </div>
 
@@ -246,7 +254,7 @@ foreach ($metadata as $attr_title => $arr) {
         <?php if ($currentPage > 1): ?>
             <a href="?page=<?= $currentPage - 1 ?>" class="bg-accent text-white py-2 px-4 rounded interactive">Previous</a>
         <?php else: ?>
-            <span class="bg-light-dark text-white py-2 px-4 rounded cursor-not-allowed">Previous</span>
+            <span class="bg-light-gray text-light-dark py-2 px-4 rounded cursor-not-allowed">Previous</span>
         <?php endif; ?>
 
         <!-- Page Numbers -->
@@ -255,19 +263,19 @@ foreach ($metadata as $attr_title => $arr) {
             if ($totalPages <= 4) {
                 for ($i = 1; $i <= $totalPages; $i++) {
                     echo $i == $currentPage
-                        ? "<span class='bg-accent text-white py-2 px-4 rounded'>{$i}</span>"
-                        : "<a href='?page={$i}' class='shadow hover:bg-light-gray text-gray-800 py-2 px-4 rounded interactive'>{$i}</a>";
+                        ? "<span class='bg-accent text-primary py-2 px-4 rounded'>{$i}</span>"
+                        : "<a href='?page={$i}' class='shadow hover:bg-light-gray text-light-dark py-2 px-4 rounded interactive'>{$i}</a>";
                 }
             } else {
                 if ($currentPage > 2) {
-                    echo "<a href='?page=1' class='shadow hover:bg-light-gray text-gray-800 py-2 px-4 rounded interactive'>1</a>";
-                    echo "<a href='?page=2' class='shadow hover:bg-light-gray text-gray-800 py-2 px-4 rounded interactive'>2</a>";
+                    echo "<a href='?page=1' class='shadow hover:bg-light-gray text-light-dark py-2 px-4 rounded interactive'>1</a>";
+                    echo "<a href='?page=2' class='shadow hover:bg-light-gray text-light-dark py-2 px-4 rounded interactive'>2</a>";
                     echo "<span class='py-2 px-4'>...</span>";
                 }
                 echo "<span class='bg-accent text-white py-2 px-4 rounded'>{$currentPage}</span>";
                 if ($currentPage < $totalPages) {
                     echo "<span class='py-2 px-4'>...</span>";
-                    echo "<a href='?page={$totalPages}' class='shadow hover:bg-light-gray text-gray-800 py-2 px-4 rounded interactive'>{$totalPages}</a>";
+                    echo "<a href='?page={$totalPages}' class='shadow hover:bg-light-gray text-light-dark py-2 px-4 rounded interactive'>{$totalPages}</a>";
                 }
             }
             ?>
@@ -277,7 +285,7 @@ foreach ($metadata as $attr_title => $arr) {
         <?php if ($hasMore): ?>
             <a href="?page=<?= $currentPage + 1 ?>" class="bg-accent text-white py-2 px-4 rounded interactive">Next</a>
         <?php else: ?>
-            <span class="bg-light-dark text-white py-2 px-4 rounded cursor-not-allowed">Next</span>
+            <span class="bg-light-gray text-light-dark py-2 px-4 rounded cursor-not-allowed">Next</span>
         <?php endif; ?>
     </div>
 

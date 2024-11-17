@@ -1,5 +1,5 @@
 <div class="w-full md:w-10/12 mx-auto flex justify-between items-center px-2 py-3">
-    <span class="font-extrabold text-lg  sm:text-xl uppercase tracking-wide"><?= $title_name; ?></span>
+    <span class="font-semibold text-xl sm:text-2xl lg:text-3xl xl:text-4xl uppercase tracking-tighter"><?= $title_name; ?></span>
 
     <?php if($create_btn_desc): ?>
         <span 

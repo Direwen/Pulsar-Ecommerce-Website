@@ -152,6 +152,21 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/revenue-trend' => [
+        'controller' => 'controllers/api/get_revenue_trend.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/order-status' => [
+        'controller' => 'controllers/api/get_order_status_count.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/top-selling-products' => [
+        'controller' => 'controllers/api/get_top_selling_products.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'test' => [
         'controller' => 'controllers/test.php',
         'middleware' => []

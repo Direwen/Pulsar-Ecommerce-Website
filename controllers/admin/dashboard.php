@@ -96,7 +96,8 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
         case 'category-management':
             $db_data = ErrorHandler::handle(fn() => $category_model->getAll(
-                page: $page
+                page: $page,
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
             ));
 
             // Render the create button
@@ -155,7 +156,8 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                         'table' => $category_model->getTableName(),
                         'on' => "products.category_id = categories.id",
                     ]
-                ]
+                ],
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
             ));
 
             renderDashboardHeader(
@@ -208,7 +210,8 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                         'table' => $product_model->getTableName(),
                         'on' => "variants.product_id = products.id",
                     ]
-                ]
+                ],
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
             ));
             
             renderDashboardHeader(
@@ -260,7 +263,8 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                         'table' => $discount_model->getTableName(),
                         'on' => "orders.used_discount_id = discounts.id",
                     ]
-                ]
+                ],
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
             ));
             
             renderDashboardHeader(
@@ -306,7 +310,14 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             break;
 
         case 'analytics':
-            echo "Analytics dashboard";
+
+            $total_sales = $order_model->getTotalSales();
+            $total_orders = $order_model->getTotalOrders();
+            $pending_orders_count = $order_model->getPendingOrdersCount();
+            $total_products_sold = $order_variant_model->getTotalProductsSold();
+            $total_refunds = $order_model->getTotalRefunds();
+            $total_active_users = $user_model->getTotalActiveUsers();
+            require ('./views/admin/data_analytics.view.php');
             break;
 
         default:
