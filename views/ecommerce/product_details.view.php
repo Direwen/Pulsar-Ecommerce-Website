@@ -2,7 +2,7 @@
 
     <div class="flex flex-col xl:flex-row xl:items-stretch">
         <!-- Left Side to show varinat img and img_for_ads for the selected variant -->
-        <div class="w-full xl:w-8/12 bg-secondary xl:self-stretch">
+        <div class="pt-24 xl:pt-0 w-full xl:w-8/12 bg-secondary xl:self-stretch">
             <!-- Main Swiper Slider -->
             <div class="swiper main-slider w-full xl:h-[35rem]">
                 <div class="swiper-wrapper">

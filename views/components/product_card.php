@@ -13,7 +13,10 @@
             </span>
             
             <!-- Add to cart icon -->
-            <button class="absolute bottom-4 right-4 bg-primary rounded-full px-2 py-1 shadow text-light-dark interactive z-10 hover:bg-accent hover:text-secondary">
+            <button
+                onclick="event.stopPropagation(); event.preventDefault(); addToCartShortcut(<?= $product['variant_id']; ?>, <?= $root_directory; ?>)"
+                class="absolute bottom-4 right-4 bg-primary rounded-full px-2 py-1 shadow text-light-dark interactive z-10 hover:bg-accent hover:text-secondary"
+            >
                 <span class="material-symbols-outlined">shopping_bag</span>
             </button>
         </div>

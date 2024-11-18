@@ -48,6 +48,7 @@ if (is_array($category)) {
             ["column" => $product_model->getColumnId()],
             ["column" => $product_model->getColumnName()],
             ["column" => $product_model->getColumnImg()],
+            ["column" => $variant_model->getColumnId(), "alias" => "variant_id", "table" => $variant_model->getTableName()]
         ],
         aggregates: [
             ["column" => $variant_model->getColumnUnitPrice(), "function" => "MIN", "alias" => "min_price", "table" => $variant_model->getTableName()],
@@ -72,7 +73,6 @@ if (is_array($category)) {
         sortDirection: $sort_dir
 
     ));
-    ;
 
     $products = $fetched_overview_products_data["records"];
 } else {

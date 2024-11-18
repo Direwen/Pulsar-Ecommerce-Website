@@ -4,18 +4,24 @@ function addToCart(btn) {
     // const quantityDisplay = document.getElementById("quantity-display");
     const quantityDisplayElement = document.getElementById('product-quantity-display');
 
-    console.log("add to cart");
-    console.log(quantityDisplayElement);
-
     axios.post(btn.getAttribute('cart-api'), {id: variantId.textContent, quantity: quantityDisplayElement.textContent})
         .then(response => {
-            console.log(response);
             openShoppingCart(btn.getAttribute('root'));
         })
         .catch(error => {
             console.log(error);
         });
 
+}
+
+function addToCartShortcut(id, rootDirectory) {
+    axios.post(rootDirectory + "api/cart", {id: id, quantity: 1})
+    .then(response => {
+        openShoppingCart(rootDirectory);
+    })
+    .catch(error => {
+        console.log(error);
+    });
 }
 
 // Increment quantity function
