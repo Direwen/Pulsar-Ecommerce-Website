@@ -22,6 +22,13 @@ function selectVariant(selector, text_details) {
         addToCartButton.style.display = "none";  // Hide "Add to Cart" button
         soldOutButton.style.display = "block";  // Show "Sold Out" button
     }
+
+    var parentContainer = document.getElementById("variants-selections-container"); // Get the container by class
+    var previouslySelected = parentContainer.querySelector(".border-accent"); // Scope query to container
+    if (previouslySelected) {
+        previouslySelected.classList.remove("border-accent");
+    }
+    selector.classList.add("border-accent");
 }
 
 // Set the initial quantity

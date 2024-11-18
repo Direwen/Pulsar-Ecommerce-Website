@@ -78,9 +78,9 @@
                 </section>
 
                 <!-- Variant main images to select -->
-                <section class="flex justify-start items-center gap-2">
-                    <?php foreach ($variants as $variant): ?>
-                        <section class="bg-secondary border shadow cursor-pointer interactive"
+                <section id="variants-selections-container" class="flex justify-start items-center gap-2 flex-wrap">
+                    <?php foreach ($variants as $index => $variant): ?>
+                        <section class="bg-secondary border-2 shadow cursor-pointer interactive <?= ($index == 0 ) ? 'border-accent' : '' ?>"
                             onclick="selectVariant(this, {'price': <?= $variant['unit_price'] ?>, 'type': '<?= $variant['type'] ?>', 'name': '<?= $variant['name'] ?>', 'stock_quantity': <?= $variant['stock_quantity'] ?>, 'id': <?= $variant['id'] ?>})">
                             <img src="<?= $root_directory . "assets/products/" . $variant["img"] ?>" alt="img"
                                 class="w-20 h-20">
