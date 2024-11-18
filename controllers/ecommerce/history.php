@@ -65,17 +65,18 @@ if ($status_search_for == 'delivered') {
 
 
 $orders = [];
-$page = 0;
-$fetched_overview_orders_data = ErrorHandler::handle(fn() => $order_model->getAll(
-    page: $page++,
-    conditions: $conditions
-));
-$orders = array_merge($orders, $fetched_overview_orders_data["records"]);
-while ($fetched_overview_orders_data["hasMore"]) {
+$page = 1; // Start at page 1
 
-    $fetched_overview_orders_data = ErrorHandler::handle(fn() => $order_model->getAll(page: $page++, conditions: $conditions));
+do {
+    $fetched_overview_orders_data = ErrorHandler::handle(fn() => $order_model->getAll(
+        page: $page++,
+        conditions: $conditions,
+        sortField: $order_model->getColumnCreatedAt(),
+        sortDirection: 'DESC'
+    ));
     $orders = array_merge($orders, $fetched_overview_orders_data["records"]);
-}
+} while ($fetched_overview_orders_data["hasMore"]);
+
 
 ?>
 
@@ -92,7 +93,7 @@ while ($fetched_overview_orders_data["hasMore"]) {
                 <span class="material-symbols-outlined text-2xl">tune</span>
                 <span class="text-sm">Show Filters</span>
             </section>
-            <section class="text-sm border rounded shadow p-1 text-dark w-fit flex gap-2 flex-wrap">
+            <section class="text-sm border rounded shadow p-1 text-dark w-fit flex justify-center items-center gap-2 flex-wrap">
                 <a href="?status=all"
                     class="px-3 py-1 rounded interactive <?= $status_search_for == 'all' ? 'bg-accent text-secondary' : 'bg-primary ' ?>">All
                     Orders</a>
@@ -149,7 +150,7 @@ while ($fetched_overview_orders_data["hasMore"]) {
                     </p>
                     <p class="text-sm text-light-dark">
                         <span class="font-medium">Order At:</span>
-                        <?= date('F d, Y', strtotime($order['created_at'])); ?>
+                        <?= date('F d, Y h:i A', strtotime($order['created_at'])); ?>
                     </p>
                 </div>
 

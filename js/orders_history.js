@@ -52,7 +52,7 @@ function viewOrderDetails(btn) {
                         <p class="text-light-dark">${order.email}</p>
                         <p class="text-light-dark">${order.phone}</p>
                         <p class="text-light-dark">${order.address}, ${order.apartment}, ${order.postal_code}, ${order.city}, ${order.country}</p>
-                        <p class="text-light-dark">${order.company || 'N/A'}</p>
+                        <p class="text-light-dark">${order.company || ''}</p>
                     </div>
 
                     <div class="mt-6">
