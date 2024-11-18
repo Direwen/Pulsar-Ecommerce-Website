@@ -1,4 +1,4 @@
-<div id="navbar" class="w-8/12 min-h-screen overflow-y-scroll bg-white px-2 py-5 flex flex-col gap-2 justify-start items-start shadow-inner hidden z-50">
+<div id="navbar" class="hide-scrollbar w-8/12 min-h-screen overflow-y-scroll bg-white px-2 py-5 flex flex-col gap-2 justify-start items-start shadow-inner hidden z-50">
 
     <section class="flex justify-end items-center w-full py-5">
         <span class="material-symbols-outlined interactive text-4xl" onclick="forceOverlayToClose()">close</span>
@@ -24,12 +24,14 @@
     <hr>
     
     <?php if ($auth_service->getAuthUser()): ?>
-        <a href="#" class="w-full cursor-pointer">Order History</a> <!-- Link to Pulsar By You -->
-        <a href="#" class="w-full cursor-pointer">Dashboard</a> <!-- Link to Pulsar By You -->
+        <a href="<?= $root_directory . 'history' ?>" class="w-full cursor-pointer">Order History</a> <!-- Link to Pulsar By You -->
+        <?php if ($_SESSION["user_role"] != "user"): ?>
+            <a href="<?= $root_directory . 'admin/dashboard' ?>" class="w-full cursor-pointer">Dashboard</a> <!-- Link to Pulsar By You -->
+        <?php endif; ?>
         <a href="#" class="w-full cursor-pointer">Disable Account</a> <!-- Link to Pulsar By You -->
-        <a href="#" class="w-full cursor-pointer">Logout</a> <!-- Link to Pulsar By You -->
+        <a href="<?= $root_directory . 'logout' ?>" class="w-full cursor-pointer">Logout</a> <!-- Link to Pulsar By You -->
     <?php else: ?>
-        <a href="#" class="w-full cursor-pointer">Login</a> <!-- Link to Pulsar By You -->
+        <a href="<?= $root_directory . 'login' ?>" class="w-full cursor-pointer">Login</a> <!-- Link to Pulsar By You -->
     <?php endif; ?>
     
 </div>
