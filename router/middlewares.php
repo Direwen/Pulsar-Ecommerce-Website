@@ -47,3 +47,11 @@ function checkoutMiddleware()
         exit();
     }
 }
+
+function recentOrderMiddleware()
+{
+    if (!isset($_SESSION["recent_order"]) || !$_SESSION["recent_order"] || !isset($_SESSION['recent_order_time']) || !(time() - $_SESSION['recent_order_time']) < (60 * 3)) { // 3 minutes
+        header("Location: ./");
+        exit();
+    }
+}

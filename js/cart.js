@@ -34,7 +34,6 @@ function incrementCartItemQuantity(rootDirectory, itemId, targetElement) {
 
     axios.post(rootDirectory + "api/cart", { id: itemId, quantity: newQuantity })
         .then(response => {
-            console.log(response);
             openShoppingCart(rootDirectory); // Re-render cart with updated quantity
         })
         .catch(error => {
@@ -58,7 +57,6 @@ function decrementCartItemQuantity(rootDirectory, itemId, targetElement) {
 
     axios.post(rootDirectory + "api/cart", { id: itemId, quantity: newQuantity })
         .then(response => {
-            console.log(response);
             openShoppingCart(rootDirectory); // Re-render cart with updated quantity
         })
         .catch(error => {

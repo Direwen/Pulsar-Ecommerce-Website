@@ -212,5 +212,11 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $us
 });
 
 // If we reach here, everything was successful
-header("Location: " . $_SERVER['HTTP_REFERER']);
+if ($result) {
+    $_SESSION["recent_order"] = true;
+    $_SESSION["recent_order_time"] = time();
+    header("Location: " . $root_directory . "thank-you");
+} else {
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+}
 exit();

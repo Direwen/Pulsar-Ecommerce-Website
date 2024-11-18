@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     (async function () {
         var trendContainer = document.getElementById('revenue-trend-chart');
         var root = trendContainer.getAttribute('root-directory');
-        console.log();
 
         var data = [];
         axios.get(root + "api/revenue-trend")
@@ -52,13 +51,11 @@ document.addEventListener("DOMContentLoaded", function () {
     (async function () {
         var chartContainer = document.getElementById('order-status-chart');
         var root = chartContainer.getAttribute('root-directory');
-        console.log();
 
         var data = [];
         axios.get(root + "api/order-status")
             .then(response => {
                 data = response.data.records;
-                console.log(data);
                 new Chart(
                     chartContainer,
                     {

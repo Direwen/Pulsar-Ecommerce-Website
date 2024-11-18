@@ -71,7 +71,6 @@ let currentDiscount = 0; // Store discount percentage here
 // Centralized function to calculate and display the total
 function calculateTotal() {
     const subtotalPriceDisplay = document.getElementById("sub-total");
-    console.log(subtotalPriceDisplay.textContent);
     const shippingFeeDisplay = document.getElementById("shipping-fee");
     const totalPriceDisplay = document.getElementById("total");
 

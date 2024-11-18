@@ -1,5 +1,4 @@
 function createProduct(submissionPath, extra_info) {
-    console.log(extra_info);
 
     // Create options for categories dynamically
     const categoryOptions = extra_info.categories.map(category =>
@@ -197,7 +196,6 @@ function createProduct(submissionPath, extra_info) {
 }
 
 function editProduct(recordId, submissionPath, categories, currentValues) {
-    console.log(currentValues);
 
     const categoryOptions = categories.map(category => {
         const isSelected = category.id === currentValues.categoryId;
@@ -469,7 +467,6 @@ document.querySelectorAll('.edit-product-button').forEach(button => {
 
         axios.get(apiForCategories)
             .then(response => {
-                console.log(response);
                 editProduct(recordId, submissionPath, response.data.categories, productDetails);
             })
             .catch(error => {

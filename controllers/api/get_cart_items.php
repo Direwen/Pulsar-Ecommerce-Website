@@ -32,8 +32,9 @@ foreach ($cart as $variant_id => $quantity) {
         ]
     ));
 
+
     // If variant data is found, add it to the selected variants array with quantity
-    if (!empty($variant)) {
+    if ($variant && is_array(($variant))) {
         $selected_variants[] = ["quantity" => $quantity, ...$variant];
     }
 }

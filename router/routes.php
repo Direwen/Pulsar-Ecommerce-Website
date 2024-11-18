@@ -113,6 +113,10 @@ return [
         'controller' => 'controllers/ecommerce/history.php',
         'middleware' => [],
     ],
+    'thank-you' => [
+        'controller' => 'controllers/ecommerce/thank_you.php',
+        'middleware' => ['auth', 'recentOrder'],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],

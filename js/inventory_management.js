@@ -125,7 +125,6 @@ document.querySelectorAll('.create-inventory-button').forEach(button => {
 
         axios.get(apiForVariants)
             .then(response => {
-                console.log(response);
                 createInventory(submissionPath, response.data.variants)
             })
             .catch(error => {
