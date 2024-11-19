@@ -276,22 +276,8 @@ class OrderModel extends BaseModel
     public function getTotalSales()
     {
         $total_sales = [];
-        $page = 0;
-        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
-            aggregates: [
-                ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "total_sales", "table" => $this->getTableName()],
-            ],
-            conditions: [
-                [
-                    'attribute' => $this->getColumnStatus(),
-                    'operator' => "<>",
-                    'value' => "cancelled",
-                ]
-            ],
-            page: ++$page
-        ));
-        $total_sales[] = $fetched_orders["records"][0]["total_sales"];
-
+        $page = 1;
+    
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
                 aggregates: [
@@ -304,9 +290,10 @@ class OrderModel extends BaseModel
                         'value' => "cancelled",
                     ]
                 ],
-                page: ++$page
+                page: $page
             ));
             $total_sales[] = $fetched_orders["records"][0]["total_sales"];
+            $page++;
         } while ($fetched_orders["hasMore"]);
 
         return array_sum($total_sales);
@@ -315,23 +302,19 @@ class OrderModel extends BaseModel
     public function getTotalOrders()
     {
         $total_orders = [];
-        $page = 0;
-        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
-            aggregates: [
-                ["column" => $this->getColumnTotalPrice(), "function" => "COUNT", "alias" => "orders_count", "table" => $this->getTableName()],
-            ],
-            page: ++$page
-        ));
-        $total_orders[] = $fetched_orders["records"][0]["orders_count"];
+        $page = 1;
+
 
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
                 aggregates: [
-                    ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "orders_count", "table" => $this->getTableName()],
+                    ["column" => $this->getColumnTotalPrice(), "function" => "COUNT", "alias" => "orders_count", "table" => $this->getTableName()],
                 ],
-                page: ++$page
+                page: $page
             ));
-            $total_orders[] = $fetched_orders["records"][0]["orders_count"];
+
+            if (!empty($fetched_orders["records"])) $total_orders[] = $fetched_orders["records"][0]["orders_count"];
+            $page++;
         } while ($fetched_orders["hasMore"]);
 
         return array_sum($total_orders);
@@ -340,26 +323,12 @@ class OrderModel extends BaseModel
     public function getPendingOrdersCount()
     {
         $pending_order_counts = [];
-        $page = 0;
-        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
-            aggregates: [
-                ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "pending_count", "table" => $this->getTableName()],
-            ],
-            conditions: [
-                [
-                    'attribute' => $this->getColumnStatus(),
-                    'operator' => "=",
-                    'value' => "pending",
-                ]
-            ],
-            page: ++$page
-        ));
-        $pending_order_counts[] = $fetched_orders["records"][0]["pending_count"];
+        $page = 1;
 
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
                 aggregates: [
-                    ["column" => $this->getColumnId(), "function" => "SUM", "alias" => "pending_count", "table" => $this->getTableName()],
+                    ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "pending_count", "table" => $this->getTableName()],
                 ],
                 conditions: [
                     [
@@ -368,9 +337,10 @@ class OrderModel extends BaseModel
                         'value' => "pending",
                     ]
                 ],
-                page: ++$page
+                page: $page
             ));
             $pending_order_counts[] = $fetched_orders["records"][0]["pending_count"];
+            $page++;
         } while ($fetched_orders["hasMore"]);
 
         return array_sum($pending_order_counts);
@@ -379,21 +349,7 @@ class OrderModel extends BaseModel
     public function getTotalRefunds()
     {
         $total_refunds = [];
-        $page = 0;
-        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
-            aggregates: [
-                ["column" => $this->getColumnTotalPrice(), "function" => "SUM", "alias" => "total_refunds", "table" => $this->getTableName()],
-            ],
-            conditions: [
-                [
-                    'attribute' => $this->getColumnStatus(),
-                    'operator' => "=",
-                    'value' => "cancelled",
-                ]
-            ],
-            page: ++$page
-        ));
-        $total_refunds[] = $fetched_orders["records"][0]["total_refunds"];
+        $page = 1;
 
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
@@ -404,12 +360,13 @@ class OrderModel extends BaseModel
                     [
                         'attribute' => $this->getColumnStatus(),
                         'operator' => "=",
-                        'value' => "pending",
+                        'value' => "cancelled",
                     ]
                 ],
-                page: ++$page
+                page: $page
             ));
             $total_refunds[] = $fetched_orders["records"][0]["total_refunds"];
+            $page++;
         } while ($fetched_orders["hasMore"]);
 
         return array_sum($total_refunds);
@@ -418,31 +375,7 @@ class OrderModel extends BaseModel
     public function getRevenueTrend()
     {
         $data = [];
-        $page = 0;
-        $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
-            select: [
-                ["column" => $this->getColumnCreatedAt()]
-            ],
-            aggregates: [
-                [
-                    "column" => $this->getColumnTotalPrice(),
-                    "function" => "SUM",
-                    "alias" => "total_price",
-                    "table" => $this->getTableName()
-                ],
-            ],
-            sortField: $this->getColumnCreatedAt(),
-            groupBy: $this->getColumnCreatedAt(),
-            conditions: [
-                [
-                    'attribute' => $this->getColumnCreatedAt(),
-                    'operator' => '>=',
-                    'value' => date('Y-m-d H:i:s', strtotime('-30 days')),
-                ]
-            ],
-            page: ++$page
-        ));
-        $data = array_merge($fetched_orders["records"], $data);
+        $page = 1;
 
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
@@ -466,9 +399,10 @@ class OrderModel extends BaseModel
                         'value' => date('Y-m-d H:i:s', strtotime('-30 days')),
                     ]
                 ],
-                page: ++$page
+                page: $page
             ));
             $data = array_merge($fetched_orders["records"], $data);
+            $page++;
         } while ($fetched_orders["hasMore"]);
 
         return $data;
@@ -477,7 +411,7 @@ class OrderModel extends BaseModel
     public function getOrderStatus()
     {
         $data = [];
-        $page = 0;
+        $page = 1;
 
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
@@ -494,7 +428,7 @@ class OrderModel extends BaseModel
                 ],
                 sortField: "status_count",
                 groupBy: $this->getColumnStatus(),
-                page: ++$page
+                page: $page
             ));
 
             foreach ($fetched_orders["records"] as $record) {
@@ -507,6 +441,8 @@ class OrderModel extends BaseModel
                     $data[$status] = $count; // Initialize if not set
                 }
             }
+
+            $page++;
         } while ($fetched_orders["hasMore"]);
 
         // Convert the result back to the desired array format

@@ -320,6 +320,35 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             require ('./views/admin/data_analytics.view.php');
             break;
 
+        case 'mail':
+
+            $db_data = ErrorHandler::handle(fn () => $support_model->getAll(
+                select: [
+                    ["column" => $support_model->getColumnId()],
+                    ["column" => $support_model->getColumnUserEmail()],
+                    ["column" => $support_model->getColumnSubject()],
+                    ["column" => $support_model->getColumnMessage()],
+                    ["column" => $support_model->getColumnStatus()],
+                    ["column" => $support_model->getColumnCreatedAt()],
+                ],
+                sortField: $support_model->getColumnCreatedAt(),
+                sortDirection: "DESC",
+                page: $page
+            ));
+
+            renderDashboardHeader(
+                title_name: "Support Tickets",
+            );
+
+            renderPaginatedTable(
+                attributes_data: $DB_METADATA,
+                fetched_data: $db_data,
+                update_submission_file_path: "admin/support-ticket/reply",
+                edit_btn_class: "edit-support-button"
+            );
+
+            break;
+
         default:
             echo "Invalid dashboard selection.";
             break;
@@ -327,6 +356,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
     ?>
 
+    <!-- easy touch menu -->
     <span id="draggable"
         class="material-symbols-outlined fixed bottom-40 right-5 z-50 flex w-fit h-fit px-3 py-2 cursor-pointer justify-center items-center rounded-full bg-accent/70 shadow hover:bg-accent text-primary transition-all duration-100 ease-in-out user-select-none touch-action-none"
         style="user-select: none; touch-action: none;">

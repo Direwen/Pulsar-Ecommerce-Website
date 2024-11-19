@@ -89,6 +89,10 @@ return [
         'controller' => 'controllers/admin/discount_management/delete.php',
         'middleware' => []
     ],
+    'admin/support-ticket/reply' => [
+        'controller' => 'controllers/admin/support_management/update.php',
+        'middleware' => []
+    ],
     'products' => [
         'controller' => 'controllers/ecommerce/products.php',
         'middleware' => [],

@@ -113,7 +113,7 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
 
                             <?php foreach ($record as $attr_name => $attr_value): ?>
                                 <?php if ($attr_name !== "id"): ?>
-                                    <td class="p-3 text-left whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
+                                    <td class="p-3 text-left  min-w-[100px] max-w-[400px] whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
                                         <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
                                             <?= $attr_value ? "true" : "false" ?>
                                         <?php else: ?>
@@ -125,27 +125,35 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
                                                 // Check if it's an array
                                                 if ($valueType === 'array'): 
                                                 ?>
+
                                                     <?php if(count($decodedValue) > 0): ?>
+
                                                         <div class="">
-                                                        <?php $toggleBtnCount++; ?>
-                                                        <button class="text-dark interactive px-3 rounded" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>" onclick="toggleDropdown(this)">
-                                                            Show
-                                                            <span class="material-symbols-outlined">arrow_drop_down</span>
-                                                        </button>
-                                                        <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
-                                                            <?php foreach ($decodedValue as $each): ?>
-                                                                <span><?= htmlspecialchars($each); ?></span>
-                                                            <?php endforeach; ?>
-                                                        </section>
-                                                    </div>
+                                                            <?php $toggleBtnCount++; ?>
+                                                            <button class="text-dark interactive px-3 rounded" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>" onclick="toggleDropdown(this)">
+                                                                Show
+                                                                <span class="material-symbols-outlined">arrow_drop_down</span>
+                                                            </button>
+                                                            <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
+                                                                <?php foreach ($decodedValue as $each): ?>
+                                                                    <span><?= htmlspecialchars($each); ?></span>
+                                                                <?php endforeach; ?>
+                                                            </section>
+                                                        </div>
+
                                                     <?php else: ?>
+
                                                         <span>N/A</span>
-                                                        <?php endif; ?>
+
+                                                    <?php endif; ?>
 
                                                 <?php elseif ($valueType === 'object'): ?>
-                                                    <div class="flex justify-center items-center gap-1">
+                                                    <div class="flex justify-start items-center gap-2 flex-wrap">
+
                                                         <?php foreach ($decodedValue as $key => $value): ?>
+
                                                             <?php $toggleBtnCount++; ?>
+
                                                             <section class="">
                                                                 <button class="border shadow px-3 rounded" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>" onclick="toggleDropdown(this)">
                                                                     <?= htmlspecialchars($key); ?>
@@ -153,15 +161,19 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
                                                                 </button>
 
                                                                 <?php if (is_array($value)): ?>
+
                                                                     <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
                                                                         <?php foreach ($value as $each): ?>
                                                                             <span><?= htmlspecialchars($each); ?></span>
                                                                         <?php endforeach; ?>
                                                                     </section>
+
                                                                 <?php else: ?>
+
                                                                     <section class="py-3 px-4 border shadow rounded hidden flex flex-col space-y-2" data-toggle="dashabordToggleBtn<?= $toggleBtnCount; ?>">
                                                                         <span><?= htmlspecialchars($value); ?></span>
                                                                     </section>
+
                                                                 <?php endif; ?>
                                                                 
                                                             </section>
@@ -169,7 +181,7 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
                                                     </div>
 
                                                 <?php else: ?>
-                                                    <p class=""><?= ucwords(htmlspecialchars($attr_value)); ?></p>
+                                                    <p class="truncate"><?= ucwords(htmlspecialchars($attr_value)); ?></p>
                                                 <?php endif; ?>
                                             <?php else: ?>
                                                 <span class="text-light-dark font-light">N/A</span>
@@ -290,23 +302,3 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
     </div>
 
 </div>
-
-<!-- Debugging Table -->
-<!-- <div class="w-full bg-dark text-accent overflow-x-auto mt-6 p-4 rounded">
-    <table class="min-w-full border-collapse border border-gray-300">
-        <thead class="bg-accent text-secondary">
-            <tr>
-                <th class="border border-gray-300 p-2 text-left">Key</th>
-                <th class="border border-gray-300 p-2 text-left">Value</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($fetched_data as $key => $value): ?>
-                <tr>
-                    <td class="border border-gray-300 p-2 text-left"><?= $key ?></td>
-                    <td class="border border-gray-300 p-2 text-left"><?php var_dump($value); ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div> -->

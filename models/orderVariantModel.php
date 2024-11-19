@@ -72,7 +72,7 @@ class OrderVariantModel extends BaseModel
         global $order_model;
 
         $sold_out_products_counts = [];
-        $page = 0;
+        $page = 1; // Start at page 1
 
         do {
             $fetched_orders = ErrorHandler::handle(fn() => $this->getAll(
@@ -93,22 +93,27 @@ class OrderVariantModel extends BaseModel
                         'value' => "cancelled",
                     ]
                 ],
-                page: ++$page
+                page: $page // Use the current page
             ));
-            $sold_out_products_counts[] = $fetched_orders["records"][0]["products_count"];
+
+            if (!empty($fetched_orders["records"])) $sold_out_products_counts[] = $fetched_orders["records"][0]["products_count"];
+
+            $page++; // Increment page after processing
         } while ($fetched_orders["hasMore"]);
 
         return array_sum($sold_out_products_counts);
     }
+
 
     public function getTopSellingProducts()
     {
         global $order_model, $product_model, $variant_model;
 
         $products = [];
-        $page = 0;
+        $page = 1; // Start at page 1
 
         do {
+            // Fetch records for the current page
             $fetched_records = ErrorHandler::handle(fn() => $this->getAll(
                 select: [
                     ["column" => $product_model->getColumnName(), "alias" => "product_name", "table" => $product_model->getTableName()]
@@ -135,7 +140,7 @@ class OrderVariantModel extends BaseModel
                 ],
                 groupBy: $product_model->getTableName() . "." . $product_model->getColumnId(),
                 conditions: [],
-                page: ++$page
+                page: $page // Use the current page
             ));
 
             foreach ($fetched_records["records"] as $record) {
@@ -148,6 +153,8 @@ class OrderVariantModel extends BaseModel
                     $products[$productName] = $totalSold; // Initialize if not set
                 }
             }
+
+            $page++; // Increment the page after processing
         } while ($fetched_records["hasMore"]);
 
         // Convert the result to the desired array format
@@ -157,6 +164,7 @@ class OrderVariantModel extends BaseModel
             $products
         );
     }
+
 
 }
 ?>

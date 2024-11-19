@@ -32,7 +32,17 @@ class AuthService
     {
         $otp = $this->otpService->generateOtp();
         $this->otpService->storeOtp($email, $otp);
-        $this->mailService->sendOtp($email, $otp);
+        $this->mailService->sendMail(
+            to: $email,
+            details: [
+                "subject" => "Pulsar Login OTP Code",
+                "body" => "<p>Your one-time password (OTP) for logging into your Pulsar account is:</p>
+                            <h2 style='text-align: center; font-size: 24px; color: #1878b8;'>$otp</h2>
+                            <p>Please use this code within the next 10 minutes. For your security, do not share this OTP with anyone.</p>
+                            <p>If you did not request this code, please ignore this email or contact our support team.
+                        </p>",
+            ]
+        );
         return true;
     }
 
