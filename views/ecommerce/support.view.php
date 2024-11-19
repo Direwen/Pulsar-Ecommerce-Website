@@ -29,4 +29,13 @@
         <span class="text-2xl md:text-4xl lg:text-5xl tracking-tighter font-semibold">FAQs</span>
         <div class="w-full" id="faq-container"></div>
     </div>
+
+    <div class="bg-black text-primary flex flex-col justify-center items-center lg:flex-row lg:items-end py-14 gap-6 px-2 md:px-4">
+        <section>
+            <span class="text-xl lg:text-2xl font-semibold tracking-tighter">Still need help?</span>
+            <p class="text-lg lg:text-xl font-thin tracking-tighter">You can always contact us throught submitted a ticket</p>
+        </section>
+
+        <button onclick="openTicketForm(this)" root-directory="<?= $root_directory; ?>" type="button" class="block border border-2 border-secondary text-secondary hover:bg-accent px-4 py-2 rounded interactive uppercase font-semibold">Submit a ticket</button>
+    </div>
 </div>

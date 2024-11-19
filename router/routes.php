@@ -180,6 +180,11 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/ticket-submission' => [
+        'controller' => 'controllers/api/submit_ticket.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'test' => [
         'controller' => 'controllers/test.php',
         'middleware' => []

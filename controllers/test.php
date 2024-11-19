@@ -1,59 +1,54 @@
-<div class="font-sans text-dark bg-[url('https://maxesport.gg/medias/2022/01/Logo-Pulsar.webp')] bg-danger mix-blend-multiply bg-cover bg-center leading-relaxed bg-light-gray p-8 max-w-3xl mx-auto rounded-lg shadow-md" style="background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('https://maxesport.gg/medias/2022/01/Logo-Pulsar.webp');">
-            <!-- Header Section -->
-            <div class="text-center mb-8 flex justify-between items-center">
-                <h1 class="text-4xl font-bold text-accent tracking-tighter uppercase">Pulsar</h1>
-                <p class="text-2xl text-light-dark tracking-tighter uppercase">Invoice</p>
-            </div>
+<div id="overlay" class="w-screen h-screen bg-light-gray/95 fixed top-0 left-0 z-50 hidden"
+    onclick="closeOverlay(event)">
 
-            <!-- Customer Details -->
-            <div class="border-b border-light-gray pb-6 mb-6">
-                <h2 class="text-xl font-semibold text-dark mb-4">Customer Information</h2>
-                <div class="text-sm space-y-2">
-                    <p><span class="font-bold">Name:</span> ${order.first_name} ${order.last_name}</p>
-                    <p><span class="font-bold">Email:</span> ${order.email}</p>
-                    <p><span class="font-bold">Phone:</span> ${order.phone}</p>
-                    <p><span class="font-bold">Address:</span> ${order.address}, ${order.apartment}, ${order.postal_code}, ${order.city}, ${order.country}</p>
-                    <p><span class="font-bold text-2xl">Company:</span> ${order.company || 'N/A'}</p>
-                </div>
-            </div>
+    <section id="overlay_content_container"
+        class="hide-scrollbar w-11/12 overflow-y-scroll sm:w-10/12 md:w-8/12 lg:w-1/2 bg-secondary p-5 flex flex-col gap-4 rounded max-h-full overflow-y-scoll shadow-xl">
 
-            <!-- Order Summary -->
-            <div>
-                <h2 class="text-xl font-semibold text-dark mb-4">Order Summary</h2>
-                <table class="w-full border-collapse text-sm mb-6">
-                    <thead class="border shadow text-dark text-left">
-                        <tr>
-                            <th class="py-3 px-4">Product</th>
-                            <th class="py-3 px-4">Variant</th>
-                            <th class="py-3 px-4 text-center">Quantity</th>
-                            <th class="py-3 px-4 text-right">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        ${variantsContent}
-                        <tr>
-                            <td colspan="3" class="py-3 px-4 text-right font-semibold text-dark">Discount (${discountPercentage}%):</td>
-                            <td class="py-3 px-4 text-right">- $${discountAmount}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="py-3 px-4 text-right font-semibold text-dark">Subtotal:</td>
-                            <td class="py-3 px-4 text-right">$${subtotal.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="py-3 px-4 text-right font-semibold text-dark">Shipping Fee:</td>
-                            <td class="py-3 px-4 text-right">$${shippingFee.toFixed(2)}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" class="py-3 px-4 text-right font-bold text-dark">Total:</td>
-                            <td class="py-3 px-4 text-right font-bold">$${totalWithShipping.toFixed(2)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <section class="border-b border-light-dark pb-4">
+            <h2 class="text-xl font-semibold text-dark">Submit a Support Ticket</h2>
+        </section>
 
-            <!-- Footer -->
-            <div class="text-center text-light-dark text-sm border-t border-light-gray pt-4">
-                <p>Thank you for your order!</p>
-                <p>Visit us at <span class="text-accent font-semibold">www.pulsar.com</span></p>
-            </div>
-        </div>
+        <form action="/submit-ticket" method="POST" class="flex flex-col gap-4">
+            <!-- Email Input -->
+            <section class="flex flex-col justify-start items-start gap-2">
+                <label for="user_email" class="block text-sm font-medium text-dark">Email Address</label>
+                <input type="email" name="user_email" class="block w-full border shadow rounded outline-accent p-2"
+                    placeholder="Enter your email" required>
+            </section>
+
+            <!-- Subject Input -->
+            <section class="flex flex-col justify-start items-start gap-2">
+                <label for="subject" class="block text-sm font-medium text-dark">Subject</label>
+                <input type="text" name="subject" class="block w-full border shadow rounded outline-accent p-2"
+                    placeholder="Enter ticket subject" required>
+            </section>
+
+            <!-- Message Input -->
+            <section class="flex flex-col justify-start items-start gap-2">
+                <label for="message" class="block text-sm font-medium text-dark">Message</label>
+                <textarea name="message" class="block w-full border shadow rounded outline-accent p-2" rows="4"
+                    placeholder="Describe your issue" required></textarea>
+            </section>
+
+            <!-- Status Dropdown -->
+            <section class="flex flex-col justify-start items-start gap-2">
+                <label for="status" class="block text-sm font-medium text-dark">Status</label>
+                <select name="status" class="block w-full border shadow rounded outline-accent p-2">
+                    <option value="open" selected>Open</option>
+                    <option value="replied">Replied</option>
+                </select>
+            </section>
+
+            <!-- Buttons -->
+            <section class="flex justify-end items-center gap-2">
+                <button type="button" onclick="forceOverlayToClose()"
+                    class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
+                <button type="submit"
+                    class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Submit</button>
+            </section>
+        </form>
+
+
+    </section>
+
+</div>

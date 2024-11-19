@@ -86,14 +86,12 @@ class SupportTicketModel extends BaseModel
         }
 
         // Validate 'message' - required
-        if (empty($post_data[$this->getColumnMessage()])) {
+        if (empty(trim($post_data[$this->getColumnMessage()]))) {
             $errors[] = "Message is required.";
         }
 
         // If there are errors, handle them
         if (!empty($errors)) {
-            var_dump($errors);
-            setMessage(implode(", ", $errors), 'error');
             return false;
         }
 
@@ -104,8 +102,8 @@ class SupportTicketModel extends BaseModel
     {
         $formattedData = [
             'user_email' => isset($data['user_email']) ? strtolower(trim($data['user_email'])) : null,
-            'subject' => isset($data['subject']) ? trim($data['subject']) : null,
-            'message' => $data['message'] ?? null,
+            'subject' => isset($data['subject']) ? strtolower(trim($data['subject'])) : null,
+            'message' => isset($data['message']) ? $data['message'] : null,
             'status' => isset($data['status']) ? $data['status'] : 'open'
         ];
 

@@ -73,13 +73,13 @@ function displayFAQs(query = "") {
             faqHTML += `
                 <div class="w-full faq-item bg-primary border p-5 mb-4 shadow rounded flex flex-col gap-2 items-start justify-start transition-all ease-in-out duration-200 hover:-translate-y-1 hover:shadow-lg cursor-help">
                     <button 
-                            class="faq-question font-semibold text-dark"
+                            class="w-full text-left font-semibold text-dark"
                             data-toggle="faq-${faqCounter}"
                             onclick="toggleDropdown(this)"
                         >
                             ${faq.question}
                     </button>
-                    <section class="faq-answer hidden" data-toggle="faq-${faqCounter}">
+                    <section class="hidden" data-toggle="faq-${faqCounter}">
                         <p class="text-xs lg:text-sm text-light-dark">${faq.answer}</p>
                     </section>
                 </div>
@@ -95,13 +95,13 @@ function displayFAQs(query = "") {
                 faqHTML += `
                     <div class="w-full faq-item bg-primary border p-5 mb-4 shadow rounded flex flex-col gap-2 items-start justify-start transition-all ease-in-out duration-200 hover:-translate-y-1 hover:shadow-lg cursor-help">
                         <button 
-                            class="faq-question font-semibold text-dark"
+                            class="w-full text-left font-semibold text-dark"
                             data-toggle="faq-${faqCounter}"
                             onclick="toggleDropdown(this)"
                         >
                             ${question}
                          </button>
-                        <section class="faq-answer hidden" data-toggle="faq-${faqCounter}">
+                        <section class="hidden" data-toggle="faq-${faqCounter}">
                             <p class="text-xs lg:text-sm text-light-dark">${faqs[question]}</p>
                         </section>
                     </div>
