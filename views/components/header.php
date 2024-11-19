@@ -5,9 +5,7 @@ $currentPage = basename($_SERVER['SCRIPT_FILENAME']);
 // Define navigation links
 $navLinks = [
     ['url' => 'product.php', 'label' => 'PRODUCT'],
-    ['url' => 'support.php', 'label' => 'SUPPORT'],
-    ['url' => 'where_to_buy.php', 'label' => 'WHERE TO BUY'],
-    ['url' => './src/views/login.php', 'label' => 'RELEASE'],
+    ['url' => 'support', 'label' => 'SUPPORT'],
 ];
 ?>
 
@@ -25,8 +23,8 @@ $navLinks = [
         <section id="navigation-links-container"
             class="hidden flex-grow sm:flex justify-center items-stretch gap-5 uppercase">
             <?php foreach ($navLinks as $link): ?>
-                <a href="<?php echo $link['url']; ?>"
-                    class="header_links interactive h-full <?php echo ($currentPage == basename($link['url'])) ? 'active' : ''; ?>">
+                <a href="<?= $root_directory . $link['url']; ?>"
+                    class="header_links interactive h-full">
                     <?php echo $link['label']; ?>
                 </a>
             <?php endforeach; ?>

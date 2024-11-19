@@ -15,11 +15,7 @@
         <?php renderCategories(false); ?>
     </section>
 
-    <a href="#" class="w-full cursor-pointer text-2xl">SUPPORT</a> <!-- Link to Support -->
-    <a href="#" class="w-full cursor-pointer text-2xl">WHERE TO BUY</a> <!-- Link to Where to Buy -->
-    <a href="#" class="w-full cursor-pointer text-2xl">eSports</a> <!-- Link to eSports -->
-    <a href="#" class="w-full cursor-pointer text-2xl">RELEASE</a> <!-- Link to Release -->
-    <a href="#" class="w-full cursor-pointer text-2xl">PULSAR BY YOU</a> <!-- Link to Pulsar By You -->
+    <a href="<?= $root_directory . 'support' ?>" class="w-full cursor-pointer text-2xl">SUPPORT</a> <!-- Link to Support -->
 
     <hr>
     

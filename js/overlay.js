@@ -14,6 +14,7 @@ function openOverlayModal(content) {
     overlayContent.classList.add('flex');
     overlayContent.innerHTML = content; // Insert the dynamic content
     showOverlay();
+    overlay.classList.add("py-4", "lg:py-10");
 }
 
 function openNavbar() {
@@ -33,11 +34,13 @@ const showOverlay = () => {
 // Function to close the overlay
 const closeOverlay = (event) => {
     if (event.target.id === 'overlay') forceOverlayToClose();
+    overlay.classList.remove("py-4", "lg:py-10");
 };
 
 function forceOverlayToClose() {
     overlay.classList.remove('flex', 'justify-center', 'justify-end', 'items-center');
     overlay.classList.add('hidden');
+    overlay.classList.remove("py-4", "lg:py-10");
 
     overlayContent.classList.add('hidden');
     overlayContent.classList.remove('flex');
@@ -51,6 +54,8 @@ function forceOverlayToClose() {
     modalState = false;
     navbarState = false;
     shoppingCartState = false;
+
+
 }
 
 // Event listener to close the overlay when clicking outside
