@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     (async function () {
         var trendContainer = document.getElementById('revenue-trend-chart');
+        if (!trendContainer) return;
         var root = trendContainer.getAttribute('root-directory');
 
         var data = [];
@@ -50,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     (async function () {
         var chartContainer = document.getElementById('order-status-chart');
+        if (!chartContainer) return;
         var root = chartContainer.getAttribute('root-directory');
 
         var data = [];
@@ -79,6 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     (async function () {
         var chartContainer = document.getElementById('most-selling-products-chart');
+        if (!chartContainer) return;
         var root = chartContainer.getAttribute('root-directory');
 
         var data = [];

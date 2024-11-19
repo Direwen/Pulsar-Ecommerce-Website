@@ -126,6 +126,11 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/category' => [
+        'controller' => 'controllers/api/get_category.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'api/products' => [
         'controller' => 'controllers/api/get_products.php',
         'middleware' => [],

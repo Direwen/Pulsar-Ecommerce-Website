@@ -163,9 +163,9 @@
     <div class="border-y border shadow py-3">
         <section
             class="w-full md:w-8/12 lg:w-1/2 flex justify-around items-center mx-auto font-medium text-sm md:text-base tracking-tighter text-dark">
-            <a href="#product-desc-container" class="hover:text-accent">Product Details</a>
-            <a href="#specs-container" class="hover:text-accent">Techinical Specifications</a>
-            <a href="" class="hover:text-accent">Download</a>
+            <a href="#product-desc-container" class="cursor-pointer hover:text-accent">Product Details</a>
+            <a href="#specs-container" class="cursor-pointer hover:text-accent">Techinical Specifications</a>
+            <span product-id="<?= $product["id"]; ?>" onclick="toggleDownloadModal(this)" class="cursor-pointer hover:text-accent" root-directory="<?= $root_directory; ?>">Download</span>
         </section>
     </div>
 
