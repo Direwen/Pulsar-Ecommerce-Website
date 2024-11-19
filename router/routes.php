@@ -117,6 +117,10 @@ return [
         'controller' => 'controllers/ecommerce/thank_you.php',
         'middleware' => ['auth', 'recentOrder'],
     ],
+    'support' => [
+        'controller' => 'controllers/ecommerce/support.php',
+        'middleware' => [],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],
