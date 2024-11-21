@@ -69,12 +69,13 @@ $page = 1; // Start at page 1
 
 do {
     $fetched_overview_orders_data = ErrorHandler::handle(fn() => $order_model->getAll(
-        page: $page++,
+        page: $page,
         conditions: $conditions,
         sortField: $order_model->getColumnCreatedAt(),
         sortDirection: 'DESC'
     ));
     $orders = array_merge($orders, $fetched_overview_orders_data["records"]);
+    $page++;
 } while ($fetched_overview_orders_data["hasMore"]);
 
 

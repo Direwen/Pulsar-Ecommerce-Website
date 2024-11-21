@@ -165,6 +165,5 @@ class OrderVariantModel extends BaseModel
         );
     }
 
-
 }
 ?>

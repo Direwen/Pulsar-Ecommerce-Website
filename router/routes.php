@@ -189,6 +189,21 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/get-products-to-rate' => [
+        'controller' => 'controllers/api/get_variants_to_rate.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/review-submission' => [
+        'controller' => 'controllers/api/submit_review.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/review-later' => [
+        'controller' => 'controllers/api/review_later.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'test' => [
         'controller' => 'controllers/test.php',
         'middleware' => []

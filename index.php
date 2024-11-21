@@ -27,6 +27,7 @@ require_once './models/orderVariantModel.php';
 require_once './models/addressModel.php';
 require_once './models/discountModel.php';
 require_once './models/supportTicketModel.php';
+require_once './models/reviewModel.php';
 
 $error_handler = null; 
 $user_model = null; 
@@ -40,6 +41,7 @@ $discount_model = null;
 $order_model = null; 
 $order_variant_model = null;
 $support_model = null;
+$review_model = null;
 $DB_METADATA = null;
 
 $root_directory = "/E-Commerce%20Assignment%20Project/";
@@ -49,7 +51,7 @@ $error_handler = ErrorHandler::getInstance($pdo);
 $result = $error_handler->handleDbOperation(function () use ($pdo) {
 
     global $user_model, $session_model, $category_model, $product_model, $variant_model, $inventory_model, 
-    $address_model, $discount_model, $order_model, $order_variant_model, $support_model, $DB_METADATA;
+    $address_model, $discount_model, $order_model, $order_variant_model, $support_model, $review_model, $DB_METADATA;
 
     $user_model = new UserModel($pdo);
     $session_model = new SessionModel($pdo);
@@ -62,6 +64,7 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
     $order_model = new OrderModel($pdo);
     $order_variant_model = new OrderVariantModel($pdo);
     $support_model = new SupportTicketModel($pdo);
+    $review_model = new ReviewModel($pdo);
     $DB_METADATA = [
         UserModel::getTableName() => $user_model->getColumnMetadata(),
         SessionModel::getTableName() => $session_model->getColumnMetadata(),
@@ -73,7 +76,8 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
         OrderVariantModel::getTableName() => $order_variant_model->getColumnMetadata(),
         AddressModel::getTableName() => $address_model->getColumnMetadata(),
         DiscountModel::getTableName() => $discount_model->getColumnMetadata(),
-        SupportTicketModel::getTableName() => $support_model->getColumnMetadata()
+        SupportTicketModel::getTableName() => $support_model->getColumnMetadata(),
+        ReviewModel::getTableName() => $review_model->getColumnMetadata()
     ];
 
     return true;
@@ -86,6 +90,7 @@ $token_service = new TokenService($session_model);
 $session_service = new SessionService($token_service);
 $auth_service = new AuthService($mail_service, $otp_service, $session_service, $token_service, $user_model);
 $browsing_history_service = new BrowsingHistoryService();
+
 
 // ErrorHandler::handle(fn () => $otp_service->clearOtpSession());
 

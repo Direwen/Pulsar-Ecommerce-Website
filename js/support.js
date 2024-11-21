@@ -38,18 +38,6 @@ function openTicketForm(btn) {
                 <button type="submit" class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Submit</button>
             </section>
         </form>
-
-        <div id="form_error" class="hidden flex flex-col justify-center items-center gap-4">
-            <img src="${root}assets/illustrations/error.svg" class="w-1/2 lg:w-1/4">
-            <p class="text-dark text-xs lg:text-sm text-danger font-semibold">An error occurred.</p>
-            <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-danger interactive text-primary font-semibold py-2 px-6 rounded shadow">Close</button>
-        </div>
-
-        <div id="form_success" class="hidden flex flex-col justify-center items-center gap-4">
-            <img src="${root}assets/illustrations/mail_sent.svg" class="w-1/2 lg:w-1/4">
-            <p class="text-dark text-xs lg:text-sm text-success font-semibold">Your ticket has been submitted successfully!</p>
-            <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Close</button>
-        </div>
     `;
 
     openOverlayModal(content);
@@ -88,12 +76,10 @@ function handleFormSubmit(event, root) {
             const success = res.data.success;
             if (success) {
                 // Replace form with success container
-                document.getElementById('ticketForm').classList.add('hidden');
-                document.getElementById('form_success').classList.remove('hidden');
+                renderSuccessModal(`${root}assets/illustrations/mail_sent.svg`, "Your ticket has been submitted successfully!");
             } else {
                 // Replace form with error container
-                document.getElementById('ticketForm').classList.add('hidden');
-                document.getElementById('form_error').classList.remove('hidden');
+                renderErrorModal(root);
             }
         })
         .catch((err) => {

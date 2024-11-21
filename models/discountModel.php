@@ -143,4 +143,22 @@ class DiscountModel extends BaseModel
         // Return true if no errors
         return true;
     }
+
+    public function generateDiscount(int $max_usage=1, $expired_at = null)
+    {
+        // Generate a random discount code (e.g., 8 characters)
+        $code = strtoupper(bin2hex(random_bytes(4))); // 4 bytes = 8 characters in hex
+
+        // Generate a random discount amount (percentage between 5% and 50%)
+        $amount = rand(1, 50);
+
+        ErrorHandler::handle(fn () => $this->create([
+            $this->getColumnCode() => $code,
+            $this->getColumnAmount() => $amount,
+            $this->getColumnMaxUsage() => $max_usage,
+            $this->getColumnExpiredAt() => $expired_at,
+        ]));
+
+        return $code;
+    }
 }

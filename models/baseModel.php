@@ -31,6 +31,7 @@ abstract class BaseModel
             implode(', ', $columns),
             implode(', ', $placeholders)
         );
+
         // Execute the query with formatted data as the values
         return $this->db->execute($query, array_combine($placeholders, array_values($formattedData)));
     }
@@ -200,8 +201,12 @@ abstract class BaseModel
     protected function ensureStorageCompatibility(array $attributes): array
     {
         foreach ($attributes as $field => $value) {
-            if ($this->isFieldTimestamps($field))
+            // var_dump("Checking ========" . $attributes[$field] . "<br>");
+            if ($this->isFieldTimestamps($field) && !empty($value)) {
+                // var_dump("Before ========" . $attributes[$field] . "<br>");
                 $attributes[$field] = $this->getTimestampString($value);
+                // var_dump("After ========" . $attributes[$field] . "<br>");
+            }
         }
 
         return $attributes;
