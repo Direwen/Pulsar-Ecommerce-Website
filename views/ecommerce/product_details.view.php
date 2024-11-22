@@ -257,4 +257,6 @@
         </section>
     </section>
 
+    <?= renderRecentlyViewedSection(); ?>
+
 </div>

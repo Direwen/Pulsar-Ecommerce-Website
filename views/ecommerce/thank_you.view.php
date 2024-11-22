@@ -19,3 +19,4 @@
         Explore for more
     </a>
 </div>
+<?= renderRecentlyViewedSection(); ?>

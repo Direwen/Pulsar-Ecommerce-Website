@@ -2,7 +2,7 @@
     <!-- Product main image -->
 
     <a href="<?= $root_directory . "product/view?id=" . urlencode($product["id"]); ?>">
-        <div class="relative h-64 bg-secondary flex items-center justify-center rounded">
+        <div class="relative h-64 bg-secondary flex items-center justify-center rounded overflow-hidden">
             <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($product["img"]) ?>" 
                  alt="product image" 
                  class="w-64 h-64 object-cover z-10 rounded transition-all ease-in duration-300 hover:scale-110">
