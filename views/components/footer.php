@@ -6,7 +6,7 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Product</h4>
                 <section class="flex flex-col gap-1">
-                    <?php renderCategories("text-light-dark hover:text-secondary"); ?>
+                    <?php renderCategories("text-light-dark hover:text-secondary cursor-pointer"); ?>
                 </section>
             </div>
 
@@ -14,15 +14,16 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Support</h4>
                 <section class="flex flex-col gap-1">
-                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Support</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary cursor-pointer">Support</a>
                     <?php if (!$auth_service->getAuthUser()): ?>
-                        <a href="#" class="text-light-dark hover:text-secondary">Login</a>
+                        <a href="#" class="text-light-dark hover:text-secondary cursor-pointer">Login</a>
                     <?php endif; ?>
-                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Warranty</a>
-                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Contact Us</a>
-                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Refund Policy</a>
-                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">FAQ</a>
-                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Where to Buy</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary cursor-pointer">Warranty</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary cursor-pointer">Contact Us</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary cursor-pointer">Refund Policy</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary cursor-pointer">FAQ</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary cursor-pointer">Where to Buy</a>
+                    <span class="text-light-dark hover:text-secondary cursor-pointer" onclick="openTermsForPurchase()">Terms & Conditions</span>
                 </section>
             </div>
 
@@ -30,9 +31,9 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Community</h4>
                 <section class="flex flex-col gap-1">
-                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary">News</a>
-                    <a href="https://t.co/1d3hoNI15S" target="_blank" class="text-light-dark hover:text-secondary">Discord</a>
-                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary">eSports</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">News</a>
+                    <a href="https://t.co/1d3hoNI15S" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">Discord</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">eSports</a>
                 </section>
             </div>
 

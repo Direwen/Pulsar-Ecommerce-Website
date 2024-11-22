@@ -292,8 +292,11 @@
                 <input type="text" name="user_id" class="hidden" value="<?= $_SESSION["user_id"]; ?>">
                 <input type="email" name="user_email" class="hidden" value="<?= $_SESSION["user_email"]; ?>">
 
-                <button type="submit" class="bg-accent interactive py-3 w-full text-primary rounded font-semibold">Pay
-                    now</button>
+                <span class="inline-block cursor-pointer text-accent underline underline-offset-4 interactive" onclick="openTermsForPurchase()">Terms & Conditions</span>
+
+                <button type="submit" class="bg-accent interactive py-3 w-full text-primary rounded font-semibold">
+                    Pay now
+                </button>
             </div>
         </div>
 
