@@ -129,6 +129,10 @@ return [
         'controller' => 'controllers/404.php',
         'middleware' => [],
     ],
+    'auth/terms-conditions' => [
+        'controller' => 'controllers/terms_conditions/authentication.php',
+        'middleware' => [],
+    ],
     'api/categories' => [
         'controller' => 'controllers/api/get_categories.php',
         'middleware' => [],

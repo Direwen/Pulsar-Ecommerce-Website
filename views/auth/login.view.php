@@ -19,6 +19,6 @@
             <button type="submit" class="inline-block w-full bg-accent interactive text-primary p-2 rounded">Continue</button>
         </form>
 
-        <a href="" class="text-accent">Privacy</a>
+        <span onclick="openTermsForAuthentication(<?= $root_directory ?>)" class="text-accent cursor-pointer">Privacy</>
     </div>
 </div>
