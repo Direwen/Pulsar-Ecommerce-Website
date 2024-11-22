@@ -155,6 +155,7 @@
             );
             ?>
 
+            <!-- Rating -->
             <section class="flex flex-col items-center p-4">
                 <!-- Rating Number -->
                 <span class="text-accent text-5xl md:text-6xl lg:text-7xl font-bold tracking-wide"><?= $finalized_rating; ?></span>
@@ -190,6 +191,8 @@
                     <!-- Rating Count -->
                     <span class="text-light-dark text-sm"><?= $data["rating_count"]; ?> <?= ($data["rating_count"] > 1) ? 'reviews' : 'review'; ?></span>
                 </section>
+
+                <span class="text-light-dark text-sm"><?= ($product['views'] > 1) ? 'This product has been viewed for ' . $product['views'] . ' times.'  : ''; ?></span>
             </section>
 
 

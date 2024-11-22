@@ -18,7 +18,9 @@ class ProductModel extends BaseModel
     private const COLUMN_IMG = 'img';
     private const COLUMN_CREATED_AT = 'created_at';
     private const COLUMN_UPDATED_AT = 'updated_at';
+    private const COLUMN_VIEWS = 'views'; // Add the views column
     private const TABLE_NAME = 'products';
+
 
     public static function getColumnId(): string
     {
@@ -84,6 +86,11 @@ class ProductModel extends BaseModel
     {
         return self::COLUMN_UPDATED_AT;
     }
+    
+    public static function getColumnViews(): string
+    {
+        return self::COLUMN_VIEWS;
+    }
 
     public static function getTableName(): string
     {
@@ -105,6 +112,7 @@ class ProductModel extends BaseModel
                 " . self::getColumnPackageContent() . " JSON NOT NULL,
                 " . self::getColumnImgForAds() . " JSON NOT NULL,
                 " . self::getColumnImg() . " VARCHAR(255) NOT NULL,
+                " . self::getColumnViews() . " INT DEFAULT 0,
                 " . self::getColumnCreatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 " . self::getColumnUpdatedAt() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (" . self::getColumnCategoryId() . ") REFERENCES categories(" . CategoryModel::getColumnId() . ") ON DELETE CASCADE,
@@ -214,7 +222,9 @@ class ProductModel extends BaseModel
             'requirement' => isset($data['requirement']) ? json_encode($data['requirement']) : null,
             'package_content' => isset($data['package_content']) ? json_encode($data['package_content']) : null,
             'img_for_ads' => isset($data['img_for_ads']) ? json_encode($data['img_for_ads']) : null,
-            'img' => $data['img'] ?? null
+            'img' => $data['img'] ?? null,
+            'views' => isset($data['views']) ? $data['views'] : 0, // Default value is 0 for views
+
         ];
 
         // Filter out null values to keep only the provided attributes

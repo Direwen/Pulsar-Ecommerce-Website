@@ -144,6 +144,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     ["column" => $product_model->getColumnPackageContent(), "alias" => "Package_Content", "table" => $product_model->getTableName()],
                     ["column" => $product_model->getColumnImg(), "alias" => "Product_Image", "table" => $product_model->getTableName()],
                     ["column" => $product_model->getColumnImgForAds(), "alias" => "Ads_Image", "table" => $product_model->getTableName()],
+                    ["column" => $product_model->getColumnViews(), "alias" => "views_count", "table" => $product_model->getTableName()],
                 ],
                 joins: [
                     [

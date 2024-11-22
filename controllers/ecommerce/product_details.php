@@ -20,6 +20,7 @@ $fetched_data = ErrorHandler::handle(fn() => $product_model->getAll(
         ["column" => $product_model->getColumnPackageContent()],
         ["column" => $product_model->getColumnImgForAds()],
         ["column" => $product_model->getColumnImg()],
+        ["column" => $product_model->getColumnViews()],
         ["column" => $variant_model->getColumnId(), "alias" => "variant_id", "table" => $variant_model->getTableName()],
         ["column" => $variant_model->getColumnType(), "table" => $variant_model->getTableName()],
         ["column" => $variant_model->getColumnName(), "alias" => "variant_name", "table" => $variant_model->getTableName()],
@@ -59,6 +60,7 @@ foreach ($fetched_data['records'] as $record) {
     $product = [
         "id" => $record['id'],
         "name" => $record['name'],
+        "views" => $record['views'],
         "description" => $record['description'],
         "dimension" => json_decode($record['dimension']),
         "feature" => json_decode($record['feature'], true), // Decode feature string to array
@@ -83,6 +85,14 @@ foreach ($fetched_data['records'] as $record) {
 
 if (!empty($product)) {
     $browsing_history_service->addViewedItem($product["id"]);
+    ErrorHandler::handle(fn () => $product_model->update(
+        [
+            $product_model->getColumnViews() => ++$product["views"]
+        ],
+        [
+            $product_model->getColumnId() => $product["id"]
+        ]
+    ));
 }
 
 
