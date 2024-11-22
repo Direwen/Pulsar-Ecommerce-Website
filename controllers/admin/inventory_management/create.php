@@ -26,7 +26,6 @@ $isCreated = ErrorHandler::handle(fn () => $inventory_model->create([
     $inventory_model->getColumnVariantId() => $_POST["variant_id"],
     $inventory_model->getColumnCode() => $_POST["code"],
     $inventory_model->getColumnStockQuantity() => $_POST["stock_quantity"],
-    $inventory_model->getColumnReorderLevel() => $_POST["reorder_level"],
 ]));
 
 if (!$isCreated) {

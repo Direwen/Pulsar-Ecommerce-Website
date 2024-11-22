@@ -30,12 +30,6 @@ function createInventory(submissionPath, variants) {
                 <input type="number" name="stock_quantity" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter stock quantity">
             </section>
 
-            <!-- Reorder Level Input -->
-            <section class="flex flex-col justify-start items-start gap-2">
-                <label for="reorder_level" class="block text-sm font-medium text-dark">Reorder Level</label>
-                <input type="number" name="reorder_level" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter reorder level">
-            </section>
-
             <!-- Buttons -->
             <section class="flex justify-end items-center gap-2">
                 <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
@@ -97,12 +91,6 @@ function editInventory(recordId, submissionPath, current_values, variants) {
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="stock_quantity" class="block text-sm font-medium text-dark">Stock Quantity</label>
                 <input type="number" name="stock_quantity" value="${current_values.stockQuantity}" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter stock quantity">
-            </section>
-
-            <!-- Reorder Level Input -->
-            <section class="flex flex-col justify-start items-start gap-2">
-                <label for="reorder_level" class="block text-sm font-medium text-dark">Reorder Level</label>
-                <input type="number" name="reorder_level" value="${current_values.reorderLevel}" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter reorder level">
             </section>
 
             <!-- Buttons -->

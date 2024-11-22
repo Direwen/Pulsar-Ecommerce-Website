@@ -57,8 +57,8 @@ function editOrder(recordId, submissionPath, status) {
     const statusOptions = {
         pending: ['pending', 'confirmed', 'cancelled'],
         confirmed: ['confirmed', 'processing', 'cancelled'],
-        processing: ['processing', 'shipped'],
-        shipped: ['shipped', 'delivered'],
+        processing: ['processing', 'shipping'],
+        shipping: ['shipping', 'delivered'],
         delivered: [],
         cancelled: []
     };

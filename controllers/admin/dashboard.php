@@ -197,7 +197,6 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     ["column" => $variant_model->getColumnId(), "alias" => "variant_id", "table" => $variant_model->getTableName()],
                     ["column" => $product_model->getColumnName(), "alias" => "product", "table" => $product_model->getTableName()],
                     ["column" => $inventory_model->getColumnStockQuantity()],
-                    ["column" => $inventory_model->getColumnReorderLevel()],
                 ],
                 joins: [
                     [

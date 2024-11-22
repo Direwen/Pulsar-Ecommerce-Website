@@ -135,7 +135,7 @@ class OrderModel extends BaseModel
                 " . self::getColumnId() . " INT AUTO_INCREMENT PRIMARY KEY,
                 " . self::getColumnOrderCode() . " VARCHAR(50) NOT NULL UNIQUE,
                 " . self::getColumnUserId() . " INT NULL,
-                " . self::getColumnStatus() . " ENUM('pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
+                " . self::getColumnStatus() . " ENUM('pending', 'confirmed', 'processing', 'shipping', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
                 " . self::getColumnTotalPrice() . " DECIMAL(10, 2) NOT NULL,
                 " . self::getColumnUsedDiscountId() . " INT NULL,
                 " . self::getColumnFirstName() . " VARCHAR(100) NOT NULL,
@@ -257,8 +257,8 @@ class OrderModel extends BaseModel
         $validTransitions = [
             'pending' => ['confirmed', 'cancelled'],
             'confirmed' => ['processing', 'cancelled'],
-            'processing' => ['shipped'],
-            'shipped' => ['delivered'],
+            'processing' => ['shipping'],
+            'shipping' => ['delivered'],
             'delivered' => [],
             'cancelled' => []
         ];

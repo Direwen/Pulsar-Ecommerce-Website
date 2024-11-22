@@ -11,7 +11,6 @@ class InventoryModel extends BaseModel
     private const COLUMN_CODE = 'code';
     private const COLUMN_VARIANT_ID = 'variant_id';
     private const COLUMN_STOCK_QUANTITY = 'stock_quantity';
-    private const COLUMN_REORDER_LEVEL = 'reorder_level';
     private const COLUMN_LAST_UPDATED = 'last_updated_at';
 
     // Static getters for table and column names
@@ -40,11 +39,6 @@ class InventoryModel extends BaseModel
         return self::COLUMN_STOCK_QUANTITY;
     }
 
-    public static function getColumnReorderLevel(): string
-    {
-        return self::COLUMN_REORDER_LEVEL;
-    }
-
     public static function getColumnLastUpdated(): string
     {
         return self::COLUMN_LAST_UPDATED;
@@ -62,7 +56,6 @@ class InventoryModel extends BaseModel
                 " . self::getColumnCode() . " VARCHAR(50) NOT NULL UNIQUE,
                 " . self::getColumnVariantId() . " INT NOT NULL,
                 " . self::getColumnStockQuantity() . " INT DEFAULT 0,
-                " . self::getColumnReorderLevel() . " INT DEFAULT 0,
                 " . self::getColumnLastUpdated() . " TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (" . self::getColumnVariantId() . ") REFERENCES variants(id) ON DELETE CASCADE,
                 INDEX idx_variant_id (" . self::getColumnVariantId() . "),
@@ -94,13 +87,6 @@ class InventoryModel extends BaseModel
             }
         }
 
-        // Validate 'reorder_level' - optional, must be a non-negative integer
-        if (isset($post_data[$this->getColumnReorderLevel()])) {
-            if (!is_numeric($post_data[$this->getColumnReorderLevel()]) || (int) $post_data[$this->getColumnReorderLevel()] < 0) {
-                $errors[] = "Reorder level must be a non-negative integer.";
-            }
-        }
-
         // Check if there are any validation errors
         if (!empty($errors)) {
             setMessage(implode(", ", $errors), 'error');
@@ -118,7 +104,6 @@ class InventoryModel extends BaseModel
             'code' => isset($data['code']) ? strtoupper(trim($data['code'])) : null,
             'variant_id' => $data['variant_id'] ?? null,
             'stock_quantity' => $data['stock_quantity'] ?? 0,
-            'reorder_level' => $data['reorder_level'] ?? 0,
         ];
 
         // Filter out null values to keep only the provided attributes

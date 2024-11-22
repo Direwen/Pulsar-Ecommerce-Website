@@ -44,7 +44,7 @@
             'confirmed' => 'bg-green-500/60', // Green conveys positivity and approval.
             'processing' => 'bg-blue-500/60', // Blue suggests ongoing action or a process.
             'cancelled' => 'bg-red-500/60', // Red strongly indicates a stop or issue.
-            'shipped' => 'bg-indigo-500/60', // Indigo/blue implies movement or transition.
+            'shipping' => 'bg-indigo-500/60', // Indigo/blue implies movement or transition.
             'delivered' => 'bg-green-600/60', // Darker green represents completion.
         ];
         

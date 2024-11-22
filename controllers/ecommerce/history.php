@@ -37,7 +37,7 @@ if ($status_search_for == 'delivered') {
     $conditions[] = [
         'attribute' => $order_model->getColumnStatus(),
         'operator' => "<>",
-        'value' => 'shipped'
+        'value' => 'shipping'
     ];
     $conditions[] = [
         'attribute' => $order_model->getColumnStatus(),
@@ -53,7 +53,7 @@ if ($status_search_for == 'delivered') {
     $conditions[] = [
         'attribute' => $order_model->getColumnStatus(),
         'operator' => "LIKE",
-        'value' => 'shipped'
+        'value' => 'shipping'
     ];
 } else if ($status_search_for == 'cancelled') {
     $conditions[] = [

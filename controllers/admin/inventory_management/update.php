@@ -39,7 +39,6 @@ $isUpdated = ErrorHandler::handle(fn() => $inventory_model->update(
         $inventory_model->getColumnVariantId() => $_POST["variant_id"],
         $inventory_model->getColumnCode() => $_POST["code"],
         $inventory_model->getColumnStockQuantity() => $_POST["stock_quantity"],
-        $inventory_model->getColumnReorderLevel() => $_POST["reorder_level"],
     ],
     [
         $inventory_model->getColumnId() => $_POST["id"],
