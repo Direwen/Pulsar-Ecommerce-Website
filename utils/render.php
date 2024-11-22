@@ -33,9 +33,18 @@ function renderDashboardHeader(string $title_name, string $create_btn_desc = '',
     include("./views/components/admin_dashboard_header.php");
 }
 
-function renderProductCard(array $product)
+function renderProductCard(array $product, int $max_views)
 {
     global $root_directory;
+
+    // Parse available_variant_ids
+    $available_variant_ids = isset($product['available_variant_ids']) 
+    ? explode(',', $product['available_variant_ids']) 
+    : [];
+
+    // Check if any variant is available
+    $is_available = !empty($available_variant_ids);
+    
     include("./views/components/product_card.php");
 }
 

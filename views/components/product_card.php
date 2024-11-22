@@ -1,6 +1,5 @@
-<section class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 p-4 rounded-lg">
+<section class="rounded-lg">
     <!-- Product main image -->
-
     <a href="<?= $root_directory . "product/view?id=" . urlencode($product["id"]); ?>">
         <div class="relative h-64 bg-secondary flex items-center justify-center rounded overflow-hidden">
             <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($product["img"]) ?>" 
@@ -13,12 +12,24 @@
             </span>
             
             <!-- Add to cart icon -->
+            <?php
+                // Get the first available variant ID if any
+                $variant_id = $is_available ? $available_variant_ids[0] : null;
+
+                // Define button classes based on availability
+                $button_classes = $is_available 
+                    ? "bg-primary hover:bg-accent hover:text-secondary interactive" 
+                    : "bg-light-gray text-secondary cursor-not-allowed";
+            ?>
             <button
-                onclick="event.stopPropagation(); event.preventDefault(); addToCartShortcut(<?= $product['variant_id']; ?>, <?= $root_directory; ?>)"
-                class="absolute bottom-4 right-4 bg-primary rounded-full px-2 py-1 shadow text-light-dark interactive z-10 hover:bg-accent hover:text-secondary"
+                title="<?= $is_available ? 'add to cart' : 'Out of Stock' ?>"
+                onclick="<?= $is_available ? "event.stopPropagation(); event.preventDefault(); addToCartShortcut($variant_id, $root_directory)" : "return false;" ?>"
+                class="absolute bottom-4 right-4 rounded-full px-2 py-1 shadow text-light-dark z-10 <?= $button_classes ?>"
+                <?= $is_available ? "" : "disabled" ?>
             >
                 <span class="material-symbols-outlined">shopping_bag</span>
             </button>
+
         </div>
     </a>
 
@@ -37,7 +48,22 @@
     </p>
 
     <!-- Product price -->
-    <p class="text-left text-dark text-sm mt-1 font-bold">
-        <span class="text-xs">$</span><?= htmlspecialchars($product["min_price"]); ?>
-    </p>
+    <section class="flex justify-between items-center">
+        <p class="text-left text-dark text-sm mt-1 font-bold">
+            <span class="text-xs">$</span><?= htmlspecialchars($product["min_price"]); ?>
+        </p>
+
+        <section class="flex gap-1">
+            <?php if($product["views"] === $max_views): ?>
+                <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-yellow-500 text-primary border shadow rounded-full">Most Popular</span>
+            <?php endif; ?>
+
+            <?php if(!$is_available): ?>
+                <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-dark text-secondary border shadow rounded-full">Sold Out</span>
+            <?php endif; ?>
+        </section>
+    </section>
+    
+
+    
 </section>

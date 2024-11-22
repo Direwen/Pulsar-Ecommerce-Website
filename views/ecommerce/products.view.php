@@ -34,11 +34,12 @@
 
             </div>
 
-            <div class="flex flex-wrap justify-center items-start gap-x-2 gap-y-4">
+            <div class="w-11/12 mx-auto my-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <?php foreach ($products as $product): ?>
-                    <?php renderProductCard($product); ?>
+                    <?php renderProductCard($product, $max_views); ?>
                 <?php endforeach; ?>
             </div>
+
 
         <?php else: ?>
 
@@ -56,7 +57,5 @@
                 class="w-1/2 md:w-1/4 lg:w-1/6 animate-pulse">
         </div>
     <?php endif; ?>
-
-
 
 </div>
