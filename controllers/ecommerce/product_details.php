@@ -5,6 +5,9 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
+$data = $review_model->getRatingsAndCount($_GET["id"]);
+$finalized_rating = generateRating($data["total_ratings"], $data["rating_count"]);
+
 $fetched_data = ErrorHandler::handle(fn() => $product_model->getAll(
     select: [
         ["column" => $product_model->getColumnId()],

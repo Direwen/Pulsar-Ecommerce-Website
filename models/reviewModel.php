@@ -144,4 +144,36 @@ class ReviewModel extends BaseModel
         return $result;
 
     }
+
+    public function getRatingsAndCount($product_id)
+    {
+        global $variant_model, $product_model;
+
+        $fetched_record = $this->getAll(
+            aggregates: [
+                ["column" => $this->getColumnRating(), "function" => "SUM", "alias" => "total_ratings", "table" => $this->getTableName()],
+                ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "rating_count", "table" => $this->getTableName()],
+            ],
+            joins: [
+                [
+                    "type" => "INNER JOIN",
+                    "table" => $variant_model->getTableName(),
+                    "on" => "reviews.variant_id = variants.id",
+                ],
+                [
+                    "type" => "INNER JOIN",
+                    "table" => $product_model->getTableName(),
+                    "on" => "variants.product_id = products.id",
+                ]
+            ],
+            conditions: [
+                [
+                    'attribute' => $variant_model->getColumnProductId(),
+                    'operator' => "=",
+                    'value' => $product_id
+                ]
+            ]
+        )["records"][0];
+        return $fetched_record;
+    }
 }

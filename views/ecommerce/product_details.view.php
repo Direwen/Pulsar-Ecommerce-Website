@@ -155,6 +155,44 @@
             );
             ?>
 
+            <section class="flex flex-col items-center p-4">
+                <!-- Rating Number -->
+                <span class="text-accent text-5xl md:text-6xl lg:text-7xl font-bold tracking-wide"><?= $finalized_rating; ?></span>
+
+                <!-- Stars and Rating Count -->
+                <section class="flex items-end mt-2 gap-3">
+                    <!-- Stars Container -->
+                    <section class="flex gap-1">
+                        <?php
+                        // Calculate full, half, and empty stars
+                        $full_stars = floor($finalized_rating); // Full stars
+                        $has_half_star = ($finalized_rating - $full_stars) >= 0.5; // Check if half star is needed
+                        $empty_stars = 5 - $full_stars - ($has_half_star ? 1 : 0); // Remaining empty stars
+
+                        // Render full stars
+                        for ($i = 0; $i < $full_stars; $i++) {
+                            echo '<svg class="w-4 h-4 lg:w-6 lg:h-6 text-yellow-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.562 4.805a1 1 0 00.95.69h5.043c.969 0 1.372 1.24.588 1.81l-4.086 2.966a1 1 0 00-.364 1.118l1.562 4.805c.3.921-.755 1.688-1.54 1.118l-4.086-2.966a1 1 0 00-1.176 0L3.8 18.34c-.785.57-1.84-.197-1.54-1.118l1.562-4.805a1 1 0 00-.364-1.118L.372 9.432C-.412 8.862-.009 7.622.96 7.622h5.042a1 1 0 00.95-.69L9.05 2.927z"/></svg>';
+                        }
+
+                        // Render half star
+                        if ($has_half_star) {
+                            echo '<svg class="w-4 h-4 lg:w-6 lg:h-6 text-yellow-400" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><defs><clipPath id="half-star"><rect x="0" y="0" width="10" height="20" /></clipPath></defs><g clip-path="url(#half-star)"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.562 4.805a1 1 0 00.95.69h5.043c.969 0 1.372 1.24.588 1.81l-4.086 2.966a1 1 0 00-.364 1.118l1.562 4.805c.3.921-.755 1.688-1.54 1.118l-4.086-2.966a1 1 0 00-1.176 0L3.8 18.34c-.785.57-1.84-.197-1.54-1.118l1.562-4.805a1 1 0 00-.364-1.118L.372 9.432C-.412 8.862-.009 7.622.96 7.622h5.042a1 1 0 00.95-.69L9.05 2.927z"/></g></svg>';
+                        }
+
+                        // Render empty stars
+                        for ($i = 0; $i < $empty_stars; $i++) {
+                            echo '<svg class="w-4 h-4 lg:w-6 lg:h-6 text-light-gray" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.562 4.805a1 1 0 00.95.69h5.043c.969 0 1.372 1.24.588 1.81l-4.086 2.966a1 1 0 00-.364 1.118l1.562 4.805c.3.921-.755 1.688-1.54 1.118l-4.086-2.966a1 1 0 00-1.176 0L3.8 18.34c-.785.57-1.84-.197-1.54-1.118l1.562-4.805a1 1 0 00-.364-1.118L.372 9.432C-.412 8.862-.009 7.622.96 7.622h5.042a1 1 0 00.95-.69L9.05 2.927z"/></svg>';
+                        }
+                        ?>
+                    </section>
+
+
+                    <!-- Rating Count -->
+                    <span class="text-light-dark text-sm"><?= $data["rating_count"]; ?> <?= ($data["rating_count"] > 1) ? 'reviews' : 'review'; ?></span>
+                </section>
+            </section>
+
+
         </div>
 
     </div>
@@ -216,5 +254,4 @@
         </section>
     </section>
 
-    <!-- manual -->
 </div>

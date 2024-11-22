@@ -1,7 +1,7 @@
 <footer class="bg-black text-secondary py-8">
     <!-- Top Footer Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
             <!-- Product Section -->
             <div>
                 <h4 class="text-lg font-bold mb-4">Product</h4>
@@ -14,14 +14,15 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Support</h4>
                 <section class="flex flex-col gap-1">
-                    <a href="#" class="text-light-dark hover:text-secondary">Support Home</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Download</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Register</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Warranty</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Refund Policy</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">FAQ</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Where to Buy</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Contact Us</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Support</a>
+                    <?php if (!$auth_service->getAuthUser()): ?>
+                        <a href="#" class="text-light-dark hover:text-secondary">Login</a>
+                    <?php endif; ?>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Warranty</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Contact Us</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Refund Policy</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">FAQ</a>
+                    <a href="<?= $root_directory . 'support' ?>" class="text-light-dark hover:text-secondary">Where to Buy</a>
                 </section>
             </div>
 
@@ -29,21 +30,11 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Community</h4>
                 <section class="flex flex-col gap-1">
-                    <a href="#" class="text-light-dark hover:text-secondary">About Us</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">News</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">Discord</a>
-                    <a href="#" class="text-light-dark hover:text-secondary">eSports</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary">News</a>
+                    <a href="https://t.co/1d3hoNI15S" target="_blank" class="text-light-dark hover:text-secondary">Discord</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary">eSports</a>
                 </section>
             </div>
-
-            <!-- Program Section -->
-            <div>
-                <h4 class="text-lg font-bold mb-4">Program</h4>
-                <section class="flex flex-col gap-1">
-                    <a href="#" class="text-light-dark hover:text-secondary">Affiliate Program</a>
-                </section>
-            </div>
-
 
             <!-- Stay Connected Section -->
             <div class="sm:col-span-2 md:col-span-4">

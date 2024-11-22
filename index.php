@@ -15,6 +15,7 @@ require_once './utils/errorHandler.php';
 require_once './utils/imageHandler.php';
 require_once './utils/messageHandler.php';
 require_once './utils/clearCookie.php';
+require_once './utils/generateRating.php';
 
 require_once './models/userModel.php';
 require_once './models/sessionModel.php';
