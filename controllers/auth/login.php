@@ -1,30 +1,48 @@
 <?php
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // Process the POST request
-    $email = $_POST["email"];
-    
     // Validate email input
-    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        
-        global $auth_service;
+    $email = trim($_POST["email"]);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        setMessage("Enter a valid Email", "error");
+        header("Location: ./login");
+        exit();
+    }
 
-        // Error handling for OTP request
+    // Process the POST request
+    global $auth_service, $user_model;
+
+    // Normalize email
+    $email = strtolower($email);
+
+    // Fetch user details
+    $user = ErrorHandler::handle(fn () => $user_model->get([
+        $user_model->getColumnEmail() => $email
+    ]));
+
+    if (is_array($user)) {
+        // Check if user is active
+        if (!$user[$user_model->getColumnIsActive()]) {
+            setMessage("This account is disabled, please send a ticket to get your access to this account", "error");
+            header("Location: ./login");
+            exit();
+        }
+
+        // Request OTP
         if (ErrorHandler::handle(fn () => $auth_service->requestOtp($email))) {
             header("Location: ./otp");
             exit();
-        } else {
-            $_SESSION['message'] = "An error occurred while requesting the OTP.";
         }
 
-    } else {
-        $_SESSION['message'] = "Enter a valid Email";
+        // OTP request failed
+        setMessage("An error occurred while requesting the OTP", "error");
     }
 
+    // Fallback if user does not exist
+    setMessage("User not found", "error");
     header("Location: ./login");
     exit();
-    
 } else {
-    // If it's not a POST request, display the login form
+    // Display the login form for GET request
     require("./views/auth/login.view.php");
 }

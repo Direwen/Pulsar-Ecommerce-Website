@@ -1,32 +1,51 @@
 // Function to handle user edit actions and trigger the overlay
-function editUser(recordId, submissionPath) {
+function editUser(recordId, submissionPath, currentValues) {
 
     // Fetch or build the content dynamically based on the recordId
-    const content = `<section class="border-b border-light-dark pb-4">
+    const content = `
+        <section class="border-b border-light-dark pb-4">
             <h2 class="text-xl font-semibold text-dark">Update User?</h2>
         </section>
 
         <form action="${submissionPath}" method="POST" class="flex flex-col gap-4">
             <section class="flex justify-start items-center gap-2">
                 <input type="hidden" name="id" value="${recordId}"> <!-- Hidden input for record ID -->
+
+                <!-- User Role Selection -->
                 <label for="role" class="block text-sm font-medium text-dark mb-1">User Role</label>
-                <select name="role" id="role" class="block grow border border-light-gray rounded-md p-2 shadow">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
+                <select name="role" id="role" class="block grow border border-light-gray rounded-md p-2 shadow hover:outline-accent">
+                    <option value="user" ${currentValues.role === 'user' ? 'selected' : ''}>User</option>
+                    <option value="admin" ${currentValues.role === 'admin' ? 'selected' : ''}>Admin</option>
                 </select>
             </section>
+
+            <section class="flex justify-start items-center gap-4">
+                <!-- Account Status: Active or Disabled with Radio Buttons -->
+                <label class="block text-sm font-medium text-dark mb-1">Account Status</label>
+                <div class="flex items-center gap-4">
+                    <label for="isActiveTrue" class="flex items-center gap-2">
+                        <input type="radio" id="isActiveTrue" name="is_active" value="1" ${currentValues.isActive === '1' ? 'checked' : ''}>
+                        <span>Active</span>
+                    </label>
+                    <label for="isActiveFalse" class="flex items-center gap-2">
+                        <input type="radio" id="isActiveFalse" name="is_active" value="0" ${currentValues.isActive === '0' ? 'checked' : ''}>
+                        <span>Disabled</span>
+                    </label>
+                </div>
+            </section>
+
 
             <section class="flex justify-end items-center gap-2">
                 <button type="button" onclick="forceOverlayToClose()" class="w-fit bg-primary interactive text-accent font-semibold py-2 px-6 rounded shadow">Cancel</button>
                 <button type="submit" class="w-fit bg-accent interactive text-primary font-semibold py-2 px-6 rounded shadow">Save</button>
             </section>
-        </form>`;
-
+        </form>
+    `;
 
     // Show the overlay with the dynamic content
     openOverlayModal(content);
-
 }
+
 
 function deleteUser(recordId, userEmail, submissionPath) {
     const content = `<section class="border-b border-light-dark pb-4">
@@ -70,9 +89,14 @@ function createUser(submissionPath) {
 // Function to attach the editUser function to all edit buttons in the User Management dashboard
 document.querySelectorAll('.edit-user-button').forEach(button => {
     button.addEventListener('click', function () {
+        console.log( this.getAttribute('is_active'));
         const recordId = this.getAttribute('data-id');  // Get the record ID from the data attribute
         const submissionPath = this.getAttribute('submission-path');  // Get the submission path from the data attribute
-        editUser(recordId, submissionPath);  // Call the edit function specific to User Management
+        const userDetails = {
+            'role': this.getAttribute('role'),
+            'isActive' : this.getAttribute('is_active')
+        }
+        editUser(recordId, submissionPath, userDetails);  // Call the edit function specific to User Management
     });
 });
 

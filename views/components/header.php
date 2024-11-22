@@ -57,10 +57,9 @@ $navLinks = [
                             class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">history</span> Order History
                         </a>
-                        <a href="<?= $root_directory; ?>disable"
-                            class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                        <span onclick="confirmAccountDisable(<?= $root_directory ?>)"class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">block</span> Disable Account
-                        </a>
+                        </span>
                         <a href="<?= $root_directory; ?>logout"
                             class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">logout</span> Logout

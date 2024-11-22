@@ -2,14 +2,14 @@
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit;
+    exit();
 }
 
 // Validate form data
 if (!$category_model->validateFormData($_POST, $_FILES ?? [])) {
     setMessage("Invalid form data.", "error");
     header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit;
+    exit();
 }
 
 // Handle image preparation
@@ -22,7 +22,7 @@ $img_details = ErrorHandler::handle(fn() => ImageHandler::prepareImageForStorage
 if (!$img_details) {
     setMessage("Failed to prepare the image.", "error");
     header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit;
+    exit();
 }
 
 $banner_img_details = [];
@@ -36,7 +36,7 @@ $banner_img_details = ErrorHandler::handle(fn () => ImageHandler::prepareImageFo
 if (!$banner_img_details) {
     setMessage("Failed to prepare the image.", "error");
     header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit;
+    exit();
 }
 
 // Create category and move file within a transaction
@@ -70,10 +70,10 @@ $isCreated = $error_handler->handleDbOperation(function () use ($category_model,
 
 if (!$isCreated) {
     header("Location: " . $_SERVER['HTTP_REFERER']);
-    exit;
+    exit();
 }
 
 // Success message
 setMessage("Created a new category", "success");
 header("Location: " . $_SERVER['HTTP_REFERER']);
-exit;
+exit();

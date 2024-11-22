@@ -17,6 +17,10 @@ return [
         'controller' => 'controllers/auth/otp.php',
         'middleware' => ['guest', 'otp'],
     ],
+    'disable' => [
+        'controller' => 'controllers/auth/disable.php',
+        'middleware' => ['auth'],
+    ],
     'admin/dashboard' => [
         'controller' => 'controllers/admin/dashboard.php',
         'middleware' => []

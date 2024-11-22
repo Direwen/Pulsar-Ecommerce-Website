@@ -198,7 +198,7 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
                                     <span
                                         <?php
                                         foreach ($record as $k => $v) {
-                                            if ($k != 'id' && !empty($v)) {
+                                            if ($k != 'id') {
                                                 $value = is_array($v) || is_object($v) ? htmlspecialchars(json_encode($v)) : htmlspecialchars($v);
                                                 echo " {$k}=\"{$value}\" ";
                                             }

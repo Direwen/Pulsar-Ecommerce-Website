@@ -1,19 +1,20 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    global $user_model;
 
     $user_id = $_POST["id"];
     $user_role = $_POST["role"];
+    $is_active = $_POST["is_active"];
     $result = $user_model->get([
         $user_model->getColumnId() => $user_id
     ]);
 
     // Check if $result is an array before accessing its elements
-    if (is_array($result) && $result[$user_model->getColumnRole()] != $user_role) {
+    if (is_array($result)) {
         $update_result = $user_model->update(
             [
-                $user_model->getColumnRole() => $user_role
+                $user_model->getColumnRole() => $user_role,
+                $user_model->getColumnIsActive() => ($is_active == '1') ? true : false
             ],
             [
                 $user_model->getColumnId() => $user_id
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             setMessage("Failed to Update", "error"); // Use setMessage for failure
         }
     } else {
-        setMessage("No need to Update", "info"); // Use setMessage for no change
+        setMessage("User is not found", "info"); // Use setMessage for no change
     }
 }
 
