@@ -33,3 +33,11 @@
 </head>
 
 <body>
+
+<!-- Scroll Up Button -->
+<!-- Scroll Up Button -->
+<button 
+    id="scrollUpBtn" 
+    class="hidden fixed bottom-5 right-5 p-3 bg-accent text-primary rounded-full shadow-lg interactive transition-opacity duration-300 transform opacity-0 translate-y-2 z-10">
+    <span class="material-symbols-outlined">keyboard_arrow_up</span>
+</button>

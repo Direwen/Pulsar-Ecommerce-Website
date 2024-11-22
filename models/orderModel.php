@@ -292,7 +292,7 @@ class OrderModel extends BaseModel
                 ],
                 page: $page
             ));
-            $total_sales[] = $fetched_orders["records"][0]["total_sales"];
+            $total_sales[] = !empty($fetched_orders["records"]) ? $fetched_orders["records"][0]["total_sales"] : 0;
             $page++;
         } while ($fetched_orders["hasMore"]);
 
