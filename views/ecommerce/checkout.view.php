@@ -122,10 +122,10 @@
                         <!-- Country Selector -->
                         <select name="delivery[country]" onchange="updateShippingAndTotal(this)" required
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent">
-                            <option value="" disabled <?= empty($address) ? 'selected' : '' ?>>Select a country</option>
+                            <option value="" disabled <?= !is_array($address) ? 'selected' : '' ?>>Select a country</option>
 
                             <?php foreach ($countries as $name => $value): ?>
-                                <option value="<?= $name ?>" shipping="<?= $value['shipping'] ?>" <?= !empty($address) && $address["country"] === $value["code"] ? 'selected' : '' ?>>
+                                <option value="<?= $name ?>" shipping="<?= $value['shipping'] ?>" <?= is_array($address) && $address["country"] === $value["code"] ? 'selected' : '' ?>>
                                     <?= $name ?>
                                 </option>
                             <?php endforeach; ?>
@@ -136,44 +136,44 @@
                             <input type="text" name="delivery[first_name]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="First name"
-                                value="<?= !empty($address) ? htmlspecialchars($address['first_name']) : ''; ?>">
+                                value="<?= is_array($address) ? htmlspecialchars($address['first_name']) : ''; ?>">
                             <input type="text" name="delivery[last_name]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="Last name"
-                                value="<?= !empty($address) ? htmlspecialchars($address['last_name']) : ''; ?>">
+                                value="<?= is_array($address) ? htmlspecialchars($address['last_name']) : ''; ?>">
                         </div>
 
                         <!-- Company, Address, and Additional Address Information -->
                         <input type="text" name="delivery[company]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Company (optional)"
-                            value="<?= !empty($address) ? htmlspecialchars($address['company']) : ''; ?>">
+                            value="<?= is_array($address) ? htmlspecialchars($address['company']) : ''; ?>">
                         <input type="text" name="delivery[address]" required
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Address"
-                            value="<?= !empty($address) ? htmlspecialchars($address['address']) : ''; ?>">
+                            value="<?= is_array($address) ? htmlspecialchars($address['address']) : ''; ?>">
                         <input type="text" name="delivery[apartment]"
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Apartment, suite, etc. (optional)"
-                            value="<?= !empty($address) ? htmlspecialchars($address['apartment']) : ''; ?>">
+                            value="<?= is_array($address) ? htmlspecialchars($address['apartment']) : ''; ?>">
 
                         <!-- Postal Code and City Inputs -->
                         <div class="flex gap-4">
                             <input type="text" name="delivery[postal_code]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="Postal code"
-                                value="<?= !empty($address) ? htmlspecialchars($address['postal_code']) : ''; ?>">
+                                value="<?= is_array($address) ? htmlspecialchars($address['postal_code']) : ''; ?>">
                             <input type="text" name="delivery[city]" required
                                 class="border border-light-dark w-1/2 px-4 py-2 rounded focus:outline-accent"
                                 placeholder="City"
-                                value="<?= !empty($address) ? htmlspecialchars($address['city']) : ''; ?>">
+                                value="<?= is_array($address) ? htmlspecialchars($address['city']) : ''; ?>">
                         </div>
 
                         <!-- Phone Input -->
                         <input type="text" name="delivery[phone]" required
                             class="border border-light-dark w-full px-4 py-2 rounded focus:outline-accent"
                             placeholder="Phone"
-                            value="<?= !empty($address) ? htmlspecialchars($address['phone']) : ''; ?>">
+                            value="<?= is_array($address) ? htmlspecialchars($address['phone']) : ''; ?>">
 
                         <!-- Save Information Checkbox -->
                         <div class="flex items-center gap-2 mt-2">

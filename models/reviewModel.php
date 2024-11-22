@@ -14,13 +14,34 @@ class ReviewModel extends BaseModel
     private const TABLE_NAME = 'reviews';
 
     // Column accessors
-    public static function getColumnId(): string { return self::COLUMN_ID; }
-    public static function getColumnUserId(): string { return self::COLUMN_USER_ID; }
-    public static function getColumnVariantId(): string { return self::COLUMN_VARIANT_ID; }
-    public static function getColumnRating(): string { return self::COLUMN_RATING; }
-    public static function getColumnCreatedAt(): string { return self::COLUMN_CREATED_AT; }
-    public static function getColumnUpdatedAt(): string { return self::COLUMN_UPDATED_AT; }
-    public static function getTableName(): string { return self::TABLE_NAME; }
+    public static function getColumnId(): string
+    {
+        return self::COLUMN_ID;
+    }
+    public static function getColumnUserId(): string
+    {
+        return self::COLUMN_USER_ID;
+    }
+    public static function getColumnVariantId(): string
+    {
+        return self::COLUMN_VARIANT_ID;
+    }
+    public static function getColumnRating(): string
+    {
+        return self::COLUMN_RATING;
+    }
+    public static function getColumnCreatedAt(): string
+    {
+        return self::COLUMN_CREATED_AT;
+    }
+    public static function getColumnUpdatedAt(): string
+    {
+        return self::COLUMN_UPDATED_AT;
+    }
+    public static function getTableName(): string
+    {
+        return self::TABLE_NAME;
+    }
 
     /**
      * Creates the table with the simplified design.
@@ -60,11 +81,11 @@ class ReviewModel extends BaseModel
     public function getUnreviewedVariants()
     {
         global $order_variant_model, $product_model, $variant_model, $order_model;
-        $page= 1;
+        $page = 1;
         $result = [];
         do {
 
-            $fetched_result = ErrorHandler::handle(fn () => $order_variant_model->getAll(
+            $fetched_result = ErrorHandler::handle(fn() => $order_variant_model->getAll(
                 select: [
                     [
                         "column" => $variant_model->getColumnId(),
@@ -72,9 +93,9 @@ class ReviewModel extends BaseModel
                         "table" => $variant_model->getTableName()
                     ],
                     [
-                      "column" => $product_model->getColumnName(),
-                      "alias" => "product_name",
-                      "table" => $product_model->getTableName()  
+                        "column" => $product_model->getColumnName(),
+                        "alias" => "product_name",
+                        "table" => $product_model->getTableName()
                     ],
                     [
                         "column" => $variant_model->getColumnName(),
@@ -149,31 +170,54 @@ class ReviewModel extends BaseModel
     {
         global $variant_model, $product_model;
 
-        $fetched_record = $this->getAll(
-            aggregates: [
-                ["column" => $this->getColumnRating(), "function" => "SUM", "alias" => "total_ratings", "table" => $this->getTableName()],
-                ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "rating_count", "table" => $this->getTableName()],
-            ],
-            joins: [
-                [
-                    "type" => "INNER JOIN",
-                    "table" => $variant_model->getTableName(),
-                    "on" => "reviews.variant_id = variants.id",
+        $page = 1;
+        $totalRatings = 0;
+        $ratingCount = 0;
+
+        do {
+            // Fetch paginated data
+            $fetched_result = $this->getAll(
+                aggregates: [
+                    ["column" => $this->getColumnRating(), "function" => "SUM", "alias" => "total_ratings", "table" => $this->getTableName()],
+                    ["column" => $this->getColumnId(), "function" => "COUNT", "alias" => "rating_count", "table" => $this->getTableName()],
                 ],
-                [
-                    "type" => "INNER JOIN",
-                    "table" => $product_model->getTableName(),
-                    "on" => "variants.product_id = products.id",
-                ]
-            ],
-            conditions: [
-                [
-                    'attribute' => $variant_model->getColumnProductId(),
-                    'operator' => "=",
-                    'value' => $product_id
-                ]
-            ]
-        )["records"][0];
-        return $fetched_record;
+                joins: [
+                    [
+                        "type" => "INNER JOIN",
+                        "table" => $variant_model->getTableName(),
+                        "on" => "reviews.variant_id = variants.id",
+                    ],
+                    [
+                        "type" => "INNER JOIN",
+                        "table" => $product_model->getTableName(),
+                        "on" => "variants.product_id = products.id",
+                    ]
+                ],
+                conditions: [
+                    [
+                        'attribute' => $variant_model->getColumnProductId(),
+                        'operator' => "=",
+                        'value' => $product_id
+                    ]
+                ],
+                page: $page
+            );
+
+            // Accumulate results if records are returned
+            if (!empty($fetched_result["records"])) {
+                $record = $fetched_result["records"][0];
+                $totalRatings += $record["total_ratings"] ?? 0; // Avoid errors if null
+                $ratingCount += $record["rating_count"] ?? 0; // Avoid errors if null
+            }
+
+            $page++;
+        } while ($fetched_result["hasMore"]); // Continue pagination if there are more results
+
+        // Return the final aggregated results
+        return [
+            "total_ratings" => $totalRatings,
+            "rating_count" => $ratingCount,
+        ];
     }
+
 }
