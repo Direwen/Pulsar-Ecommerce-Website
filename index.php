@@ -134,7 +134,7 @@ require("./views/components/end.php");
 
 ?>
 
-<div class="fixed hidden w-fit bottom-5 left-10 z-50 bg-secondary border-2 border-red-900 text-red-900 px-4 py-8 rounded">
+<div class="fixed w-fit bottom-5 left-10 z-50 bg-secondary border-2 border-red-900 text-red-900 px-4 py-8 rounded">
 
     <h3>Session Data:</h3>
     <ul>

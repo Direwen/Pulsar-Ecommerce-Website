@@ -39,7 +39,7 @@ $filtered_data = [
 ];
 
 // Wrap the entire order processing in a single transaction
-$result = $error_handler->handleDbOperation(function () use ($filtered_data, $user_model, $discount_model, $variant_model, $inventory_model, $order_model, $order_variant_model, $address_model) {
+$result = $error_handler->handleDbOperation(function () use ($filtered_data, $mail_service, $user_model, $discount_model, $variant_model, $inventory_model, $order_model, $order_variant_model, $address_model) {
     // Validate user
     $user = $user_model->get(
         conditions: [
@@ -208,6 +208,33 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $us
     }
 
     setcookie("CART", '', time() - (30 * 24 * 60 * 60), '/');
+
+    //send order receipt
+    $emailDetails = [
+        "subject" => "Your Pulsar Gaming Gear Order Confirmation",
+        "body" => "
+            <div style='font-family: Arial, sans-serif; color: #333; line-height: 1.6;'>
+            <h2 style='color: #000;'>Thank You for Your Order!</h2>
+            <p style='margin-bottom: 16px;'>Hi <strong>" . htmlspecialchars($filtered_data['delivery']['first_name']) . " " . htmlspecialchars($filtered_data['delivery']['last_name']) . "</strong>,</p>
+            <p style='margin-bottom: 16px;'>We have received your order <strong>#{$order_code}</strong> and it is now being processed.</p>
+            <h3 style='color: #000; margin-bottom: 8px;'>Order Details:</h3>
+            <ul style='list-style-type: none; padding: 0;'>
+                <li style='margin-bottom: 8px;'><strong>Order Code:</strong> {$order_code}</li>
+                <li style='margin-bottom: 8px;'><strong>Total Amount:</strong> $" . number_format($total, 2) . "</li>
+                <li><strong>Shipping Address:</strong> " 
+                    . htmlspecialchars($filtered_data['delivery']['address']) . ", "
+                    . htmlspecialchars($filtered_data['delivery']['city']) . ", "
+                    . htmlspecialchars($filtered_data['delivery']['postal_code']) . ", "
+                    . htmlspecialchars($filtered_data['delivery']['country']) . 
+                "</li>
+            </ul>
+            <p style='margin-top: 16px;'>We will notify you once your order has shipped.</p>
+        </div>
+        "
+    ];
+    
+
+    ErrorHandler::handle(fn () => $mail_service->sendMail($filtered_data["user_email"], $emailDetails));
 
 });
 
