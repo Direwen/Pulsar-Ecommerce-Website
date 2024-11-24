@@ -339,7 +339,7 @@ class OrderModel extends BaseModel
                 ],
                 page: $page
             ));
-            $pending_order_counts[] = $fetched_orders["records"][0]["pending_count"];
+            $pending_order_counts[] = !empty($fetched_orders["records"]) ? $fetched_orders["records"][0]["pending_count"] : 0;
             $page++;
         } while ($fetched_orders["hasMore"]);
 

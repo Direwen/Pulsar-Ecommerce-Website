@@ -47,6 +47,15 @@ $DB_METADATA = null;
 
 $root_directory = "/E-Commerce%20Assignment%20Project/";
 $pdo = ErrorHandler::handle(fn() => Database::getInstance());
+
+// Check if database is connected
+if (empty($pdo)) {
+
+    include './views/server_error.view.php';
+
+    exit();
+}
+
 $error_handler = ErrorHandler::getInstance($pdo);
 
 $result = $error_handler->handleDbOperation(function () use ($pdo) {
