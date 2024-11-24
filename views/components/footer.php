@@ -31,6 +31,7 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Community</h4>
                 <section class="flex flex-col gap-1">
+                    <a href="<?= $root_directory . 'about' ?>" class="text-light-dark hover:text-secondary cursor-pointer">About us</a>
                     <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">News</a>
                     <a href="https://t.co/1d3hoNI15S" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">Discord</a>
                     <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">eSports</a>

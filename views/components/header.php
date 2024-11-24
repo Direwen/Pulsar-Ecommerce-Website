@@ -6,6 +6,7 @@ $currentPage = basename($_SERVER['SCRIPT_FILENAME']);
 $navLinks = [
     ['url' => 'product.php', 'label' => 'PRODUCT'],
     ['url' => 'support', 'label' => 'SUPPORT'],
+    ['url' => 'about', 'label' => 'About'],
 ];
 ?>
 

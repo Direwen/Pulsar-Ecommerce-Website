@@ -129,6 +129,10 @@ return [
         'controller' => 'controllers/ecommerce/support.php',
         'middleware' => [],
     ],
+    'about' => [
+        'controller' => 'controllers/ecommerce/about.php',
+        'middleware' => [],
+    ],
     '404' => [
         'controller' => 'controllers/404.php',
         'middleware' => [],
