@@ -29,6 +29,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
     <link rel="stylesheet" href="<?= $root_directory ?>css/common.css" />
     <link rel="stylesheet" href="<?= $root_directory ?>css/header.css" />
+    <link rel="stylesheet" href="<?= $root_directory ?>css/message.css" />
     <link rel="stylesheet" href="<?= $root_directory ?>css/interactive_components.css" />
 </head>
 

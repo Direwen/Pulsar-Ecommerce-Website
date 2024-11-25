@@ -1,0 +1,15 @@
+#message-box {
+    opacity: 1; /* Fully visible by default */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#message-box.hidden {
+    opacity: 0;
+    transform: translateY(100%); /* Slide out */
+    pointer-events: none; /* Prevent interactions */
+}
+
+#progress-bar {
+    width: 100%; /* Start fully filled */
+    transition: width linear;
+}

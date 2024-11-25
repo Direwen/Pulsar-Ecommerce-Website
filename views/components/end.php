@@ -10,12 +10,15 @@ if (isset($_SESSION['message'])) {
     // Define a class based on the state
     $messageClass = '';
     if ($state === 'success') {
-        $messageClass = 'bg-green-500 text-white'; // Green background for success
+        $messageClass = 'bg-green-500 text-primary border border-light-gray'; // Subtle green for success
     } elseif ($state === 'error') {
-        $messageClass = 'bg-red-500 text-white'; // Red background for error
+        $messageClass = 'bg-danger text-light-gray border border-dark'; // Bold red for error
     } elseif ($state === 'info') {
-        $messageClass = 'bg-blue-500 text-white'; // Blue background for info
+        $messageClass = 'bg-yellow-500 text-secondary border border-light-gray'; // Muted yellow for info
     }
+    
+    
+
 
     require("./views/components/message.php");
 
