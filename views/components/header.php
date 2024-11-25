@@ -4,7 +4,7 @@ $currentPage = basename($_SERVER['SCRIPT_FILENAME']);
 
 // Define navigation links
 $navLinks = [
-    ['url' => 'product.php', 'label' => 'PRODUCT'],
+    ['url' => './', 'label' => 'PRODUCT'],
     ['url' => 'support', 'label' => 'SUPPORT'],
     ['url' => 'about', 'label' => 'About'],
 ];
@@ -49,20 +49,20 @@ $navLinks = [
                         class="hidden absolute w-auto min-w-[200px] right-0 bg-primary border shadow rounded mt-2">
                         <?php if ($_SESSION["user_role"] != "user"): ?>
                             <a href="<?= $root_directory; ?>admin/dashboard"
-                                class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                                class="block px-4 py-2 text-dark hover:bg-secondary interactive">
                                 <span class="material-symbols-outlined interactive">widgets</span> Dashboard
                             </a>
                         <?php endif; ?>
 
                         <a href="<?= $root_directory; ?>history"
-                            class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                            class="block px-4 py-2 text-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">history</span> Order History
                         </a>
-                        <span onclick="confirmAccountDisable(<?= $root_directory ?>)"class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                        <span onclick="confirmAccountDisable(<?= $root_directory ?>)"class="cursor-pointer block px-4 py-2 text-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">block</span> Disable Account
                         </span>
                         <a href="<?= $root_directory; ?>logout"
-                            class="block px-4 py-2 text-light-dark hover:bg-secondary interactive">
+                            class="block px-4 py-2 text-dark hover:bg-secondary interactive">
                             <span class="material-symbols-outlined interactive">logout</span> Logout
                         </a>
                     </div>

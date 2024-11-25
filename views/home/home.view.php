@@ -9,9 +9,9 @@
     <div class="w-full h-full bg-secondary/60 relative flex justify-start items-end p-4 z-10 sm:px-20 sm:py-16">
         <section class="flex flex-col items-start justify-center text-center uppercase">
             <span class="text-4xl sm:text-7xl font-bold tracking-tighter">
-                <span class="text-accent">pulsar</span> By You
+                <span class="text-accent">pulsar</span> Official
             </span>
-            <span class="text-2xl sm:text-7xl tracking-tighter">Custom Gaming Mice</span>
+            <span class="text-2xl sm:text-7xl tracking-tighter">Gaming Gears</span>
             <?php renderLinkButton("Discover", "./") ?>
         </section>
     </div>
