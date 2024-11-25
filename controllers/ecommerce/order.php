@@ -1,7 +1,7 @@
 <?php
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: " . $_SERVER['HTTP_REFERER']);
+    header("Location: ".  $root_directory . "404");
     exit;
 }
 
@@ -66,6 +66,10 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $ma
     // Get total price
     $cart = json_decode($_COOKIE["CART"], true);
     $selected_variants = [];
+
+    if (empty($cart)) {
+        throw new Exception("It seems like you remove your items from the cart while checking out");
+    }
 
     foreach ($cart as $variant_id => $quantity) {
         $variant = $variant_model->get(
@@ -189,18 +193,51 @@ $result = $error_handler->handleDbOperation(function () use ($filtered_data, $ma
 
 
     if ($filtered_data["delivery"]["save_address"]) {
-        $address_created = $address_model->create([
-            $address_model->getColumnUserId() => $order_data[$order_model->getColumnUserId()],
-            $address_model->getColumnFirstName() => $order_data[$order_model->getColumnFirstName()],
-            $address_model->getColumnLastName() => $order_data[$order_model->getColumnLastName()],
-            $address_model->getColumnCompany() => $order_data[$order_model->getColumnCompany()],
-            $address_model->getColumnAddress() => $order_data[$order_model->getColumnAddress()],
-            $address_model->getColumnApartment() => $order_data[$order_model->getColumnApartment()],
-            $address_model->getColumnPostalCode() => $order_data[$order_model->getColumnPostalCode()],
-            $address_model->getColumnCity() => $order_data[$order_model->getColumnCity()],
-            $address_model->getColumnCountry() => $order_data[$order_model->getColumnCountry()],
-            $address_model->getColumnPhone() => $order_data[$order_model->getColumnPhone()],
-        ]);
+
+        $saved_address = $address_model->get(
+            conditions: [
+                $address_model->getColumnUserId() => $order_data[$order_model->getColumnUserId()]
+            ]
+        );
+
+        $address_created = null;
+
+        if (is_array($saved_address)) {
+
+            $address_created = $address_model->update(
+                [
+                    $address_model->getColumnUserId() => $order_data[$order_model->getColumnUserId()],
+                    $address_model->getColumnFirstName() => $order_data[$order_model->getColumnFirstName()],
+                    $address_model->getColumnLastName() => $order_data[$order_model->getColumnLastName()],
+                    $address_model->getColumnCompany() => $order_data[$order_model->getColumnCompany()],
+                    $address_model->getColumnAddress() => $order_data[$order_model->getColumnAddress()],
+                    $address_model->getColumnApartment() => $order_data[$order_model->getColumnApartment()],
+                    $address_model->getColumnPostalCode() => $order_data[$order_model->getColumnPostalCode()],
+                    $address_model->getColumnCity() => $order_data[$order_model->getColumnCity()],
+                    $address_model->getColumnCountry() => $order_data[$order_model->getColumnCountry()],
+                    $address_model->getColumnPhone() => $order_data[$order_model->getColumnPhone()],
+                ],
+                [
+                    $address_model->getColumnUserId() => $order_data[$order_model->getColumnUserId()]
+                ]
+            );
+
+        } else {
+
+            $address_created = $address_model->create([
+                $address_model->getColumnUserId() => $order_data[$order_model->getColumnUserId()],
+                $address_model->getColumnFirstName() => $order_data[$order_model->getColumnFirstName()],
+                $address_model->getColumnLastName() => $order_data[$order_model->getColumnLastName()],
+                $address_model->getColumnCompany() => $order_data[$order_model->getColumnCompany()],
+                $address_model->getColumnAddress() => $order_data[$order_model->getColumnAddress()],
+                $address_model->getColumnApartment() => $order_data[$order_model->getColumnApartment()],
+                $address_model->getColumnPostalCode() => $order_data[$order_model->getColumnPostalCode()],
+                $address_model->getColumnCity() => $order_data[$order_model->getColumnCity()],
+                $address_model->getColumnCountry() => $order_data[$order_model->getColumnCountry()],
+                $address_model->getColumnPhone() => $order_data[$order_model->getColumnPhone()],
+            ]);
+
+        }
 
         if (!$address_created) {
             throw new Exception("Address creation failed.");

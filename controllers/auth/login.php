@@ -20,26 +20,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $user_model->getColumnEmail() => $email
     ]));
 
-    if (is_array($user)) {
-        // Check if user is active
-        if (!$user[$user_model->getColumnIsActive()]) {
-            setMessage("This account is disabled, please send a ticket to get your access to this account", "error");
-            header("Location: ./login");
-            exit();
-        }
+    // Check if this email is disabled
+    if (is_array($user) && !$user[$user_model->getColumnIsActive()]) {
+        setMessage("This account is disabled, please send a ticket to get your access to this account", "error");
+        header("Location: ./login");
+        exit();
+    } 
 
-        // Request OTP
-        if (ErrorHandler::handle(fn () => $auth_service->requestOtp($email))) {
-            header("Location: ./otp");
-            exit();
-        }
-
-        // OTP request failed
-        setMessage("An error occurred while requesting the OTP", "error");
+    // Request OTP
+    if (ErrorHandler::handle(fn () => $auth_service->requestOtp($email))) {
+        header("Location: ./otp");
+        exit();
     }
 
-    // Fallback if user does not exist
-    setMessage("User not found", "error");
+    // OTP request failed
+    setMessage("An error occurred while requesting the OTP", "error");
     header("Location: ./login");
     exit();
 } else {

@@ -23,7 +23,7 @@ return [
     ],
     'admin/dashboard' => [
         'controller' => 'controllers/admin/dashboard.php',
-        'middleware' => []
+        'middleware' => ['auth', 'admin']
     ],
     'admin/users/create' => [
         'controller' => 'controllers/admin/user_management/create.php',
@@ -111,15 +111,15 @@ return [
     ],
     'order' => [
         'controller' => 'controllers/ecommerce/order.php',
-        'middleware' => [],
+        'middleware' => ['auth'],
     ],
     'cancel-order' => [
         'controller' => 'controllers/admin/order_management/update.php',
-        'middleware' => [],
+        'middleware' => ['auth'],
     ],
     'history' => [
         'controller' => 'controllers/ecommerce/history.php',
-        'middleware' => [],
+        'middleware' => ['auth'],
     ],
     'thank-you' => [
         'controller' => 'controllers/ecommerce/thank_you.php',
