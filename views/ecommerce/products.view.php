@@ -36,7 +36,8 @@
 
             <div class="w-11/12 mx-auto my-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 <?php foreach ($products as $product): ?>
-                    <?php renderProductCard($product, $max_views); ?>
+                    <?php renderProductCard($product, !$most_popular_product_place_taken && ($max_views == $product['views'])); ?>
+                    <?php if(!$most_popular_product_place_taken && ($max_views == $product['views'])) $most_popular_product_place_taken = true; ?>
                 <?php endforeach; ?>
             </div>
 

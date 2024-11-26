@@ -6,11 +6,6 @@
                  alt="product image" 
                  class="w-64 h-64 lg:w-80 lg:h-80 object-cover z-10 rounded transition-all ease-in duration-300 hover:scale-110">
             
-            <!-- Background "mini" text -->
-            <span class="absolute top-2 w-full text-center text-5xl text-light-gray font-semibold z-0">
-                <?= strtoupper(preg_replace('/[^A-Za-z0-9\s]/', '', explode(" ", $product["name"])[0])) ?>
-            </span>
-            
             <!-- Add to cart icon -->
             <?php
                 // Get the first available variant ID if any
@@ -58,7 +53,7 @@
         </p>
 
         <section class="flex gap-1">
-            <?php if($product["views"] === $max_views): ?>
+            <?php if($is_popular): ?>
                 <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-yellow-500 text-primary border shadow rounded-full">Most Popular</span>
             <?php endif; ?>
         </section>

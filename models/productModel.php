@@ -216,14 +216,14 @@ class ProductModel extends BaseModel
             'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
             'category_id' => $data['category_id'] ?? null,
             'description' => $data['description'] ?? null,
-           'dimension' => isset($data['dimension']) ? json_encode(array_map(fn($value) => is_numeric($value) ? round($value, 1) : $value, $data['dimension'])) : null,
+            'dimension' => isset($data['dimension']) ? json_encode(array_map(fn($value) => is_numeric($value) ? round($value, 1) : $value, $data['dimension'])) : null,
             'feature' => isset($data['feature']) ? json_encode($data['feature']) : null,
             'important_feature' => isset($data['important_feature']) ? json_encode($data['important_feature']) : null,
             'requirement' => isset($data['requirement']) ? json_encode($data['requirement']) : null,
             'package_content' => isset($data['package_content']) ? json_encode($data['package_content']) : null,
             'img_for_ads' => isset($data['img_for_ads']) ? json_encode($data['img_for_ads']) : null,
             'img' => $data['img'] ?? null,
-            'views' => isset($data['views']) ? $data['views'] : 0, // Default value is 0 for views
+            'views' => isset($data['views']) ? $data['views'] : null, // Default value is 0 for views
 
         ];
 

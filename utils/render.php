@@ -33,7 +33,7 @@ function renderDashboardHeader(string $title_name, string $create_btn_desc = '',
     include("./views/components/admin_dashboard_header.php");
 }
 
-function renderProductCard(array $product, int $max_views)
+function renderProductCard(array $product, bool $is_popular)
 {
     global $root_directory;
 
