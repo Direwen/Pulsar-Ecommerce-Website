@@ -135,7 +135,7 @@
                     extra_info: [
                         "title_css" => "bg-transparent",
                         "trigger_css" => "cursor-pointer border-b border-light-dark flex justify-between items-center px-3 py-1 uppercase font-medium tracking-tighter",
-                        "details_css" => "tracking-tighter text-sm md:text-base font-thin"
+                        "details_css" => "tracking-tighter text-sm md:text-base"
                     ]
                 );
                 ?>
@@ -150,7 +150,7 @@
                 extra_info: [
                     "title_css" => "bg-transparent",
                     "trigger_css" => "cursor-pointer border-b border-light-dark flex justify-between items-center px-3 py-1 uppercase font-medium tracking-tighter",
-                    "details_css" => "tracking-tighter text-sm md:text-base font-thin"
+                    "details_css" => "tracking-tighter text-sm md:text-base"
                 ]
             );
             ?>

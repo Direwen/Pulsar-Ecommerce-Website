@@ -1,14 +1,14 @@
 <section class="rounded-lg">
     <!-- Product main image -->
     <a href="<?= $root_directory . "product/view?id=" . urlencode($product["id"]); ?>">
-        <div class="relative h-64 bg-secondary flex items-center justify-center rounded overflow-hidden">
+        <div class="relative h-64 bg-secondary flex items-center justify-center rounded overflow-hidden lg:h-80">
             <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($product["img"]) ?>" 
                  alt="product image" 
-                 class="w-64 h-64 object-cover z-10 rounded transition-all ease-in duration-300 hover:scale-110">
+                 class="w-64 h-64 lg:w-80 lg:h-80 object-cover z-10 rounded transition-all ease-in duration-300 hover:scale-110">
             
             <!-- Background "mini" text -->
             <span class="absolute top-2 w-full text-center text-5xl text-light-gray font-semibold z-0">
-                <?= strtoupper(explode(" ", $product["name"])[0]); ?>
+                <?= strtoupper(preg_replace('/[^A-Za-z0-9\s]/', '', explode(" ", $product["name"])[0])) ?>
             </span>
             
             <!-- Add to cart icon -->
@@ -29,6 +29,10 @@
             >
                 <span class="material-symbols-outlined">shopping_bag</span>
             </button>
+
+            <?php if(!$is_available): ?>
+                <span class="absolute top-0 left-0 text-xs md:text-sm tracking-tighter font-semibold px-4 py-1 bg-danger text-secondary rounded-br border shadow">Sold Out</span>
+            <?php endif; ?>
 
         </div>
     </a>
@@ -56,10 +60,6 @@
         <section class="flex gap-1">
             <?php if($product["views"] === $max_views): ?>
                 <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-yellow-500 text-primary border shadow rounded-full">Most Popular</span>
-            <?php endif; ?>
-
-            <?php if(!$is_available): ?>
-                <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-dark text-secondary border shadow rounded-full">Sold Out</span>
             <?php endif; ?>
         </section>
     </section>
