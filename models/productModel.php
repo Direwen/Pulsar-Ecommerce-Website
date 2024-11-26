@@ -148,11 +148,11 @@ class ProductModel extends BaseModel
 
             // Define realistic limits for each dimension (in cm and kg)
             $limits = [
-                'length' => [1, 300],   // e.g., minimum 1 cm, maximum 300 cm
-                'width' => [1, 300],
-                'height' => [1, 300],
-                'weight' => [0.1, 100]  // e.g., minimum 0.1 kg, maximum 100 kg
-            ];
+                'length' => [10, 800],   // Minimum 10 mm, maximum 800 mm
+                'width'  => [10, 500],   // Minimum 10 mm, maximum 500 mm
+                'height' => [5, 200],    // Minimum 5 mm, maximum 200 mm
+                'weight' => [30, 5000]   // Minimum 50 g, maximum 5000 g
+            ];            
 
             // Check if length, width, height, and weight exist and validate them
             foreach ($limits as $field => [$min, $max]) {
@@ -216,7 +216,7 @@ class ProductModel extends BaseModel
             'name' => isset($data['name']) ? strtolower(trim($data['name'])) : null,
             'category_id' => $data['category_id'] ?? null,
             'description' => $data['description'] ?? null,
-            'dimension' => isset($data['dimension']) ? json_encode($data['dimension']) : null,
+           'dimension' => isset($data['dimension']) ? json_encode(array_map(fn($value) => is_numeric($value) ? round($value, 1) : $value, $data['dimension'])) : null,
             'feature' => isset($data['feature']) ? json_encode($data['feature']) : null,
             'important_feature' => isset($data['important_feature']) ? json_encode($data['important_feature']) : null,
             'requirement' => isset($data['requirement']) ? json_encode($data['requirement']) : null,

@@ -57,42 +57,45 @@ function createProduct(submissionPath, extra_info) {
                 </section>
 
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                    <label>Dimensions (cm/kg)</label>
+                    <label>Dimensions (mm/g)</label>
                     <div class="flex border rounded overflow-hidden shadow">
                         <input 
                             type="number" 
                             name="dimension[length]" 
                             id="length" 
-                            placeholder="Length (cm)" 
-                            min="1" 
-                            max="300" 
+                            placeholder="Length (mm)" 
+                            min="10" 
+                            max="800" 
+                            step="0.01" 
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
                         <input 
                             type="number" 
                             name="dimension[width]" 
                             id="width" 
-                            placeholder="Width (cm)" 
-                            min="1" 
-                            max="300" 
+                            placeholder="Width (mm)" 
+                            min="10" 
+                            max="500" 
+                            step="0.01" 
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
                         <input 
                             type="number" 
                             name="dimension[height]" 
                             id="height" 
-                            placeholder="Height (cm)" 
-                            min="1" 
-                            max="300" 
+                            placeholder="Height (mm)" 
+                            min="5" 
+                            max="200" 
+                            step="0.01" 
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
                         <input 
                             type="number" 
                             name="dimension[weight]" 
                             id="weight" 
-                            placeholder="Weight (kg)" 
-                            min="0.1" 
-                            max="100" 
+                            placeholder="Weight (g)" 
+                            min="30" 
+                            max="5000" 
                             step="0.1" 
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
@@ -252,16 +255,17 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
             </section>
 
             <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                <label>Dimensions (cm/kg)</label>
+                <label>Dimensions (mm/g)</label>
                 <div class="flex border rounded overflow-hidden shadow">
                     <input 
                         type="number" 
                         value="${currentValues.dimension.length}" 
                         name="dimension[length]" 
                         id="length" 
-                        placeholder="Length (cm)" 
-                        min="1" 
-                        max="300" 
+                        placeholder="Length (mm)" 
+                        min="10" 
+                        max="800" 
+                        step="0.01" 
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />
                     <input 
@@ -269,9 +273,10 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         value="${currentValues.dimension.width}" 
                         name="dimension[width]" 
                         id="width" 
-                        placeholder="Width (cm)" 
-                        min="1" 
-                        max="300" 
+                        placeholder="Width (mm)" 
+                        min="10" 
+                        max="500" 
+                        step="0.01" 
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />
                     <input 
@@ -279,9 +284,10 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         value="${currentValues.dimension.height}" 
                         name="dimension[height]" 
                         id="height" 
-                        placeholder="Height (cm)" 
-                        min="1" 
-                        max="300" 
+                        placeholder="Height (mm)" 
+                        min="5" 
+                        max="200" 
+                        step="0.01" 
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />
                     <input 
@@ -289,9 +295,9 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         value="${currentValues.dimension.weight}" 
                         name="dimension[weight]" 
                         id="weight" 
-                        placeholder="Weight (kg)" 
-                        min="0.1" 
-                        max="100" 
+                        placeholder="Weight (g)" 
+                        min="30" 
+                        max="5000" 
                         step="0.1" 
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />

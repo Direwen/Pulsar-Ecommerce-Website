@@ -240,7 +240,7 @@
                     title: $title,
                     details: $product[$title],
                     data_toggle_attr: "specs_toggle_" . $data_toggle_count++,
-                    extra_info: ($title == "dimension") ? ["unit" => "cm", "unit_conversion" => true] : []
+                    extra_info: ($title == "dimension") ? ["add_unit" => true] : []
                 );
                 ?>
             <?php endforeach; ?>
