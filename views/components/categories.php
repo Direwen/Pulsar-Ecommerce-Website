@@ -1,5 +1,10 @@
 <?php foreach ($categories as $category): ?>
-    <div class="<?= $showImages ? $cssForContainer : ''; ?>">
+
+    <a 
+        href="<?= $root_directory; ?>products/?category=<?= $category['id']; ?>" 
+        class="select-none <?= $showImages ? $cssForContainer : ''; ?>"
+    >
+
         <?php if ($showImages): ?>
             <img
                 class="<?= $cssForImg; ?>"
@@ -8,10 +13,10 @@
             >
         <?php endif; ?>
 
-        <a 
-            class="<?= $cssForCategoryName; ?>"
-            href="<?= $root_directory; ?>products/?category=<?= $category['id']; ?>">
+        <p class="<?= $cssForCategoryName; ?>">
             <?= ucwords($category['name']); ?>
-        </a>
-    </div>
+        </p>
+
+    </a>
+
 <?php endforeach; ?>
