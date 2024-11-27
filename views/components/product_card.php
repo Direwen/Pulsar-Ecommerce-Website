@@ -42,7 +42,7 @@
     </div>
 
     <!-- Product name -->
-    <p class="mt-4 text-left text-dark text-lg font-bold tracking-tight">
+    <p class="mt-4 text-left text-dark text-lg font-bold tracking-tight mb-2">
         <?= ucwords($product["name"]); ?>
     </p>
 
@@ -52,11 +52,9 @@
             <span class="text-xs">$</span><?= htmlspecialchars($product["min_price"]); ?>
         </p>
 
-        <section class="flex gap-1">
-            <?php if($is_popular): ?>
-                <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-yellow-500 text-primary border shadow rounded-full">Most Popular</span>
-            <?php endif; ?>
-        </section>
+        <?php if($is_popular): ?>
+            <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-yellow-500 text-primary border shadow rounded-full">Most Popular</span>
+        <?php endif; ?>
     </section>
     
 

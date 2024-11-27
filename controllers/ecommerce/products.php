@@ -81,10 +81,13 @@ if (is_array($category)) {
 
     $products = $fetched_overview_products_data["records"];
 
-    $views_array = [];
-    foreach ($products as $product) $views_array[] = $product['views']; // Store the views in the array
-    $max_views = max($views_array);
-    $most_popular_product_place_taken = false;
+    if (!empty($products)) {
+        $views_array = [];
+        foreach ($products as $product) $views_array[] = $product['views']; // Store the views in the array
+        $max_views = max($views_array);
+        $most_popular_product_place_taken = false;
+    }
+
 
 } else {
     $category = null;

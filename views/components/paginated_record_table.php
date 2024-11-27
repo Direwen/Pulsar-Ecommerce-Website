@@ -87,20 +87,20 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
     <?php if (!empty($records)): ?>
         <div class="overflow-x-auto border shadow rounded hide-scrollbar">
             <table class="min-w-full border-collapse">
-                <thead>
+                <thead class="bg-accent">
                     <tr>
                         <?php foreach ($metadata as $attr_title => $arr): ?>
                             <!-- Skip 'id' field in headers -->
                             <?php if (in_array($attr_title, $filtered_metadata)): ?>
                                 <th class="p-3 text-left font-semibold whitespace-nowrap">
-                                    <span class="px-2 py-1 bg-accent text-secondary rounded shadow shadow-accent/50">
+                                    <span class="text-secondary">
                                         <?= htmlspecialchars(ucwords(str_replace('_', ' ', $attr_title))) ?>
                                     </span>
                                 </th>
                             <?php endif; ?>
                         <?php endforeach; ?>
                         <th class="p-3 text-left font-semibold whitespace-nowrap">
-                            <span class="px-2 py-1 bg-accent text-secondary rounded shadow shadow-accent/50">
+                            <span class="text-secondary">
                                 Actions
                             </span>
                         </th>
