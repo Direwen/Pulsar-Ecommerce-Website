@@ -222,10 +222,14 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
                                     <span
                                         <?php
                                         foreach ($record as $k => $v) {
-                                            if ($k != 'id' && !empty($v)) echo " {$k}={$v} ";
+                                            if ($k != 'id') {
+                                                $value = is_array($v) || is_object($v) ? htmlspecialchars(json_encode($v)) : htmlspecialchars($v);
+                                                echo " {$k}=\"{$value}\" ";
+                                            }
                                         }
                                         foreach ($extra_info as $k => $v) {
-                                            echo " {$k}={$v} ";
+                                            $value = is_array($v) || is_object($v) ? htmlspecialchars(json_encode($v)) : htmlspecialchars($v);
+                                            echo " {$k}=\"{$value}\" ";
                                         }
                                         ?>
                                         submission-path="<?= $root_directory . $delete_submission_file_path; ?>"

@@ -97,6 +97,18 @@ return [
         'controller' => 'controllers/admin/support_management/update.php',
         'middleware' => []
     ],
+    'admin/events/create' => [
+        'controller' => 'controllers/admin/event_management/create.php',
+        'middleware' => []
+    ],
+    'admin/events/update' => [
+        'controller' => 'controllers/admin/event_management/update.php',
+        'middleware' => []
+    ],
+    'admin/events/delete' => [
+        'controller' => 'controllers/admin/event_management/delete.php',
+        'middleware' => []
+    ],
     'products' => [
         'controller' => 'controllers/ecommerce/products.php',
         'middleware' => [],
@@ -213,6 +225,11 @@ return [
     ],
     'api/review-later' => [
         'controller' => 'controllers/api/review_later.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
+    'api/event-products' => [
+        'controller' => 'controllers/api/get_event_products.php',
         'middleware' => [],
         'isApi' => true
     ],

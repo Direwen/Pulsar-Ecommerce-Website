@@ -44,7 +44,7 @@ function routeToController($uri, $routes)
         // Render the script or page from controller
         global $DB_METADATA, $mail_service, $browsing_history_service, $root_directory, $error_handler, $user_model, $category_model, 
         $product_model, $variant_model, $inventory_model, $order_model, $order_variant_model, $address_model, 
-        $discount_model, $support_model, $review_model, $auth_service;
+        $discount_model, $support_model, $review_model, $event_model, $event_product_model, $auth_service;
 
         require $routes[$uri]['controller'];
     } else {

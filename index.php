@@ -29,6 +29,8 @@ require_once './models/addressModel.php';
 require_once './models/discountModel.php';
 require_once './models/supportTicketModel.php';
 require_once './models/reviewModel.php';
+require_once './models/eventModel.php';
+require_once './models/eventProductModel.php';
 
 $error_handler = null; 
 $user_model = null; 
@@ -43,6 +45,8 @@ $order_model = null;
 $order_variant_model = null;
 $support_model = null;
 $review_model = null;
+$event_model = null;
+$event_product_model = null;
 $DB_METADATA = null;
 
 $root_directory = "/E-Commerce%20Assignment%20Project/";
@@ -61,7 +65,7 @@ $error_handler = ErrorHandler::getInstance($pdo);
 $result = $error_handler->handleDbOperation(function () use ($pdo) {
 
     global $user_model, $session_model, $category_model, $product_model, $variant_model, $inventory_model, 
-    $address_model, $discount_model, $order_model, $order_variant_model, $support_model, $review_model, $DB_METADATA;
+    $address_model, $discount_model, $order_model, $order_variant_model, $support_model, $review_model, $event_model, $event_product_model, $DB_METADATA;
 
     $user_model = new UserModel($pdo);
     $session_model = new SessionModel($pdo);
@@ -75,6 +79,8 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
     $order_variant_model = new OrderVariantModel($pdo);
     $support_model = new SupportTicketModel($pdo);
     $review_model = new ReviewModel($pdo);
+    $event_model = new EventModel($pdo);
+    $event_product_model = new EventProductModel($pdo);
     $DB_METADATA = [
         UserModel::getTableName() => $user_model->getColumnMetadata(),
         SessionModel::getTableName() => $session_model->getColumnMetadata(),
@@ -87,7 +93,9 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
         AddressModel::getTableName() => $address_model->getColumnMetadata(),
         DiscountModel::getTableName() => $discount_model->getColumnMetadata(),
         SupportTicketModel::getTableName() => $support_model->getColumnMetadata(),
-        ReviewModel::getTableName() => $review_model->getColumnMetadata()
+        ReviewModel::getTableName() => $review_model->getColumnMetadata(),
+        EventModel::getTableName() => $event_model->getColumnMetadata(),
+        EventProductModel::getTableName() => $event_product_model->getColumnMetadata()
     ];
 
     return true;

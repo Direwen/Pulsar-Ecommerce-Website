@@ -349,6 +349,51 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
             break;
 
+        case 'event-management':
+
+            $db_data = ErrorHandler::handle(fn () => $event_model->getAll(
+                select: [
+                    ["column" => $event_model->getColumnId()],
+                    ["column" => $event_model->getColumnCode()],
+                    ["column" => $event_model->getColumnName()],
+                    ["column" => $event_model->getColumnDiscount()],
+                    ["column" => $event_model->getColumnDescription()],
+                    ["column" => $event_model->getColumnBannerImg()],
+                    ["column" => $event_model->getColumnStartAt()],
+                    ["column" => $event_model->getColumnEndAt()],
+                ],
+                sortField: $support_model->getColumnCreatedAt(),
+                sortDirection: "DESC",
+                page: $page
+            ));
+
+            renderDashboardHeader(
+                title_name: "Event Management",
+                create_btn_desc: "a new event",
+                create_user_btn_class: "create-event-button",
+                submission_path: "admin/events/create",
+                extra_info: [
+                    "api-for-products" => $root_directory . 'api/products',
+                    'root-directory' => $root_directory
+                ]
+            );
+
+            renderPaginatedTable(
+                attributes_data: $DB_METADATA,
+                fetched_data: $db_data,
+                update_submission_file_path: "admin/events/update",
+                edit_btn_class: "edit-event-button",
+                delete_submission_file_path: "admin/events/delete",
+                delete_btn_class: "delete-event-button",
+                attribute_to_confirm_deletion: "code",
+                extra_info: [
+                    "api-for-event-products" => $root_directory . 'api/event-products',
+                    "api-for-products" => $root_directory . 'api/products'
+                ]
+            );
+
+            break;
+
         default:
             echo "Invalid dashboard selection.";
             break;

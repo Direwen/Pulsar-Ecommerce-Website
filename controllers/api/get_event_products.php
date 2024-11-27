@@ -8,7 +8,7 @@ $hasMore = false;
 
 do {
     // Fetch the current page of results
-    $result = ErrorHandler::handle(fn() => $product_model->getAll(page: $page));
+    $result = ErrorHandler::handle(fn() => $event_product_model->getAll(page: $page));
     $hasMore = $result["hasMore"];
 
     // Collect the products from the current page
@@ -20,4 +20,4 @@ do {
 
 
 // Output all categories as JSON
-echo json_encode(['products' => $products]);
+echo json_encode(['event_products' => $products]);
