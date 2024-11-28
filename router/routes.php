@@ -99,15 +99,15 @@ return [
     ],
     'admin/events/create' => [
         'controller' => 'controllers/admin/event_management/create.php',
-        'middleware' => []
+        'middleware' => ["development"]
     ],
     'admin/events/update' => [
         'controller' => 'controllers/admin/event_management/update.php',
-        'middleware' => []
+        'middleware' => ["development"]
     ],
     'admin/events/delete' => [
         'controller' => 'controllers/admin/event_management/delete.php',
-        'middleware' => []
+        'middleware' => ["development"]
     ],
     'products' => [
         'controller' => 'controllers/ecommerce/products.php',

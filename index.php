@@ -16,6 +16,8 @@ require_once './utils/imageHandler.php';
 require_once './utils/messageHandler.php';
 require_once './utils/clearCookie.php';
 require_once './utils/generateRating.php';
+require_once './utils/formatViewCount.php';
+
 
 require_once './models/userModel.php';
 require_once './models/sessionModel.php';
@@ -29,8 +31,6 @@ require_once './models/addressModel.php';
 require_once './models/discountModel.php';
 require_once './models/supportTicketModel.php';
 require_once './models/reviewModel.php';
-require_once './models/eventModel.php';
-require_once './models/eventProductModel.php';
 
 $error_handler = null; 
 $user_model = null; 
@@ -45,8 +45,6 @@ $order_model = null;
 $order_variant_model = null;
 $support_model = null;
 $review_model = null;
-$event_model = null;
-$event_product_model = null;
 $DB_METADATA = null;
 
 $root_directory = "/E-Commerce%20Assignment%20Project/";
@@ -79,8 +77,6 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
     $order_variant_model = new OrderVariantModel($pdo);
     $support_model = new SupportTicketModel($pdo);
     $review_model = new ReviewModel($pdo);
-    $event_model = new EventModel($pdo);
-    $event_product_model = new EventProductModel($pdo);
     $DB_METADATA = [
         UserModel::getTableName() => $user_model->getColumnMetadata(),
         SessionModel::getTableName() => $session_model->getColumnMetadata(),
@@ -94,8 +90,6 @@ $result = $error_handler->handleDbOperation(function () use ($pdo) {
         DiscountModel::getTableName() => $discount_model->getColumnMetadata(),
         SupportTicketModel::getTableName() => $support_model->getColumnMetadata(),
         ReviewModel::getTableName() => $review_model->getColumnMetadata(),
-        EventModel::getTableName() => $event_model->getColumnMetadata(),
-        EventProductModel::getTableName() => $event_product_model->getColumnMetadata()
     ];
 
     return true;
@@ -108,7 +102,6 @@ $token_service = new TokenService($session_model);
 $session_service = new SessionService($token_service);
 $auth_service = new AuthService($mail_service, $otp_service, $session_service, $token_service, $user_model);
 $browsing_history_service = new BrowsingHistoryService();
-
 
 // ErrorHandler::handle(fn () => $otp_service->clearOtpSession());
 
@@ -125,24 +118,7 @@ if (isApiRequest()) {
 
 ErrorHandler::handle(fn() => $auth_service->maintainUserSession());
 $website_title = "Pulsar";
-$categories = [];
-$page = 1;
-// Fetch the first page of results
-$result = ErrorHandler::handle(function() use ($category_model, $page) {
-    return $category_model->getAll(page: $page);
-});
-
-$hasMore = $result["hasMore"];
-// Collect the categories from the first page
-$categories = array_merge($categories, $result["records"] ?? []);
-// Continue fetching while there are more pages
-while ($hasMore) {
-    $result = ErrorHandler::handle(function() use ($category_model, &$page) {
-        return $category_model->getAll(page: ++$page);
-    });
-    $hasMore = $result["hasMore"];
-    $categories = array_merge($categories, $result["records"] ?? []);
-}
+$categories = ErrorHandler::handle(fn () => $category_model->getEverything());
 
 require("./utils/render.php");
 require("./views/components/head.php");

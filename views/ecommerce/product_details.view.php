@@ -192,7 +192,9 @@
                     <span class="text-light-dark text-sm"><?= $data["rating_count"]; ?> <?= ($data["rating_count"] > 1) ? 'reviews' : 'review'; ?></span>
                 </section>
 
-                <span class="text-light-dark text-sm"><?= ($product['views'] > 1) ? 'This product has been viewed for ' . $product['views'] . ' times.'  : ''; ?></span>
+                <span class="text-light-dark text-sm">
+                    <?= ($product['views'] > 1) ? 'This product has been viewed ' . formatViews($product['views']) . ' times.' : ''; ?>
+                </span>
             </section>
 
 

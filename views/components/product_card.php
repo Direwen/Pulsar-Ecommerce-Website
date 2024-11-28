@@ -52,11 +52,10 @@
             <span class="text-xs">$</span><?= htmlspecialchars($product["min_price"]); ?>
         </p>
 
-        <?php if($is_popular): ?>
+        <?php if ($is_popular): ?>
             <span class="text-xs md:text-sm tracking-tighter font-semibold px-3 py-1 bg-yellow-500 text-primary border shadow rounded-full">Most Popular</span>
         <?php endif; ?>
     </section>
-    
 
     
 </section>

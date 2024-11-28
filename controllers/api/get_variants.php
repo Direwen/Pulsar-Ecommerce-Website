@@ -2,10 +2,7 @@
 
 header('Content-Type: application/json');
 
-$variants = [];
-$page = 1;
-$result = ErrorHandler::handle(fn () => $variant_model->getAll(
-    page : $page,
+$variants = ErrorHandler::handle(fn () => $variant_model->getEverything(
     select: [
         ["column" => $variant_model->getColumnId()],
         ["column" => $variant_model->getColumnName()],
@@ -33,12 +30,6 @@ $result = ErrorHandler::handle(fn () => $variant_model->getAll(
         ]
     ]
 ));
-$hasMore = $result["hasMore"];
-$variants = $result["records"] ?? [];
-while ($hasMore) {
-    $result = ErrorHandler::handle(fn () => $variant_model->getAll(page : ++$page));
-    $hasMore = $result["hasMore"];
-    $variants = array_merge($variants, $result["records"] ?? []);
-}
 
 echo json_encode(['variants' => $variants]);
+exit();

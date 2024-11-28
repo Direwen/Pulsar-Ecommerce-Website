@@ -36,9 +36,7 @@ $order = ErrorHandler::handle(fn () => $order_model->get(
     ]
 ));
 
-$variants = [];
-$page=0;
-$fetched_overview_variants_data = ErrorHandler::handle(fn () => $order_variant_model->getAll(
+$variants = ErrorHandler::handle(fn () => $order_variant_model->getEverything(
     select: [
         ["column" => $order_variant_model->getColumnQuantity()],
         ["column" => $order_variant_model->getColumnPriceAtOrder()],
@@ -58,31 +56,6 @@ $fetched_overview_variants_data = ErrorHandler::handle(fn () => $order_variant_m
         ]
     ]
 ));
-$variants = array_merge($variants, $fetched_overview_variants_data["records"]);
-while ($fetched_overview_variants_data["hasMore"]) {
-
-    $fetched_overview_variants_data = ErrorHandler::handle(fn() => $order_variant_model->getAll(
-        select: [
-            ["column" => $order_variant_model->getColumnQuantity()],
-            ["column" => $order_variant_model->getColumnPriceAtOrder()],
-            ["column" => $variant_model->getColumnType(), "alias" => "type", "table" => $variant_model->getTableName()],
-            ["column" => $variant_model->getColumnName(), "alias" => "variant_name", "table" => $variant_model->getTableName()],
-            ["column" => $product_model->getColumnName(), "alias" => "product_name", "table" => $product_model->getTableName()],
-        ],
-        joins: [
-            ["type" => "LEFT JOIN", "table" => $variant_model->getTableName(), "on" => "order_variants.variant_id = variants.id"],
-            ["type" => "LEFT JOIN", "table" => $product_model->getTableName(), "on" => "variants.product_id = products.id"],
-        ],
-        conditions: [
-            [
-                'attribute' => 'order_variants.order_id',
-                'operator' => "=",
-                'value' => $data["id"]
-            ]
-        ]
-    ));
-    $variants = array_merge($variants, $fetched_overview_variants_data["records"]);
-}
 
 echo json_encode(["order" => $order, "variants" => $variants]);
 exit();

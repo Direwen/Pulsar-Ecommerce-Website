@@ -182,6 +182,44 @@ abstract class BaseModel
         ];
     }
 
+    public function getEverything(
+        array $conditions = [], 
+        array $joins = [], 
+        array $select = [], 
+        array $aggregates = [], 
+        String $groupBy = null, 
+        String $sortField = null, 
+        String $sortDirection = 'ASC'
+    )
+    {
+        $records = [];
+        $page = 1;
+        $hasMore = false;
+
+        do {
+            // Fetch the current page of results
+            $result = $this->getAll(
+                select: $select,
+                aggregates: $aggregates,
+                groupBy: $groupBy,
+                joins: $joins,
+                conditions: $conditions,
+                sortField: $sortField,
+                sortDirection: $sortDirection,
+                page: $page
+            );
+            $hasMore = $result["hasMore"];
+        
+            // Collect the products from the current page
+            $records = array_merge($records, $result["records"] ?? []);
+        
+            // Increment the page number for the next iteration
+            $page++;
+        } while ($hasMore);
+
+        return $records;
+    }
+
 
     public function getColumnMetadata(): array
     {
@@ -294,7 +332,7 @@ abstract class BaseModel
         return is_string($field) && substr($field, -2) === 'at';
     }
 
-    private function getTimestampString($time, $format = "Y-m-d H-i-s"): string
+    public function getTimestampString($time, $format = "Y-m-d H-i-s"): string
     {
         return date($format, $time);
     }

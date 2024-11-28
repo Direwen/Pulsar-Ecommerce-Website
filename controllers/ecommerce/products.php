@@ -18,11 +18,60 @@ if (!empty($search_input)) {
     ]));
 }
 
+//fetch events
+// $events = ErrorHandler::handle(fn () => $event_model->getEverything(
+//     select: [
+//         ["column" => $event_model->getColumnName()],
+//         ["column" => $event_model->getColumnDiscount()]
+//     ],
+//     aggregates: [
+//         [
+//             "column" => $event_product_model->getColumnProductId(), 
+//             "function" => "GROUP_CONCAT", 
+//             "alias" => "event_products", 
+//             "table" => $event_product_model->getTableName()
+//         ],
+
+//     ],
+//     groupBy: $event_product_model->getTableName() . "." . $event_product_model->getColumnEventId(),
+//     joins: [
+//         [
+//             "type" => "INNER JOIN",
+//             "table" => $event_product_model->getTableName(),
+//             "on" => "event_products.event_id=events.id"
+//         ],
+//         [
+//             "type" => "INNER JOIN",
+//             "table" => $product_model->getTableName(),
+//             "on" => "event_products.product_id=products.id"
+//         ],
+//         [
+//             "type" => "INNER JOIN",
+//             "table" => $category_model->getTableName(),
+//             "on" => "products.category_id=categories.id"
+//         ],
+//     ],
+//     conditions: [
+//         [
+//             'attribute' => $event_model->getColumnEndAt(),
+//             'operator' => ">",
+//             'value' => $event_model->getTimestampString(time())
+//         ],
+//         [
+//             'attribute' => $category_model->getTableName() . '.' . $category_model->getColumnId(),
+//             'operator' => "=",
+//             'value' => $category["id"]
+//         ],
+//     ]
+// ));
+
+// foreach ($events as &$event) $event["event_products"] = explode(",", $event["event_products"]); 
+
 //fetch products
 if (is_array($category)) {
 
     $order_by = null;
-    $sort_dir = null;
+    $sort_dir = 'ASC';
 
     switch ($sort_input) {
         case "lowest":
@@ -43,7 +92,7 @@ if (is_array($category)) {
             break;
     }
 
-    $fetched_overview_products_data = ErrorHandler::handle(fn() => $product_model->getAll(
+    $products = ErrorHandler::handle(fn() => $product_model->getEverything(
         select: [
             ["column" => $product_model->getColumnId()],
             ["column" => $product_model->getColumnName()],
@@ -78,8 +127,6 @@ if (is_array($category)) {
         sortField: $order_by,
         sortDirection: $sort_dir
     ));
-
-    $products = $fetched_overview_products_data["records"];
 
     if (!empty($products)) {
         $views_array = [];

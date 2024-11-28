@@ -5,6 +5,33 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
     exit;
 }
 
+//fetch events
+// $events = ErrorHandler::handle(fn () => $event_model->getEverything(
+//     select: [
+//         ["column" => $event_model->getColumnName()],
+//         ["column" => $event_model->getColumnDiscount()]
+//     ],
+//     joins: [
+//         [
+//             "type" => "INNER JOIN",
+//             "table" => $event_product_model->getTableName(),
+//             "on" => "event_products.event_id=events.id"
+//         ],
+//     ],
+//     conditions: [
+//         [
+//             'attribute' => $event_model->getColumnEndAt(),
+//             'operator' => ">",
+//             'value' => $event_model->getTimestampString(time())
+//         ],
+//         [
+//             'attribute' => $event_product_model->getTableName() . '.' . $event_product_model->getColumnProductId(),
+//             'operator' => "=",
+//             'value' => $_GET["id"]
+//         ],
+//     ]
+// ));
+
 $data = $review_model->getRatingsAndCount($_GET["id"]);
 $finalized_rating = generateRating($data["total_ratings"], $data["rating_count"]);
 
@@ -84,7 +111,9 @@ foreach ($fetched_data['records'] as $record) {
 }
 
 if (!empty($product)) {
+    //Track Viewed Item
     $browsing_history_service->addViewedItem($product["id"]);
+    //Increate View Count
     ErrorHandler::handle(fn () => $product_model->update(
         [
             $product_model->getColumnViews() => ++$product["views"]

@@ -61,21 +61,8 @@ $result = $error_handler->handleDbOperation(function () use ($img_details, $even
     }
 
     //get all records from event products table
-    $products = [];
-    $page = 1;
-    $hasMore = false;
-
-    do {
-        // Fetch the current page of results
-        $result = ErrorHandler::handle(fn() => $event_product_model->getAll(page: $page));
-        $hasMore = $result["hasMore"];
-
-        // Collect the products from the current page
-        $products = array_merge($products, $result["records"] ?? []);
-
-        // Increment the page number for the next iteration
-        $page++;
-    } while ($hasMore);
+    $products = ErrorHandler::handle(fn() => $event_product_model->getEverything());;
+    
     //delete those by looping
     foreach ($products as $each) {
         $event_product_model->delete([

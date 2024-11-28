@@ -46,10 +46,11 @@ function otpMiddleware()
 
 function checkoutMiddleware()
 {
+    global $root_directory;
     // Check if the CART cookie is not set or is empty
     if (!isset($_COOKIE["CART"]) || empty($_COOKIE["CART"])) {
         setMessage("Your cart is empty. Please add items before proceeding to checkout.", 'info');
-        header("Location: ./");
+        header("Location: ".  $root_directory);
         exit();
     }
 
@@ -59,16 +60,27 @@ function checkoutMiddleware()
     // Check if the count of items in the CART is less than or equal to zero
     if (!is_array($cartItems) || count($cartItems) <= 0) {
         setMessage("Your cart is empty. Please add items before proceeding to checkout.", 'info');
-        header("Location: ./");
+        header("Location: ".  $root_directory);
         exit();
     }
 }
 
 function recentOrderMiddleware()
 {
+    global $root_directory;
+
     if (!isset($_SESSION["recent_order"]) || !$_SESSION["recent_order"] || !isset($_SESSION['recent_order_time']) || (time() - $_SESSION['recent_order_time']) >= (60 * 3)) { // 3 minutes
         setMessage("No recent orders found. Please place an order to view details.", 'info');
-        header("Location: ./");
+        header("Location: ".  $root_directory);
         exit();
     }
+}
+
+function developmentMiddleware()
+{
+    global $root_directory;
+
+    setMessage("The Promotion Event Management is still under development", 'info');
+    header("Location: ".  $root_directory);
+    exit();
 }
