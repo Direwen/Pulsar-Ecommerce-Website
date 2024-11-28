@@ -17,6 +17,7 @@ require_once './utils/messageHandler.php';
 require_once './utils/clearCookie.php';
 require_once './utils/generateRating.php';
 require_once './utils/formatViewCount.php';
+require_once './utils/dashboardUtils.php';
 
 
 require_once './models/userModel.php';

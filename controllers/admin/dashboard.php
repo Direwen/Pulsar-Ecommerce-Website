@@ -17,44 +17,12 @@ $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $search_attribute = isset($_GET['search_attribute']) ? $_GET['search_attribute'] : null;
 $record_search = isset($_GET['record_search']) ? $_GET['record_search'] : null;
 $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record_search_end_date'] : null;
+$record_search_number = isset($_GET['record_search_number']) ? $_GET['record_search_number'] : null;
 
-function getSearchConditions($search_attribute, $record_search, $record_search_end_date)
-{
-    $search_conditions = [];
-
-    // Only add conditions if $search_attribute is not null
-    if ($search_attribute !== null) {
-
-        // Check if record_search is not null or both start and end dates are not null
-        if ($record_search !== null) {
-            $search_conditions[] = [
-                'attribute' => $search_attribute,
-                'value' => $record_search,
-                'operator' => 'LIKE' // Specify the operator you want to use
-            ];
-
-            return $search_conditions;
-        }
-
-        if ($record_search_end_date !== null) {
-
-
-            $search_conditions[] = [
-                'attribute' => $search_attribute,
-                'value' => $record_search_end_date,
-                'operator' => '<='
-            ];
-
-            return $search_conditions;
-        }
-    }
-
-    return $search_conditions; // Return empty array if no valid conditions
-}
 
 ?>
 
-<div class="relative py-24 sm:py-20 md:py-24">
+<div class="relative pt-24">
 
     <?php
 
@@ -72,7 +40,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     ["column" => $user_model->getColumnIsActive()],
                     ["column" => $user_model->getColumnRole()],
                 ],
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date, $record_search_number)
             ));
 
             // Render the create button
@@ -82,7 +50,13 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 create_user_btn_class: "create-user-button",
                 submission_path: "admin/users/create"
             );
-            // Render the paginated table to display records
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
+
+            //Render the paginated table to display records
             renderPaginatedTable(
                 attributes_data: $DB_METADATA[UserModel::getTableName()],
                 fetched_data: $db_data,
@@ -92,12 +66,13 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 delete_btn_class: "delete-user-button",
                 attribute_to_confirm_deletion: "email"
             );
+            
             break;
 
         case 'category-management':
             $db_data = ErrorHandler::handle(fn() => $category_model->getAll(
                 page: $page,
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date, $record_search_number)
             ));
 
             // Render the create button
@@ -107,6 +82,11 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 create_user_btn_class: "create-category-button",
                 submission_path: "admin/categories/create"
             );
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
@@ -158,7 +138,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                         'on' => "products.category_id = categories.id",
                     ]
                 ],
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date, $record_search_number)
             ));
 
             renderDashboardHeader(
@@ -171,6 +151,11 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     "api-for-products" => $root_directory . 'api/products'
                 ]
             );
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
@@ -211,7 +196,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                         'on' => "variants.product_id = products.id",
                     ]
                 ],
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date, $record_search_number)
             ));
             
             renderDashboardHeader(
@@ -223,6 +208,11 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                     "api-for-variants" => $root_directory . 'api/variants'
                 ]
             );
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
@@ -264,12 +254,17 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                         'on' => "orders.used_discount_id = discounts.id",
                     ]
                 ],
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date, $record_search_number)
             ));
             
             renderDashboardHeader(
                 title_name: "Order Management",
             );
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
@@ -287,7 +282,7 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
 
             $db_data = ErrorHandler::handle(fn() => $discount_model->getAll(
                 page: $page,
-                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date)
+                conditions: getSearchConditions($search_attribute, $record_search, $record_search_end_date, $record_search_number)
             ));
 
             renderDashboardHeader(
@@ -296,6 +291,11 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
                 create_user_btn_class: "create-discount-button",
                 submission_path: "admin/discounts/create",
             );
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
@@ -339,6 +339,11 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
             renderDashboardHeader(
                 title_name: "Support Tickets",
             );
+
+            if (!$db_data) {
+                include ("./views/components/no_data_found.php");
+                break;
+            }
 
             renderPaginatedTable(
                 attributes_data: $DB_METADATA,
@@ -409,6 +414,6 @@ function getSearchConditions($search_attribute, $record_search, $record_search_e
     ?>
 
     <!-- easy touch menu -->
-    <?= include('./views/components/admin_easytouch.php'); ?>
+    <?= require('./views/components/admin_easytouch.php'); ?>
 
 </div>

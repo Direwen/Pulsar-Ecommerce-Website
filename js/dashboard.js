@@ -18,8 +18,14 @@ function updateInputField() {
     if (dataType.includes('timestamp')) {
         // If the data type is a timestamp, show a date input field
         inputFieldHTML = `
-            <input type="date" id="search_input" name="record_search" 
+            <input type="date" id="search_input" name="record_search_end_date" 
                 placeholder="Select date..."
+                class="w-full p-3 pr-28 border shadow focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
+        `;
+    } else if (dataType.includes('decimal') || dataType.includes('integer')) {
+        inputFieldHTML = `
+            <input type="number" id="search_input" name="record_search_number" 
+                placeholder="Enter a number"
                 class="w-full p-3 pr-28 border shadow focus:outline-none focus:border-accent mb-2 md:mb-0 md:mr-2" />
         `;
     } else {
