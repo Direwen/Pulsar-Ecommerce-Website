@@ -10,11 +10,6 @@
                 <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($product["img"]) ?>"
                     alt="product image"
                     class="w-64 h-64 object-cover z-10 rounded transition-all ease-in duration-300 hover:scale-110">
-
-                <!-- Background "mini" text -->
-                <span class="absolute top-2 w-full text-center text-5xl text-light-gray font-semibold z-0">
-                    <?= strtoupper(explode(" ", $product["name"])[0]); ?>
-                </span>
             </a>
         <?php endforeach; ?>
     </div>

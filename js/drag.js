@@ -7,51 +7,69 @@ let startX, startY; // Store initial touch coordinates
 const dragThreshold = 10; // Minimum movement required to be considered dragging
 let lastTouchTime = 0; // Track the last touch time
 
-const dashboardMenuContent = `
-<section class="border-b border-light-dark pb-4 flex justify-between items-center">
-            <h2 class="text-xl font-semibold uppercase text-dark">Management</h2>
-            <span class="material-symbols-outlined interactive" onclick="forceOverlayToClose()">close</span>
-        </section>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=user-management">
-    <section><span class="material-symbols-outlined text-md">group</span> <span class="text-md uppercase tracking-tighter">Users</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=category-management">
-    <section><span class="material-symbols-outlined text-md">category</span> <span class="text-md">Categories</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=product-management">
-    <section><span class="material-symbols-outlined text-md">mouse</span> <span class="text-md">Products</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=orders-management">
-    <section><span class="material-symbols-outlined text-md">shopping_bag</span> <span class="text-md">Orders</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=inventory-management">
-    <section><span class="material-symbols-outlined text-md">inventory_2</span> <span class="text-md">Inventory</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=discount-management">
-    <section><span class="material-symbols-outlined text-md">price_change</span> <span class="text-md">Discount</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=event-management">
-    <section><span class="material-symbols-outlined text-md">event_available</span> <span class="text-md">Event</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<section class="border-b border-light-dark pb-4">
-    <h2 class="text-xl font-semibold text-dark">Reprots & Analytics</h2>
-</section>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=analytics">
-    <section><span class="material-symbols-outlined text-md">monitoring</span> <span class="text-md">View Analytics</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-<a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=mail">
-    <section><span class="material-symbols-outlined text-md">mail</span> <span class="text-md">View Mails</span></section>
-    <span class="material-symbols-outlined font-thin">chevron_right</span>
-</a>
-`;
+function openAdminEasytouch() {
+
+    let api = draggable.getAttribute('api-for-ticket-count');
+
+    axios.get(api)
+        .then(res => {
+            
+            const unreplied_mail = res.data.count;
+
+            const mailCountElement = (unreplied_mail > 0) ? `<span class="bg-danger text-primary rounded-full px-4 border shadow py-1 ml-3">${unreplied_mail}</span>` : '';
+
+            const dashboardMenuContent = `
+            <section class="border-b border-light-dark pb-4 flex justify-between items-center">
+                        <h2 class="text-xl font-semibold uppercase text-dark">Management</h2>
+                        <span class="material-symbols-outlined interactive" onclick="forceOverlayToClose()">close</span>
+                    </section>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=user-management">
+                <section><span class="material-symbols-outlined text-md">group</span> <span class="text-md uppercase tracking-tighter">Users</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=category-management">
+                <section><span class="material-symbols-outlined text-md">category</span> <span class="text-md">Categories</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=product-management">
+                <section><span class="material-symbols-outlined text-md">mouse</span> <span class="text-md">Products</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=orders-management">
+                <section><span class="material-symbols-outlined text-md">shopping_bag</span> <span class="text-md">Orders</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=inventory-management">
+                <section><span class="material-symbols-outlined text-md">inventory_2</span> <span class="text-md">Inventory</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=discount-management">
+                <section><span class="material-symbols-outlined text-md">price_change</span> <span class="text-md">Discount</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=event-management">
+                <section><span class="material-symbols-outlined text-md">event_available</span> <span class="text-md">Event</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <section class="border-b border-light-dark pb-4">
+                <h2 class="text-xl font-semibold text-dark">Reprots & Analytics</h2>
+            </section>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=analytics">
+                <section><span class="material-symbols-outlined text-md">monitoring</span> <span class="text-md">View Analytics</span></section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            <a class="w-full py-3 px-4 flex justify-between items-center text-center rounded transition-all ease-in-out duration-200 text-light-dark hover:px-5 interactive" href="?view=mail">
+                <section><span class="material-symbols-outlined text-md">mail</span> <span class="text-md">View Mails</span>${mailCountElement}</section>
+                <span class="material-symbols-outlined font-thin">chevron_right</span>
+            </a>
+            `;
+
+        openOverlayModal(dashboardMenuContent);
+        })
+        .catch(err => console.log(err))
+
+    
+}
 
 // Get viewport dimensions
 const getViewportDimensions = () => {
@@ -65,7 +83,7 @@ const getViewportDimensions = () => {
 draggable.addEventListener('mousedown', (e) => {
     // Check if the Ctrl key is pressed
     if (!e.ctrlKey) {
-        openOverlayModal(dashboardMenuContent); // Show overlay if Ctrl is not pressed
+        openAdminEasytouch(); // Show overlay if Ctrl is not pressed
         return; // Exit the function if Ctrl is not pressed
     }
 
@@ -80,7 +98,7 @@ draggable.addEventListener('mousedown', (e) => {
     // Start a timeout to show the overlay, but do not execute it while dragging
     overlayTimeout = setTimeout(() => {
         if (!isDragging) return;
-        openOverlayModal(dashboardMenuContent); // Show overlay if Ctrl is not pressed
+        openAdminEasytouch(); // Show overlay if Ctrl is not pressed
     }, 200);
 });
 
@@ -128,7 +146,7 @@ draggable.addEventListener('touchstart', (e) => {
 
     // Check if the time between touches is less than 300ms for a double tap
     if (currentTime - lastTouchTime < 300) {
-        openOverlayModal(dashboardMenuContent); // Show overlay if Ctrl is not pressed
+        openAdminEasytouch(); // Show overlay if Ctrl is not pressed
     }
     lastTouchTime = currentTime; // Update last touch time
 
@@ -197,3 +215,4 @@ document.addEventListener('touchend', () => {
 draggable.addEventListener('touchstart', (e) => {
     e.preventDefault(); // Prevent scrolling while dragging
 });
+

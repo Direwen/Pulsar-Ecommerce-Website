@@ -233,6 +233,11 @@ return [
         'middleware' => [],
         'isApi' => true
     ],
+    'api/unreplied-tickets' => [
+        'controller' => 'controllers/api/get_unreplied_ticket_count.php',
+        'middleware' => [],
+        'isApi' => true
+    ],
     'test' => [
         'controller' => 'controllers/test.php',
         'middleware' => []

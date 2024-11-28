@@ -35,11 +35,15 @@
                     <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">News</a>
                     <a href="https://t.co/1d3hoNI15S" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">Discord</a>
                     <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">eSports</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">Facebook</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">Instagram</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">X</a>
+                    <a href="https://x.com/PulsarGears" target="_blank" class="text-light-dark hover:text-secondary cursor-pointer">Tiktok</a>
                 </section>
             </div>
 
             <!-- Stay Connected Section -->
-            <div class="sm:col-span-2 md:col-span-4">
+            <div class="col-span-2 md:col-span-4">
                 <h4 class="text-lg font-bold mb-4">Stay Connected</h4>
                 <!-- Subscribe Form -->
                 <div class="mt-4 w-full sm:w-8/12 md:w-1/2 xl:w-1/3">

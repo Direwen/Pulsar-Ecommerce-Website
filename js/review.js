@@ -18,11 +18,11 @@ function renderRatingForm(variants, root) {
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <!-- Product Image and Details -->
                 <section class="flex justify-center sm:justify-start items-center gap-3">
-                    <section class="bg-secondary border shadow rounded w-fit">
+                    <section class="shrink-0 bg-secondary border shadow rounded w-fit">
                         <img src="${root}assets/products/${variant.img}" alt="img" class="w-12 h-12 lg:w-24 lg:h-24 rounded">
                     </section>
                     <section class="flex flex-col">
-                        <span class="text-dark font-semibold uppercase text-sm md:text-base tracking-tighter truncate">${variant.product_name}</span>
+                        <span class="text-dark font-semibold uppercase text-sm md:text-base tracking-tighter text-wrap">${variant.product_name}</span>
                         <span class="text-dark text-xs md:text-sm tracking-tighter truncate">${variant.name}</span>
                     </section>
                 </section>

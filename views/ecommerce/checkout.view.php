@@ -14,7 +14,7 @@
                     <section class="flex justify-between items-center gap-1">
                         <!-- LEFT SIDE of ITEM LIST -->
                         <section class="flex justify-start items-center gap-4">
-                            <section class="relative border bg-secondary shadow">
+                            <section class="shrink-0 relative border bg-secondary shadow">
                                 <img class="w-16 h-16" src="<?= $root_directory . 'assets/products/' . $item['img']; ?>"
                                     alt="item image">
                                 <span
@@ -23,9 +23,9 @@
 
                             <section class="flex flex-col items-start justify-start text-dark grow">
                                 <span
-                                    class="text-xl text-wrap"><?= ucwords(htmlspecialchars($item["product_name"])); ?></span>
+                                    class="text-sm md:text-base text-wrap"><?= ucwords(htmlspecialchars($item["product_name"])); ?></span>
                                 <span
-                                    class="text-sm text-light-dark"><?= ucwords(htmlspecialchars($item["name"])); ?></span>
+                                    class="text-xs md:text-sm text-light-dark"><?= ucwords(htmlspecialchars($item["name"])); ?></span>
                             </section>
                         </section>
                         <!-- RIGHT SIDE OF ITEM LIST -->
