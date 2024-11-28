@@ -12,7 +12,7 @@
                 <span class="text-accent">pulsar</span> Official
             </span>
             <span class="text-2xl sm:text-7xl tracking-tighter">Gaming Gears</span>
-            <?php renderLinkButton("Discover", "./") ?>
+            <?php renderLinkButton("Discover", $root_directory . 'products') ?>
         </section>
     </div>
 </div>
@@ -39,16 +39,16 @@
     <img src="<?= $root_directory ?>assets/Pulsar_x_VCT_pacific.webp" alt="" class="w-full h-full">
 </div>
 
-<?php renderMediumBanner("SuperGlideV2", "Glass Mousepad", "Discover", "./", $root_directory . "assets/mouse_pad.webp", false); ?>
-<?php renderMediumBanner("Collaboration", "Pulsar x Demon slayer", "Discover", "./", $root_directory .  "assets/demon_slayer_collab.jpg", false); ?>
+<?php renderMediumBanner("SuperGlideV2", "Glass Mousepad", "Discover", $root_directory . "products?search=mouse pad", $root_directory . "assets/mouse_pad.webp", false); ?>
+<?php renderMediumBanner("Collaboration", "Pulsar x Demon slayer", "Discover", $root_directory . "products?search=mouse", $root_directory .  "assets/demon_slayer_collab.jpg", false); ?>
 
 <div class="p-4 sm:p-10">
     <div class="w-11/12 sm:w-10/12 lg:w-8/12 mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4">
         <?php
-        renderMiniBanner("4K", "Dongle", "./", $root_directory . "assets/4k_dongle.webp");
-        renderMiniBanner("Xlite V2", "Ergonomic", "./", $root_directory . "assets/xlite_v2.webp");
-        renderMiniBanner("X2A", "Ambidextrous", "./", $root_directory . "assets/x2a.webp");
-        renderMiniBanner("Superglide", "Mouse Skate", "./", $root_directory . "assets/mouse_skate.jpg");
+        renderMiniBanner("4K", "Dongle", $root_directory . "products?search=mouse accessories", $root_directory . "assets/4k_dongle.webp");
+        renderMiniBanner("Xlite V2", "Ergonomic", $root_directory . "products?search=mouse", $root_directory . "assets/xlite_v2.webp");
+        renderMiniBanner("X2A", "Ambidextrous", $root_directory . "products?search=mouse", $root_directory . "assets/x2a.webp");
+        renderMiniBanner("Superglide", "Mouse Skate", $root_directory . "products?search=superglide", $root_directory . "assets/mouse_skate.jpg");
         ?>
     </div>
 </div>
