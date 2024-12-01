@@ -12,6 +12,9 @@
 
     <!-- Product Items List -->
     <section class="w-full flex flex-col gap-2 px-5 py-2 bg-white hidden" id="product-items">
+        <?php if(empty($categories)): ?>
+            <span class="text-light-dark tracking-tighter">No Products Created Yet</span>
+        <?php endif; ?>
         <?php renderCategories(false); ?>
     </section>
 

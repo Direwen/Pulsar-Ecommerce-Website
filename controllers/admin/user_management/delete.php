@@ -11,8 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Set messages using the setMessage function
         if ($result) {
             setMessage("Record Deleted", "success"); // Success message
-        } else {
-            setMessage("Failed to Delete the Record", "error"); // Error message
         }
     } else {
         setMessage("User ID missing in request", "error"); // Error message if ID is missing

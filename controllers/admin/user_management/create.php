@@ -5,15 +5,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user_email = $_POST["email"];
 
-    $result = $user_model->create([
+    $result = ErrorHandler::handle(fn () => $user_model->create([
         $user_model->getColumnEmail() => $user_email 
-    ]);
+    ]));
 
     // Set messages using the setMessage function
     if ($result) {
         setMessage("Welcome, $user_email", "success"); // Use setMessage function for success
-    } else {
-        setMessage("Failed to create a new user named $user_email", "error"); // Use setMessage function for error
     }
 }
 

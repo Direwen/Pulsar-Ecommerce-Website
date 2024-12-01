@@ -14,17 +14,17 @@ function createDiscount(submissionPath) {
 
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="amount" class="block text-sm font-medium text-dark">Percentage</label>
-                <input type="number" name="amount" class="block w-full border shadow rounded outline-accent p-2" min="1" max="100" placeholder="Enter stock quantity" required>
+                <input type="number" name="amount" class="block w-full border shadow rounded outline-accent p-2" min="1" max="100" placeholder="Enter the discount percentage" required>
             </section>
             
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="max_usage" class="block text-sm font-medium text-dark">Maximum Usage</label>
-                <input type="number" name="max_usage" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter stock quantity">
+                <input type="number" name="max_usage" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter the maximum usage">
             </section>
             
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="expired_at" class="block text-sm font-medium text-dark">Expiry</label>
-                <input type="date" name="expired_at" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter stock quantity">
+                <label for="expired_at" class="block text-sm font-medium text-dark">Expiry (optional)</label>
+                <input type="date" name="expired_at" class="block w-full border shadow rounded outline-accent p-2" min="0" placeholder="Enter the expiry">
             </section>
 
             <!-- Buttons -->
@@ -77,18 +77,18 @@ function editDiscount(recordId, submissionPath, current_values) {
             <!-- Discount Amount Input -->
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="amount" class="block text-sm font-medium text-dark">Percentage</label>
-                <input type="number" name="amount" value="${current_values.amount}" class="block w-full border shadow rounded outline-accent p-2" min="1" max="100" placeholder="Enter stock quantity" required>
+                <input type="number" name="amount" value="${current_values.amount}" class="block w-full border shadow rounded outline-accent p-2" min="1" max="100" placeholder="Enter the discount percentage" required>
             </section>
 
             <!-- Max Usage Input -->
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="max_usage" class="block text-sm font-medium text-dark">Maximum Usage</label>
-                <input type="number" name="max_usage" value="${current_values.maxUsage}" class="block w-full border shadow rounded outline-accent p-2" min="1" placeholder="Enter stock quantity" required>
+                <input type="number" name="max_usage" value="${current_values.maxUsage}" class="block w-full border shadow rounded outline-accent p-2" min="1" placeholder="Enter the maximum usage" required>
             </section>
 
             <!-- Expiry Date Input -->
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="expired_at" class="block text-sm font-medium text-dark">Expiry</label>
+                <label for="expired_at" class="block text-sm font-medium text-dark">Expiry (optional)</label>
                 <input type="date" name="expired_at" value="${formattedDate}" class="block w-full border shadow rounded outline-accent p-2" required>
             </section>
 

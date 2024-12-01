@@ -8,7 +8,7 @@ class Database
     private function __construct()
     {
         $host = 'localhost';
-        $db = 'ecommerce';
+        $db = 'pulsar_ecommerce';
         $user = 'root';
         $pass = '';
         $port = '3308';

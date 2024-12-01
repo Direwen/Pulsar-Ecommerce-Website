@@ -73,7 +73,7 @@ function createUser(submissionPath) {
         <form action="${submissionPath}" method="POST" class="flex flex-col gap-4">
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="email" class="block text-sm font-medium text-dark">Email</label>
-                <input type="email" name="email" id="email" class="block w-full border shadow rounded outline-accent p-2">
+                <input required placeholder="Enter the user email" type="email" name="email" id="email" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <section class="flex justify-end items-center gap-2">

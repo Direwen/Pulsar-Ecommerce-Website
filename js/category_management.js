@@ -11,27 +11,27 @@ function editCategory(recordId, submissionPath, current_values) {
 
             <section class="flex flex-col justify-start items-start gap-2">
                 <label for="name" class="block text-sm font-medium text-dark">Category Name</label>
-                <input type="text" name="name" value="${current_values.categoryName}" class="block w-full border shadow rounded outline-accent p-2">
+                <input required type="text" name="name" value="${current_values.categoryName}" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="software" class="block text-sm font-medium text-dark">Software Link</label>
+                <label for="software" class="block text-sm font-medium text-dark">Software Link (optional)</label>
                 <input type="url" name="software" value="${current_values.software}" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="firmware" class="block text-sm font-medium text-dark">Firmware Link</label>
+                <label for="firmware" class="block text-sm font-medium text-dark">Firmware Link (optional)</label>
                 <input type="url" name="firmware" value="${current_values.firmware}" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="manual" class="block text-sm font-medium text-dark">Manual Link</label>
+                <label for="manual" class="block text-sm font-medium text-dark">Manual Link (optional)</label>
                 <input type="url" name="manual" value="${current_values.manual}" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <!-- Existing Image Preview Section -->
             <section class="flex flex-col justify-start items-start gap-2">
-                <label class="block text-sm font-medium text-dark">Current Image</label>
+                <label class="block text-sm font-medium text-dark">Current Category Image</label>
                 <img src="${current_values.rootDirectory + 'assets/categories/' + current_values.img}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
 
                 <!-- Option to change image -->
@@ -46,8 +46,8 @@ function editCategory(recordId, submissionPath, current_values) {
             
             <!-- Existing Banner Image Preview Section -->
             <section class="flex flex-col justify-start items-start gap-2">
-                <label class="block text-sm font-medium text-dark">Current Image</label>
-                <img src="${current_values.rootDirectory + 'assets/categories/' + current_values.bannerImg}" alt="Current Image" class="w-32 h-32 object-cover border rounded">
+                <label class="block text-sm font-medium text-dark">Current Category Banner Image</label>
+                <img src="${current_values.rootDirectory + 'assets/categories/' + current_values.bannerImg}" alt="Current Image" class="w-full h-32 object-cover border rounded">
 
                 <!-- Option to change image -->
                 <label class="flex items-center gap-2 mt-2">
@@ -99,17 +99,17 @@ function createCategory(submissionPath) {
             </section>
 
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="software" class="block text-sm font-medium text-dark">Software Link</label>
+                <label for="software" class="block text-sm font-medium text-dark">Software Link (optional)</label>
                 <input type="url" name="software" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="firmware" class="block text-sm font-medium text-dark">Firmware Link</label>
+                <label for="firmware" class="block text-sm font-medium text-dark">Firmware Link (optional)</label>
                 <input type="url" name="firmware" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 
             <section class="flex flex-col justify-start items-start gap-2">
-                <label for="manual" class="block text-sm font-medium text-dark">Manual Link</label>
+                <label for="manual" class="block text-sm font-medium text-dark">Manual Link (optional)</label>
                 <input type="url" name="manual" class="block w-full border shadow rounded outline-accent p-2">
             </section>
 

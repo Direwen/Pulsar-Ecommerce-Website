@@ -1,7 +1,7 @@
 <?php
 // At the start of product-details.php
 if (!isset($_GET['id']) || empty($_GET['id'])) {
-    header("Location: " . $_SERVER['HTTP_REFERER']);
+    header("Location: " . $root_directory . 'products');
     exit;
 }
 

@@ -113,7 +113,7 @@ $record_search_end_date = isset($_GET['record_search_end_date']) ? $_GET['record
 
                             <?php foreach ($record as $attr_name => $attr_value): ?>
                                 <?php if ($attr_name !== "id"): ?>
-                                    <td class="p-3 text-left  min-w-[100px] max-w-[400px] whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
+                                    <td class="p-3 text-left  min-w-[100px] max-w-[400px] overflow-y-auto whitespace-nowrap <?= !in_array($attr_name, $filtered_metadata) ? 'hidden' : '' ?>">
                                         <?php if ($metadata[$attr_name]['type'] == "tinyint(1)"): ?>
                                             <?= $attr_value ? "true" : "false" ?>
                                         <?php else: ?>

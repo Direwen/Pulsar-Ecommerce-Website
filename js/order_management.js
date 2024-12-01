@@ -70,7 +70,7 @@ function editOrder(recordId, submissionPath, status) {
 
     const content = `
         <section class="border-b border-light-dark pb-4">
-            <h2 class="text-xl font-semibold text-dark">Edit Inventory</h2>
+            <h2 class="text-xl font-semibold text-dark">Update Order</h2>
         </section>
 
         <form action="${submissionPath}" method="POST" class="flex flex-col gap-4">

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Check if $result is an array before accessing its elements
     if (is_array($result)) {
-        $update_result = $user_model->update(
+        $update_result = ErrorHandler::handle(fn () => $user_model->update(
             [
                 $user_model->getColumnRole() => $user_role,
                 $user_model->getColumnIsActive() => ($is_active == '1') ? true : false
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             [
                 $user_model->getColumnId() => $user_id
             ]
-        );
+        ));
 
         // Check if $update_result indicates success
         if ($update_result) {

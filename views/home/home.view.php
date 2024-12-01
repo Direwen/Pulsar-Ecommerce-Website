@@ -24,6 +24,7 @@
     </section>
 
     <div id="scroll-container" class="p-5 overflow-x-auto whitespace-nowrap scroll-smooth hide-scrollbar">
+        <?php if(!empty($categories)): ?>
         <?php
         renderCategories(
             "block mt-2 font-semibold",
@@ -32,6 +33,11 @@
             "floatable bg-secondary border inline-block rounded w-8/12 sm:w-5/12 md:w-3/12 xl:w-2/12 mr-4 text-center p-2"
         );
         ?>
+        <?php else: ?>
+            <div class="text-center p-4 border shadow">
+                <span class="text-light-dark tracking-tighter">No Products Created Yet</span>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 

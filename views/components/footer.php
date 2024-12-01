@@ -6,6 +6,9 @@
             <div>
                 <h4 class="text-lg font-bold mb-4">Product</h4>
                 <section class="flex flex-col gap-1">
+                    <?php if(empty($categories)): ?>
+                        <span class="text-light-dark tracking-tighter">No Products Created Yet</span>
+                    <?php endif; ?>
                     <?php renderCategories("text-light-dark hover:text-secondary cursor-pointer"); ?>
                 </section>
             </div>

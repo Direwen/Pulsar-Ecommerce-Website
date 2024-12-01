@@ -103,6 +103,7 @@ $navLinks = [
     <div id="second-header" class="w-full h-fit flex justify-center items-center p-10 hidden">
         <!-- Categories Section -->
         <div id="categories-container" class="flex justify-center items-center gap-10">
+            <?php if(!empty($categories)): ?>
             <?php
             renderCategories(
                 "font-light group-hover:text-accent tracking-tighter uppercase",
@@ -111,6 +112,9 @@ $navLinks = [
                 "flex flex-col justify-center items-center group cursor-pointer"
             );
             ?>
+            <?php else: ?>
+                <span class="text-light-dark tracking-tighter">No Products Created Yet</span>
+            <?php endif; ?>
         </div>
 
         <!-- Search Box (hidden by default) -->

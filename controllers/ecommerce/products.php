@@ -102,7 +102,8 @@ if (is_array($category)) {
         aggregates: [
             ["column" => $variant_model->getColumnUnitPrice(), "function" => "MIN", "alias" => "min_price", "table" => $variant_model->getTableName()],
             ["column" => $variant_model->getColumnImg(), "function" => "GROUP_CONCAT", "alias" => "variants", "table" => $variant_model->getTableName()],
-            ["column" => $inventory_model->getColumnVariantId(), "function" => "GROUP_CONCAT", "alias" => "available_variant_ids", "table" => $inventory_model->getTableName()]
+            ["column" => $inventory_model->getColumnVariantId(), "function" => "GROUP_CONCAT", "alias" => "available_variant_ids", "table" => $inventory_model->getTableName()],
+            ["column" => $inventory_model->getColumnStockQuantity(), "function" => "GROUP_CONCAT", "alias" => "available_variant_qty", "table" => $inventory_model->getTableName()]
         ],
         joins: [
             [
@@ -130,9 +131,14 @@ if (is_array($category)) {
 
     if (!empty($products)) {
         $views_array = [];
-        foreach ($products as $product) $views_array[] = $product['views']; // Store the views in the array
+        foreach ($products as $product)
+            $views_array[] = $product['views']; // Store the views in the array
         $max_views = max($views_array);
         $most_popular_product_place_taken = false;
+
+        echo "<pre>";
+        var_dump($products);
+        echo "</pre>";
     }
 
 
