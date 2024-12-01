@@ -42,8 +42,10 @@ function renderProductCard(array $product, bool $is_popular)
     ? explode(',', $product['available_variant_ids']) 
     : [];
 
-    // Check if any variant is available
-    $is_available = !empty($available_variant_ids);
+    $available_variant_id = null;
+    foreach ($available_variant_ids as $index => $id) {
+        if (isset($product['variant_qty'][$index]) && $product['variant_qty'][$index] > 0) $available_variant_id = $id;
+    }
     
     include("./views/components/product_card.php");
 }

@@ -10,25 +10,37 @@
 
     <section class="px-3 py-6 hidden" data-toggle="<?= $data_toggle_attr; ?>">
         <ul class="list-inside list-disc">
-            <?php foreach($details as $key => $each): ?>
-                <?php 
-                    // Format the key
-                    $key = is_numeric($key) ? "" : ucwords($key) . ": ";
-                    
-                    // Determine the unit based on the position in the dimension array
-                    $unit = "";
-                    if (isset($extra_info["add_unit"]) && $extra_info["add_unit"] === true) {
-                        $unit = match ($key) {
-                            "Length: ", "Width: ", "Height: " => " mm",
-                            "Weight: " => " g",
-                            default => ""
-                        };
-                    }
-                ?>
+            <?php if(empty($details)): ?>
                 <li class="<?= (isset($extra_info['details_css']) ? $extra_info['details_css'] : 'tracking-tighter text-sm sm:text-base md:text-xl'); ?>">
-                    <?= $key . $each . $unit; ?>
+                    No Information Specified
                 </li>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach($details as $key => $each): ?>
+                    <?php if(empty($each)): ?>
+                        <li class="<?= (isset($extra_info['details_css']) ? $extra_info['details_css'] : 'tracking-tighter text-sm sm:text-base md:text-xl'); ?>">
+                            Not Specified
+                        </li>
+                    <?php else: ?>
+                        <?php 
+                            // Format the key
+                            $key = is_numeric($key) ? "" : ucwords($key) . ": ";
+                            
+                            // Determine the unit based on the position in the dimension array
+                            $unit = "";
+                            if (isset($extra_info["add_unit"]) && $extra_info["add_unit"] === true) {
+                                $unit = match ($key) {
+                                    "Length: ", "Width: ", "Height: " => " mm",
+                                    "Weight: " => " g",
+                                    default => ""
+                                };
+                            }
+                        ?>
+                        <li class="<?= (isset($extra_info['details_css']) ? $extra_info['details_css'] : 'tracking-tighter text-sm sm:text-base md:text-xl'); ?>">
+                            <?= $key . $each . $unit; ?>
+                        </li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </ul>
     </section>
 

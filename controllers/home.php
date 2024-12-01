@@ -30,5 +30,6 @@
 //         ]
 //     ]
 // ));
+global $categories; 
 
 require("views/home/home.view.php");

@@ -8,24 +8,22 @@
             
             <!-- Add to cart icon -->
             <?php
-                // Get the first available variant ID if any
-                $variant_id = $is_available ? $available_variant_ids[0] : null;
 
                 // Define button classes based on availability
-                $button_classes = $is_available 
+                $button_classes = $available_variant_id 
                     ? "bg-primary hover:bg-accent hover:text-secondary interactive" 
                     : "bg-light-gray text-secondary cursor-not-allowed";
             ?>
             <button
-                title="<?= $is_available ? 'add to cart' : 'Out of Stock' ?>"
-                onclick="<?= $is_available ? "event.stopPropagation(); event.preventDefault(); addToCartShortcut($variant_id, $root_directory)" : "return false;" ?>"
+                title="<?= $available_variant_id ? 'add to cart' : 'Out of Stock' ?>"
+                onclick="<?= $available_variant_id ? "event.stopPropagation(); event.preventDefault(); addToCartShortcut($available_variant_id, $root_directory)" : "return false;" ?>"
                 class="absolute bottom-4 right-4 rounded-full px-2 py-1 shadow text-light-dark z-10 <?= $button_classes ?>"
-                <?= $is_available ? "" : "disabled" ?>
+                <?= $available_variant_id ? "" : "disabled" ?>
             >
                 <span class="material-symbols-outlined">shopping_bag</span>
             </button>
 
-            <?php if(!$is_available): ?>
+            <?php if(!$available_variant_id): ?>
                 <span class="absolute top-0 left-0 text-xs md:text-sm tracking-tighter font-semibold px-4 py-1 bg-danger text-secondary rounded-br border shadow">Sold Out</span>
             <?php endif; ?>
 

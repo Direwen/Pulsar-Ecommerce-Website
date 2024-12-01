@@ -83,8 +83,8 @@ function addSpecialFeatureCategory() {
             </section>
 
             <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                <label for="featureDescription_${featureCount}" class="text-gray-700">Details</label>
-                <textarea id="featureDescription_${featureCount}" name="special-feature-details[]" placeholder="Feature Details" class="block w-full border shadow rounded outline-accent p-2" required></textarea>
+                <label for="featureDescription_${featureCount}" class="text-gray-700">Details (separate by commas)</label>
+                <textarea id="featureDescription_${featureCount}" name="special-feature-details[]" placeholder="e.g., Waterproof, Wireless, 10-hour battery life" class="block w-full border shadow rounded outline-accent p-2" required></textarea>
             </section>
 
             <button type="button" class="absolute -top-3 -right-2 w-fit interactive bg-secondary text-light-dark font-semibold rounded-full px-1 border shadow hover:bg-red-500 hover:text-primary" onclick="removeFeature(this)">
@@ -133,12 +133,12 @@ function addVariant() {
 
     <section class="block text-sm font-medium text-dark flex flex-col gap-2">
         <label for="variantType_${variantCount}" class="text-gray-700">Type</label>
-        <input type="text" id="variantType_${variantCount}" name="variants[${variantCount - 1}][type]" class="block w-full border shadow rounded outline-accent p-2" required>
+        <input type="text" id="variantType_${variantCount}" name="variants[${variantCount - 1}][type]" placeholder="Color" class="block w-full border shadow rounded outline-accent p-2" required>
     </section>
 
     <section class="block text-sm font-medium text-dark flex flex-col gap-2">
         <label for="variantName_${variantCount}" class="text-gray-700">Name</label>
-        <input type="text" id="variantName_${variantCount}" name="variants[${variantCount - 1}][name]" class="block w-full border shadow rounded outline-accent p-2" required>
+        <input type="text" id="variantName_${variantCount}" name="variants[${variantCount - 1}][name]" placeholder="White" class="block w-full border shadow rounded outline-accent p-2" required>
     </section>
 
     <section class="block text-sm font-medium text-dark flex flex-col gap-2">
@@ -147,12 +147,12 @@ function addVariant() {
     </section>
 
     <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-        <label for="variantImg_${variantCount}" class="text-gray-700">Image for the variant</label>
-        <input multiple type="file" accept="image/*" id="variantImg_${variantCount}" name="variants_img[${variantCount - 1}]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
+        <label for="variantImg_${variantCount}" class="text-gray-700">Main Image of the variant</label>
+        <input type="file" accept="image/*" id="variantImg_${variantCount}" name="variants_img[${variantCount - 1}]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
     </section>
     
     <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-        <label for="variantImg_${variantCount}" class="text-gray-700">Image for the variant</label>
+        <label for="variantImg_${variantCount}" class="text-gray-700">Ads Images of the variant</label>
         <input multiple type="file" accept="image/*" id="variantImg_${variantCount}" name="variants_img_for_ads[${variantCount - 1}][]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
     </section>
 

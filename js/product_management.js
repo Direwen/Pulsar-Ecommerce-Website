@@ -40,7 +40,7 @@ function createProduct(submissionPath, extra_info) {
 
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label for="product-name">Product Name</label>
-                    <input type="text" name="product-name" id="product-name" class="block w-full border shadow rounded outline-accent p-2">
+                    <input type="text" name="product-name" id="product-name" class="block w-full border shadow rounded outline-accent p-2" placeholder="X2A Gaming Mouse">
                 </section>
 
                 <section class="flex justify-start items-center gap-2">
@@ -53,7 +53,7 @@ function createProduct(submissionPath, extra_info) {
                 <!-- Description and other inputs -->
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label for="description">Description</label>
-                    <textarea name="description" id="description" class="block w-full border shadow rounded outline-accent p-2"></textarea>
+                    <textarea name="description" id="description" class="block w-full border shadow rounded outline-accent p-2" placeholder="describe the product"></textarea>
                 </section>
 
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
@@ -94,7 +94,7 @@ function createProduct(submissionPath, extra_info) {
                             name="dimension[weight]" 
                             id="weight" 
                             placeholder="Weight (g)" 
-                            min="30" 
+                            min="5" 
                             max="5000" 
                             step="0.1" 
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
@@ -104,18 +104,18 @@ function createProduct(submissionPath, extra_info) {
 
                 <section class="block text-sm font-medium text-dark">
                     <label for="requirement">Requirement (separate by commas)</label>
-                    <textarea name="requirement" id="requirement" class="block w-full border shadow rounded outline-accent p-2"></textarea>
+                    <textarea name="requirement" id="requirement" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Requirement1, Requirement2, Requirement3"></textarea>
                 </section>
 
                 <section class="block text-sm font-medium text-dark">
                     <label for="package-content">Package Content (separate by commas)</label>
-                    <textarea name="package-content" id="package-content" class="block w-full border shadow rounded outline-accent p-2"></textarea>
+                    <textarea name="package-content" id="package-content" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Cable, Manual, Warranty Card"></textarea>
                 </section>
 
                 <!-- Feature Input -->
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label for="feature">Feature (separate by commas)</label>
-                    <input type="text" name="feature" id="feature-input" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., item1, item2">
+                    <input type="text" name="feature" id="feature-input" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Waterproof, Wireless, 10-hour battery life">
                 </section>
 
                 <!-- Special Feature Input -->
@@ -123,10 +123,10 @@ function createProduct(submissionPath, extra_info) {
                     <label>Special Features</label>
 
                     <!-- Container for dynamic special feature entries -->
-                    <div id="special-feature-container"></div>
+                    <div id="special-feature-container" class="flex flex-col gap-4"></div>
 
                     <!-- Button to add a new category for special features -->
-                    <button type="button" onclick="addSpecialFeatureCategory()" class="w-fit bg-primary text-accent font-semibold py-2 px-4 rounded shadow">+ Add Special Feature</button>
+                    <button type="button" onclick="addSpecialFeatureCategory()" class="interactive w-fit bg-primary text-accent font-semibold py-2 px-4 rounded shadow">+ Add Special Feature</button>
                 </section>
 
                 <!-- Image Inputs -->
@@ -153,11 +153,11 @@ function createProduct(submissionPath, extra_info) {
                     <div class="variant-item relative flex flex-col gap-4 border shadow px-4 py-6" data-variant-id="1">
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                             <label for="variantType_1" class="text-gray-700">Type</label>
-                            <input type="text" id="variantType_1" name="variants[0][type]" class="block w-full border shadow rounded outline-accent p-2" required>
+                            <input type="text" id="variantType_1" name="variants[0][type]" placeholder="Color" class="block w-full border shadow rounded outline-accent p-2" required>
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                             <label for="variantName_1" class="text-gray-700">Name</label>
-                            <input type="text" id="variantName_1" name="variants[0][name]" class="block w-full border shadow rounded outline-accent p-2" required>
+                            <input type="text" id="variantName_1" name="variants[0][name]" placeholder="White" class="block w-full border shadow rounded outline-accent p-2" required>
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                             <label for="variantUnitPrice_1" class="text-gray-700">Unit Price</label>
@@ -173,11 +173,11 @@ function createProduct(submissionPath, extra_info) {
                             >
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                            <label for="variantImg_1" class="text-gray-700">Provide Main Image</label>
+                            <label for="variantImg_1" class="text-gray-700">Main Image of the variant</label>
                             <input type="file" accept="image/*" id="variantImg_1" name="variants_img[0]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
                         </section>
                         <section class="block text-sm font-medium text-dark flex flex-col gap-2">
-                            <label for="variantImg_1" class="text-gray-700">Provide Images for Ads</label>
+                            <label for="variantImg_1" class="text-gray-700">Ads Images of the variant</label>
                             <input multiple type="file" accept="image/*" id="variantImg_1" name="variants_img_for_ads[0][]" class="block w-full bg-primary border shadow rounded outline-accent p-2" required>
                         </section>
                         <button type="button" class="absolute -top-3 -right-2 w-fit interactive bg-secondary text-light-dark font-semibold rounded-full px-1 border shadow hover:bg-red-500 hover:text-primary" onclick="removeVariant(this)">
@@ -296,7 +296,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         name="dimension[weight]" 
                         id="weight" 
                         placeholder="Weight (g)" 
-                        min="30" 
+                        min="5" 
                         max="5000" 
                         step="0.1" 
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
@@ -311,7 +311,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
             </section>
             <section class="flex flex-col gap-2">
                 <label>Special Features</label>
-                <div id="special-feature-container">
+                <div id="special-feature-container" class="flex flex-col gap-4">
                     ${specialsContent}
                 </div>
                 <button type="button" onclick="addSpecialFeatureCategory()" class="w-fit bg-primary text-accent font-semibold py-2 px-4 rounded shadow">+ Add Special Feature</button>

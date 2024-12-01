@@ -151,7 +151,7 @@ class ProductModel extends BaseModel
                 'length' => [10, 800],   // Minimum 10 mm, maximum 800 mm
                 'width'  => [10, 500],   // Minimum 10 mm, maximum 500 mm
                 'height' => [5, 200],    // Minimum 5 mm, maximum 200 mm
-                'weight' => [30, 5000]   // Minimum 50 g, maximum 5000 g
+                'weight' => [5, 5000]   // Minimum 5 g, maximum 5000 g
             ];            
 
             // Check if length, width, height, and weight exist and validate them
