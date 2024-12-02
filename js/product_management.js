@@ -40,12 +40,12 @@ function createProduct(submissionPath, extra_info) {
 
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label for="product-name">Product Name</label>
-                    <input type="text" name="product-name" id="product-name" class="block w-full border shadow rounded outline-accent p-2" placeholder="X2A Gaming Mouse">
+                    <input required type="text" name="product-name" id="product-name" class="block w-full border shadow rounded outline-accent p-2" placeholder="X2A Gaming Mouse">
                 </section>
 
                 <section class="flex justify-start items-center gap-2">
                     <label for="category" class="block text-sm font-medium text-dark mb-1">Category</label>
-                    <select name="category" id="category" class="block grow border border-light-gray rounded-md p-2 shadow">
+                    <select required name="category" id="category" class="block grow border border-light-gray rounded-md p-2 shadow">
                         ${categoryOptions}
                     </select>
                 </section>
@@ -53,13 +53,14 @@ function createProduct(submissionPath, extra_info) {
                 <!-- Description and other inputs -->
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label for="description">Description</label>
-                    <textarea name="description" id="description" class="block w-full border shadow rounded outline-accent p-2" placeholder="describe the product"></textarea>
+                    <textarea required name="description" id="description" class="block w-full border shadow rounded outline-accent p-2" placeholder="describe the product"></textarea>
                 </section>
 
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label>Dimensions (mm/g)</label>
                     <div class="flex border rounded overflow-hidden shadow">
-                        <input 
+                        <input
+                            required
                             type="number" 
                             name="dimension[length]" 
                             id="length" 
@@ -70,6 +71,7 @@ function createProduct(submissionPath, extra_info) {
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
                         <input 
+                            required
                             type="number" 
                             name="dimension[width]" 
                             id="width" 
@@ -80,6 +82,7 @@ function createProduct(submissionPath, extra_info) {
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
                         <input 
+                            required
                             type="number" 
                             name="dimension[height]" 
                             id="height" 
@@ -90,6 +93,7 @@ function createProduct(submissionPath, extra_info) {
                             class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                         />
                         <input 
+                            required
                             type="number" 
                             name="dimension[weight]" 
                             id="weight" 
@@ -109,13 +113,13 @@ function createProduct(submissionPath, extra_info) {
 
                 <section class="block text-sm font-medium text-dark">
                     <label for="package-content">Package Content (separate by commas)</label>
-                    <textarea name="package-content" id="package-content" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Cable, Manual, Warranty Card"></textarea>
+                    <textarea required name="package-content" id="package-content" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Cable, Manual, Warranty Card"></textarea>
                 </section>
 
                 <!-- Feature Input -->
                 <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                     <label for="feature">Feature (separate by commas)</label>
-                    <input type="text" name="feature" id="feature-input" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Waterproof, Wireless, 10-hour battery life">
+                    <input required type="text" name="feature" id="feature-input" class="block w-full border shadow rounded outline-accent p-2" placeholder="e.g., Waterproof, Wireless, 10-hour battery life">
                 </section>
 
                 <!-- Special Feature Input -->
@@ -132,12 +136,12 @@ function createProduct(submissionPath, extra_info) {
                 <!-- Image Inputs -->
                 <section class="flex flex-col justify-start items-start gap-2">
                     <label for="img" class="block text-sm font-medium text-dark">Images for Ads</label>
-                    <input multiple type="file" name="img[]" id="img" accept="image/*" class="block w-full bg-primary border shadow rounded outline-accent p-2">
+                    <input required multiple type="file" name="img[]" id="img" accept="image/*" class="block w-full bg-primary border shadow rounded outline-accent p-2">
                 </section>
 
                 <section class="flex flex-col justify-start items-start gap-2">
                     <label for="main-img" class="block text-sm font-medium text-dark">Main Image</label>
-                    <input type="file" name="main-img" id="main-img" accept="image/*" class="block w-full bg-primary border shadow rounded outline-accent p-2">
+                    <input required type="file" name="main-img" id="main-img" accept="image/*" class="block w-full bg-primary border shadow rounded outline-accent p-2">
                 </section>
                 
             </div>
@@ -241,23 +245,24 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
             <input type="hidden" name="product-id" value="${currentValues.productId}">
             <section class="flex flex-col gap-2">
                 <label for="product-name" class="text-sm font-medium text-dark">Product Name</label>
-                <input type="text" name="product-name" value="${currentValues.productName}" class="w-full border shadow rounded outline-accent p-2">
+                <input required type="text" name="product-name" value="${currentValues.productName}" class="w-full border shadow rounded outline-accent p-2" placeholder="X2A Gaming Mouse">
             </section>
             <section class="flex justify-start items-center gap-2">
                 <label for="category" class="text-sm font-medium text-dark">Category</label>
-                <select name="category" class="grow border border-light-gray rounded-md p-2 shadow">
+                <select required name="category" class="grow border border-light-gray rounded-md p-2 shadow">
                     ${categoryOptions}
                 </select>
             </section>
             <section class="flex flex-col gap-2">
                 <label for="description" class="text-sm font-medium text-dark">Description</label>
-                <textarea name="description" class="w-full border shadow rounded outline-accent p-2">${currentValues.description ?? ""}</textarea>
+                <textarea required name="description" class="w-full border shadow rounded outline-accent p-2" placeholder="describe the product">${currentValues.description ?? ""}</textarea>
             </section>
 
             <section class="block text-sm font-medium text-dark flex flex-col gap-2">
                 <label>Dimensions (mm/g)</label>
                 <div class="flex border rounded overflow-hidden shadow">
-                    <input 
+                    <input
+                        required 
                         type="number" 
                         value="${currentValues.dimension.length}" 
                         name="dimension[length]" 
@@ -269,6 +274,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />
                     <input 
+                        required
                         type="number" 
                         value="${currentValues.dimension.width}" 
                         name="dimension[width]" 
@@ -280,6 +286,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />
                     <input 
+                        required
                         type="number" 
                         value="${currentValues.dimension.height}" 
                         name="dimension[height]" 
@@ -291,6 +298,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
                         class="w-full p-2 text-center border-b-2 outline-none border-transparent focus:border-accent hover:border-accent"
                     />
                     <input 
+                        required
                         type="number" 
                         value="${currentValues.dimension.weight}" 
                         name="dimension[weight]" 
@@ -307,7 +315,7 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
 
             <section class="flex flex-col gap-2">
                 <label for="feature" class="text-sm font-medium text-dark">Feature (separate by commas)</label>
-                <input type="text" name="feature" value="${currentValues.feature ? Object.values(currentValues.feature).join(", ") : ""}" class="w-full border shadow rounded outline-accent p-2">
+                <input required type="text" name="feature" value="${currentValues.feature ? Object.values(currentValues.feature).join(", ") : ""}" class="w-full border shadow rounded outline-accent p-2" placeholder="e.g., Waterproof, Wireless, 10-hour battery life">
             </section>
             <section class="flex flex-col gap-2">
                 <label>Special Features</label>
@@ -318,11 +326,11 @@ function editProduct(recordId, submissionPath, categories, currentValues) {
             </section>
             <section class="flex flex-col gap-2">
                 <label for="requirement" class="text-sm font-medium text-dark">Requirement (separate by commas)${currentValues.requirement}</label>
-                <textarea name="requirement" class="w-full border shadow rounded outline-accent p-2">${currentValues.requirement ? Object.values(currentValues.requirement).join(", ") : ""}</textarea>
+                <textarea name="requirement" class="w-full border shadow rounded outline-accent p-2" placeholder="e.g., Requirement1, Requirement2, Requirement3">${currentValues.requirement ? Object.values(currentValues.requirement).join(", ") : ""}</textarea>
             </section>
             <section class="flex flex-col gap-2">
                 <label for="package-content" class="text-sm font-medium text-dark">Package Content (separate by commas)</label>
-                <textarea name="package-content" class="w-full border shadow rounded outline-accent p-2">${currentValues.packageContent ? Object.values(currentValues.packageContent).join(", ") : ""}</textarea>
+                <textarea required name="package-content" class="w-full border shadow rounded outline-accent p-2" placeholder="e.g., Cable, Manual, Warranty Card">${currentValues.packageContent ? Object.values(currentValues.packageContent).join(", ") : ""}</textarea>
             </section>
             <section class="flex flex-col gap-2">
                 <label for="img" class="text-sm font-medium text-dark">Images for Ads</label>
