@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/77f2cac4-d8fb-4a7b-b97d-3eb146ccbc2e)# Pulsar E-Commerce Website
+# Pulsar E-Commerce Website
 An e-commerce platform built using PHP for a university assignment, featuring a user-friendly interface, secure authentication, and comprehensive admin functionality.
 
 # Technologies Used
@@ -6,6 +6,7 @@ Frontend: HTML, CSS, JavaScript
 Backend: PHP
 Database: MySQL
 Email Integration: PHP Mailer
+Architectural Pattern: MVC
 
 # Features
 Password-less Authentication
