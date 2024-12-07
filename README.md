@@ -1,4 +1,4 @@
-# Pulsar E-Commerce Website
+![image](https://github.com/user-attachments/assets/77f2cac4-d8fb-4a7b-b97d-3eb146ccbc2e)# Pulsar E-Commerce Website
 An e-commerce platform built using PHP for a university assignment, featuring a user-friendly interface, secure authentication, and comprehensive admin functionality.
 
 # Technologies Used
@@ -16,7 +16,11 @@ Rewards System: Earn and redeem rewards for giving ratings.
 Support System: User-friendly support page with mail response functionality
 Admin Dashboard
 
-# Home Page
+# Home Page on small screen
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/sm1.png?raw=true)
+# Sidebar
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/sm2.png?raw=true)
+# Home Page on large screen
 ![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/Picture1.png?raw=true)
 # Password-less Authentication System
 ![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/login.png?raw=true)
