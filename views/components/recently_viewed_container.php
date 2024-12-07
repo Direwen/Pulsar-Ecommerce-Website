@@ -5,7 +5,7 @@
     </section>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
         <?php foreach ($products as $product): ?>
-            <a href=""
+            <a href="<?= $root_directory ?>/product/view?id=<?= htmlspecialchars($product["id"]) ?>"
                 class="block cursor-pointer relative h-64 bg-secondary flex items-center justify-center rounded shadow overflow-hidden">
                 <img src="<?= $root_directory ?>/assets/products/<?= htmlspecialchars($product["img"]) ?>"
                     alt="product image"

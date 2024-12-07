@@ -156,6 +156,8 @@ class ReviewModel extends BaseModel
 
             ));
 
+            // var_dump($fetched_result);
+            // $result["totalPages"] = $page . $fetched_result["totalPages"];
             $result = array_merge($result, $fetched_result["records"]);
             $page++;
 

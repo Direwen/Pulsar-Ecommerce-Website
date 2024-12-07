@@ -76,8 +76,7 @@ function handleFormSubmit(event, root) {
             const success = res.data.success;
             if (success) {
                 // Replace form with success container
-                renderErrorModal(root);
-                // renderSuccessModal(`${root}assets/illustrations/mail_sent.svg`, "Your ticket has been submitted successfully!");
+                renderSuccessModal(`${root}assets/illustrations/mail_sent.svg`, "Your ticket has been submitted successfully!");
             } else {
                 // Replace form with error container
                 renderErrorModal(root);
