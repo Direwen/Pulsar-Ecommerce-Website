@@ -27,4 +27,31 @@ Admin Dashboard
 ![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/products.png?raw=true)
 # Product Details Page
 ![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/product.png?raw=true)
+# Download Links of the Product
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/download.png?raw=true)
+# Add to Cart
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/addtocart.png?raw=true)
+# Checkout Page
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/checkout.png?raw=true)
+# Receipt Mail
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/receipt.png?raw=true)
+# Order History
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/receipt.png?raw=true)
+# Invoice Details
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/invoice.png?raw=true)
+# Rating
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/rating.png?raw=true)
+# Reward for Ratings
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/reward.png?raw=true)
+# Support Page
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/support.png?raw=true)
+# Dashboard Navigation
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/dashboard_navigation.png?raw=true)
+# An example of Management
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/users_management.png?raw=true)
+# Data Analytics
+![Alt text](https://github.com/Direwen/Pulsar-Ecommerce-Website/blob/main/readmeAssets/data_analytics.png?raw=true)
+
+
+
 
